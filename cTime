@@ -1,0 +1,3 @@
+#!/bin/sh
+
+./cTime.py >> /tmp/cTime.log 2>&1
