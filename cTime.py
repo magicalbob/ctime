@@ -6,6 +6,7 @@
 import random
 import time
 import gtk
+import pygtk
 import pygame
 from pygame.locals import *
 from sys import exit
@@ -127,9 +128,12 @@ class gameChoose:
 class mainScreen:
 	def __init__(self):
                 self.sWidth=gtk.gdk.screen_width()
-                self.sHeight=gtk.gdk.screen_height()
+		self.sHeight=gtk.gdk.screen_height()
                 pygame.init()
                 self.screen=pygame.display.set_mode((self.sWidth, self.sHeight))
+		screen = pygame.display.get_surface()
+                self.sWidth,self.sHeight = screen.get_width(),screen.get_height()
+
                 self.image=pygame.image.load("images/backgrounds/001.jpg").convert()
                 self.tuneNo=1
                 self.backNo=1
@@ -142,6 +146,8 @@ class mainScreen:
                 self.playState = 1
                 self.firstPlay=1
 		self.buttonPlay = button(self.screen, (0,0,200,200), "images/icons/PlayButton.png",(0,0,0))
+		print("Left: ")
+		print(self.sWidth)
 		self.buttonChoose = button(self.screen, (self.sWidth - 200, 0, 200, 200), "images/icons/ChooseButton.png",(255,0,0))
 		self.buttonVideo = button(self.screen, (0, self.sHeight - 200, 200, 200), "images/icons/VideoButton.png",(0,0,0))
 
