@@ -146,8 +146,6 @@ class mainScreen:
                 self.playState = 1
                 self.firstPlay=1
 		self.buttonPlay = button(self.screen, (0,0,200,200), "images/icons/PlayButton.png",(0,0,0))
-		print("Left: ")
-		print(self.sWidth)
 		self.buttonChoose = button(self.screen, (self.sWidth - 200, 0, 200, 200), "images/icons/ChooseButton.png",(255,0,0))
 		self.buttonVideo = button(self.screen, (0, self.sHeight - 200, 200, 200), "images/icons/VideoButton.png",(0,0,0))
 
