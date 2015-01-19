@@ -197,7 +197,7 @@ class mainScreen:
 			self.buttonPlay.changeImage("images/icons/PlayButton.png")
 		elif self.firstPlay == 1:
                 	pygame.mixer.init()
-			newTune = "tunes/%03d.ogg" %self.tuneNo
+			newTune = "tunes/bob/%03d.ogg" %self.tuneNo
 			pygame.mixer.music.load(newTune)
 			pygame.mixer.music.play()
 			self.firstPlay = 0
@@ -210,7 +210,7 @@ class mainScreen:
 		self.tuneNo += 1
 		if self.tuneNo > 10:
 			self.tuneNo = 1
-		newTune = "tunes/%03d.ogg" %self.tuneNo
+		newTune = "tunes/bob/%03d.ogg" %self.tuneNo
 		pygame.mixer.music.load(newTune)
 		pygame.mixer.music.play()
 		 
