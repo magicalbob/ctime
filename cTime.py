@@ -223,7 +223,6 @@ class mainScreen:
 	def clickButtonVideo(self):
 		self.gameState = 2
 		self.firstPlay = 1
-		self.playState = 1
 		self.vidScreen = vidScreen(self.sWidth, self.sHeight)
 
 	def playVideo(self):
