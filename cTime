@@ -1,3 +1,9 @@
 #!/bin/sh
 
+if [ -d /tmp/dcs ]; then
+  echo "Good! /tmp/dcs exists"
+else
+  mkdir /tmp/dcs
+fi
+
 ./cTime.py >> /tmp/cTime.log 2>&1
