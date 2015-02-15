@@ -23,7 +23,7 @@ class vidScreen:
 	def re_init(self):
 		try:
                 	self.image=pygame.image.load("/tmp/dcs/CAMERA1.jpg").convert()
-                	self.screen.blit(self.image,(0,0))
+                	self.screen.blit(self.image,(0,210))
 			imWidth=self.image.get_width()
 			imHeight=self.image.get_height()
 			try:
