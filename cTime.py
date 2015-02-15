@@ -11,58 +11,7 @@ import pygame
 from pygame.locals import *
 from sys import exit
 from ctimeCommon import go_fullscreen
-
-#def go_fullscreen():
-#	screen = pygame.display.get_surface()
-#	tmp = screen.convert()
-#	caption = pygame.display.get_caption()
-#	cursor = pygame.mouse.get_cursor()  # Duoas 16-04-2007 
-#    
-#	w,h = screen.get_width(),screen.get_height()
-#	flags = screen.get_flags()
-#	bits = screen.get_bitsize()
-#	
-#	pygame.display.init()
-#	screen = pygame.display.set_mode((w,h),flags|FULLSCREEN,bits)
-#	screen.blit(tmp,(0,0))
-#	pygame.display.set_caption(*caption)
-# 
-#	pygame.key.set_mods(0) #HACK: work-a-round for a SDL bug??
-# 
-#	pygame.mouse.set_cursor( *cursor )  # Duoas 16-04-2007
-#	
-#	return screen
-
-class button:
-	def __init__(self, screen, rect, image, colorkey):
-		self.rect=rect
-		self.colorkey=colorkey
-		self.image=pygame.image.load(image).convert()
-		self.image.set_colorkey(colorkey)
-		self.screen=screen
-		self.screen.blit(self.image,(self.rect[0], self.rect[1]))
-		self.oTime = time.time()
-
-	def redraw(self):
-		self.screen.blit(self.image,(self.rect[0], self.rect[1]))
-
-	def changeImage(self, image):
-		self.image=pygame.image.load(image).convert()
-		self.image.set_colorkey(self.colorkey)
-		self.screen.blit(self.image, (self.rect[0], self.rect[1]))
-
-	def checkClick(self, pos):
-		retVal = False
-
-		nTime = time.time()
-		if (nTime - self.oTime) > 1:
-			self.oTime = nTime
-			if ((pos[0] >= self.rect[0]) and
-			    (pos[0] <= self.rect[0] + self.rect[2])):
-				if ((pos[1] >= self.rect[1]) and
-				    (pos[1] <= self.rect[1] + self.rect[3])):
-					retVal = True
-		return retVal
+from ctimeButton import button
 
 class gameChoose:
 	def __init__(self, sWidth, sHeight):
