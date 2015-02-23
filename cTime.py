@@ -68,12 +68,12 @@ class mainScreen:
 	def clickButtonChoose(self):
 		self.gameState = 1
 		self.firstPlay = 1
-		self.playState = 1
 		self.gameChoose = gameChoose(self.sWidth, self.sHeight)
 
 	def clickButtonVideo(self):
 		self.gameState = 2
 		self.firstPlay = 1
+#		self.playState = 1
 		self.vidScreen = vidScreen(self.sWidth, self.sHeight)
 
 	def playVideo(self):
@@ -122,11 +122,15 @@ class mainScreen:
 				if self.gameChoose.checkClick(pos):
 					self.playVideo()
 				elif self.gameChoose.checkExit(pos):
-					self.re_init()
+					self.gameState = 0
+					self.updatePic()
+
 # gameState 2: Video feed from cameras
 			elif self.gameState == 2:
 				if self.vidScreen.checkExit(pos):
-					self.re_init()
+					self.gameState = 0
+					self.updatePic()
+#					self.re_init()
 
 	def updatePic(self):
 		self.backNo += 1
@@ -143,6 +147,7 @@ theGame=mainScreen()
 oTime = time.time()
 
 while True:
+# Check for event. Exit if return key pressed, otherwise pass event to theGame object
 	for e in pygame.event.get():
 		if (e.type is KEYDOWN and e.key == K_RETURN):
 			pygame.display.quit()
@@ -150,11 +155,13 @@ while True:
 		pos = pygame.mouse.get_pos()
 		theGame.checkEvent(e,pos)
 
+# Check for background picture of main screen changing
 	if theGame.gameState == 0:
 		nTime = time.time()
 		if (nTime - oTime) > 10:
 			theGame.updatePic()
 			oTime = nTime
+
 	if theGame.gameState == 2:
 		theGame.vidScreen.re_init()
 
