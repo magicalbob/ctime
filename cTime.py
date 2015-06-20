@@ -36,7 +36,7 @@ class mainScreen:
                 self.playState = 1
                 self.firstPlay=1
 		self.buttonPlay = button(self.screen, (0,0,200,200), "images/icons/PlayButton.png",(0,0,0))
-		self.buttonChoose = button(self.screen, (self.sWidth - 200, 0, 200, 200), "images/icons/ChooseButton.png",(255,0,0))
+#		self.buttonChoose = button(self.screen, (self.sWidth - 200, 0, 200, 200), "images/icons/ChooseButton.png",(255,0,0))
 		self.buttonVideo = button(self.screen, (0, self.sHeight - 200, 200, 200), "images/icons/VideoButton.png",(0,0,0))
 
 	def clickButtonPlay(self):
@@ -65,10 +65,10 @@ class mainScreen:
 		pygame.mixer.music.load(newTune)
 		pygame.mixer.music.play()
 		 
-	def clickButtonChoose(self):
-		self.gameState = 1
-		self.firstPlay = 1
-		self.gameChoose = gameChoose(self.sWidth, self.sHeight)
+#	def clickButtonChoose(self):
+#		self.gameState = 1
+#		self.firstPlay = 1
+#		self.gameChoose = gameChoose(self.sWidth, self.sHeight)
 
 	def clickButtonVideo(self):
 		self.gameState = 2
@@ -105,7 +105,7 @@ class mainScreen:
 			clock.tick(FPS)
 		pygame.display.set_mode((self.sWidth, self.sHeight))
 		
-		self.clickButtonChoose()
+#		self.clickButtonChoose()
 
 	def checkEvent(self, event, pos):
 		if event.type == pygame.MOUSEBUTTONUP:
@@ -113,8 +113,8 @@ class mainScreen:
 			if self.gameState == 0:
 				if (self.buttonPlay.checkClick(pos) == True):
 					self.clickButtonPlay()
-				elif (self.buttonChoose.checkClick(pos) == True):
-					self.clickButtonChoose()
+#				elif (self.buttonChoose.checkClick(pos) == True):
+#					self.clickButtonChoose()
 				elif (self.buttonVideo.checkClick(pos) == True):
 					self.clickButtonVideo()
 # gameState 1: See Me Choose game
@@ -140,7 +140,7 @@ class mainScreen:
 		self.image = pygame.image.load(imageName).convert()
 		self.screen.blit(self.image,(0,0))
 		self.buttonPlay.redraw()
-		self.buttonChoose.redraw()
+#		self.buttonChoose.redraw()
 		self.buttonVideo.redraw()
 
 theGame=mainScreen()
