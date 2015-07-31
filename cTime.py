@@ -13,7 +13,9 @@ from ctimeCommon import go_fullscreen
 from ctimeButton import button
 from ctimeGameChoose import gameChoose
 from ctimeVidScreen import vidScreen
-
+import yaml
+import datetime
+from time import strftime,strptime
 
 class mainScreen:
 	def __init__(self):
@@ -27,6 +29,12 @@ class mainScreen:
                 self.image=pygame.image.load("images/backgrounds/001.jpg").convert()
                 self.tuneNo=1
                 self.backNo=1
+		with open('cTime.yaml','r') as confile:
+			conf = yaml.load(confile)
+		self.def_vol = float(conf['vol'])
+                self.start_hour = str(conf['start_hour']).zfill(2)
+                self.end_hour = str(conf['end_hour']).zfill(2)
+		pygame.mixer.music.set_volume(self.def_vol)
 		self.re_init()
 
 	def re_init(self):
@@ -39,7 +47,20 @@ class mainScreen:
 #		self.buttonChoose = button(self.screen, (self.sWidth - 200, 0, 200, 200), "images/icons/ChooseButton.png",(255,0,0))
 		self.buttonVideo = button(self.screen, (0, self.sHeight - 200, 200, 200), "images/icons/VideoButton.png",(0,0,0))
 
+	def can_we_play(self):
+		test_start = strftime('%Y-%m-%d ')+self.start_hour+':00:00'
+		test_end = strftime('%Y-%m-%d ')+self.end_hour+':00:00'
+		if test_end < test_start:
+			test_end = str(datetime.datetime.strptime(test_end, "%Y-%m-%d %H:%M:%S") + datetime.timedelta(days=1))
+		if test_start < strftime('%Y-%m-%d %H:%M:%S'):
+			if strftime('%Y-%m-%d %H:%M:%S') < test_end:
+				return True
+
+		return False
+
 	def clickButtonPlay(self):
+		if not self.can_we_play():
+			return
 		self.playState += 1
 		if self.playState > 2:
 			self.playState = 1
@@ -167,7 +188,8 @@ while True:
 
 	if theGame.playState == 2:
 		if pygame.mixer.music.get_busy() == False:
-			theGame.playNext()
+			if theGame.can_we_play():
+				theGame.playNext()
 
 	pygame.display.update()
 
