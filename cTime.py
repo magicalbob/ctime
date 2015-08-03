@@ -32,8 +32,8 @@ class mainScreen:
 		with open('cTime.yaml','r') as confile:
 			conf = yaml.load(confile)
 		self.def_vol = float(conf['vol'])
-                self.start_hour = str(conf['start_hour']).zfill(2)
-                self.end_hour = str(conf['end_hour']).zfill(2)
+                self.start_time = str(conf['start_time'])
+                self.end_time = str(conf['end_time'])
 		pygame.mixer.music.set_volume(self.def_vol)
 		self.re_init()
 
@@ -48,8 +48,8 @@ class mainScreen:
 		self.buttonVideo = button(self.screen, (0, self.sHeight - 200, 200, 200), "images/icons/VideoButton.png",(0,0,0))
 
 	def can_we_play(self):
-		test_start = strftime('%Y-%m-%d ')+self.start_hour+':00:00'
-		test_end = strftime('%Y-%m-%d ')+self.end_hour+':00:00'
+		test_start = strftime('%Y-%m-%d ')+self.start_time
+		test_end = strftime('%Y-%m-%d ')+self.end_time
 		if test_end < test_start:
 			test_end = str(datetime.datetime.strptime(test_end, "%Y-%m-%d %H:%M:%S") + datetime.timedelta(days=1))
 		if test_start < strftime('%Y-%m-%d %H:%M:%S'):
