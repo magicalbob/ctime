@@ -47,7 +47,7 @@ class mainScreen:
 #		self.buttonChoose = button(self.screen, (self.sWidth - 200, 0, 200, 200), "images/icons/ChooseButton.png",(255,0,0))
 		self.buttonPlayList = button(self.screen, (self.sWidth - 200, 0, 200, 200), "images/icons/MusicIcon.png",(255,0,0))
 		self.buttonVideo = button(self.screen, (0, self.sHeight - 200, 200, 200), "images/icons/VideoButton.png",(0,0,0))
-
+  		
 	def can_we_play(self):
 		test_start = strftime('%Y-%m-%d ')+self.start_time
 		test_end = strftime('%Y-%m-%d ')+self.end_time
@@ -79,6 +79,7 @@ class mainScreen:
 			pygame.mixer.music.unpause()
 			self.buttonPlay.changeImage("images/icons/StopButton.png")
 
+
 	def playNext(self):
 		self.tuneNo += 1
 		if self.tuneNo > 10:
@@ -97,6 +98,12 @@ class mainScreen:
 		self.firstPlay = 1
 #		self.playState = 1
 		self.vidScreen = vidScreen(self.sWidth, self.sHeight)
+
+        def clickPlayList(self):
+                self.gameState = 3
+                self.firstPlay = 1
+#               self.playState = 1
+                self.playList = playList(self.sWidth, self.sHeight)
 
 	def playVideo(self):
 		FPS = 25
