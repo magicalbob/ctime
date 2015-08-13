@@ -13,6 +13,7 @@ from ctimeCommon import go_fullscreen
 from ctimeButton import button
 from ctimeGameChoose import gameChoose
 from ctimeVidScreen import vidScreen
+from ctimePlayList import playListScreen 
 import yaml
 import datetime
 from time import strftime,strptime
@@ -103,7 +104,7 @@ class mainScreen:
                 self.gameState = 3
                 self.firstPlay = 1
 #               self.playState = 1
-                self.playList = playList(self.sWidth, self.sHeight)
+                self.playList = playListScreen(self.sWidth, self.sHeight)
 
 	def playVideo(self):
 		FPS = 25
