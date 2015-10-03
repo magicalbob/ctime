@@ -181,7 +181,7 @@ class mainScreen:
 		self.image = pygame.image.load(imageName).convert()
 		self.screen.blit(self.image,(0,0))
 		self.buttonPlay.redraw()
-#		self.buttonChoose.redraw()
+		self.buttonPlayList.redraw()
 		self.buttonVideo.redraw()
 
 theGame=mainScreen()
