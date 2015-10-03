@@ -35,6 +35,9 @@ class mainScreen:
 		self.def_vol = float(conf['vol'])
                 self.start_time = str(conf['start_time'])
                 self.end_time = str(conf['end_time'])
+                self.firstPlay=1
+                self.playlist=0
+                self.playLen = [ 10, 30 ]
 		pygame.mixer.music.set_volume(self.def_vol)
 		self.re_init()
 
@@ -43,7 +46,7 @@ class mainScreen:
                 go_fullscreen()
                 self.screen.blit(self.image,(0,0))
                 self.playState = 1
-                self.firstPlay=1
+#                self.firstPlay=1
 		self.buttonPlay = button(self.screen, (0,0,200,200), "images/icons/PlayButton.png",(0,0,0))
 #		self.buttonChoose = button(self.screen, (self.sWidth - 200, 0, 200, 200), "images/icons/ChooseButton.png",(255,0,0))
 		self.buttonPlayList = button(self.screen, (self.sWidth - 200, 0, 200, 200), "images/icons/MusicIcon.png",(255,0,0))
@@ -83,9 +86,12 @@ class mainScreen:
 
 	def playNext(self):
 		self.tuneNo += 1
-		if self.tuneNo > 10:
+		if self.tuneNo > self.playLen[self.playlist]:
 			self.tuneNo = 1
-		newTune = "tunes/bob/%03d.ogg" %self.tuneNo
+                if self.playlist == 0:
+		  newTune = "tunes/bob/%03d.ogg" %self.tuneNo
+                else:
+		  newTune = "tunes/frozen/%03d.ogg" %self.tuneNo
 		pygame.mixer.music.load(newTune)
 		pygame.mixer.music.play()
 		 
@@ -102,7 +108,7 @@ class mainScreen:
 
         def clickPlayList(self):
                 self.gameState = 3
-                self.firstPlay = 1
+#                self.firstPlay = 1
 #               self.playState = 1
                 self.playList = playListScreen(self.sWidth, self.sHeight)
 
@@ -167,9 +173,29 @@ class mainScreen:
 # gameState 3: play list
 			elif self.gameState == 3:
 				if self.playList.checkClickBob(pos):
-					print("button pressed")
+                                        self.playlist = 0
+                                        self.tuneNo = 1
+			                newTune = "tunes/bob/%03d.ogg" %self.tuneNo
+			                pygame.mixer.music.load(newTune)
+			                pygame.mixer.music.play()
+			                self.firstPlay = 0
+					self.gameState = 0
+					self.updatePic()
+					self.re_init()
+			                self.buttonPlay.changeImage("images/icons/StopButton.png")
+                                        self.playState = 2
 				elif self.playList.checkClickFrozen(pos):
-					print("button pressed")
+                                        self.playlist = 1
+                                        self.tuneNo = 1
+			                newTune = "tunes/frozen/%03d.ogg" %self.tuneNo
+			                pygame.mixer.music.load(newTune)
+			                pygame.mixer.music.play()
+			                self.firstPlay = 0
+					self.gameState = 0
+					self.updatePic()
+					self.re_init()
+			                self.buttonPlay.changeImage("images/icons/StopButton.png")
+                                        self.playState = 2
 				elif self.playList.checkExit(pos):
 					self.gameState = 0
 					self.updatePic()
