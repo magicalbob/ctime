@@ -22,13 +22,13 @@ class playListScreen:
 					((self.sWidth / 4) - 100, 
 					(self.sHeight / 2) - 100,
 					200, 200),
-					"images/icons/Bob.png", 
+					"images/icons/bob.png", 
 					(0,0,0))  
 		self.buttonFrozen = button(self.screen,
 					(((self.sWidth * 3) / 4) - 100, 
 					(self.sHeight / 2) - 100,
 					200, 200),
-					"images/icons/NewMusic.png", 
+					"images/icons/frozen.png", 
 					(0,0,0))  
 
 	def checkClickBob(self, pos):
