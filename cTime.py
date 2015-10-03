@@ -166,7 +166,9 @@ class mainScreen:
 
 # gameState 3: play list
 			elif self.gameState == 3:
-				if self.playList.checkClick(pos):
+				if self.playList.checkClickBob(pos):
+					print("button pressed")
+				elif self.playList.checkClickFrozen(pos):
 					print("button pressed")
 				elif self.playList.checkExit(pos):
 					self.gameState = 0
