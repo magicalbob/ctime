@@ -147,6 +147,8 @@ class mainScreen:
 #					self.clickButtonChoose()
 				elif (self.buttonVideo.checkClick(pos) == True):
 					self.clickButtonVideo()
+				elif (self.buttonPlayList.checkClick(pos) == True):
+					self.clickPlayList()
 # gameState 1: See Me Choose game
 			elif self.gameState == 1:
 				if self.gameChoose.checkClick(pos):
@@ -161,6 +163,15 @@ class mainScreen:
 					self.gameState = 0
 					self.updatePic()
 #					self.re_init()
+
+# gameState 3: play list
+			elif self.gameState == 3:
+				if self.playList.checkClick(pos):
+					print("button pressed")
+				elif self.playList.checkExit(pos):
+					self.gameState = 0
+					self.updatePic()
+					self.re_init()
 
 	def updatePic(self):
 		self.backNo += 1

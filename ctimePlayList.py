@@ -31,6 +31,16 @@ class playListScreen:
 					"images/icons/NewMusic.png", 
 					(0,0,0))  
 
+	def checkClick(self, pos):
+                if (self.buttonBob.checkClick(pos)):
+			print ("bob")
+                        return True
+		elif (self.buttonFrozen.checkClick(pos)):
+			print ("frozen")
+			return True
+                else:
+                        return False
+
 	def checkExit(self, pos):
 		if (self.buttonExit.checkClick(pos)):
 			return True
