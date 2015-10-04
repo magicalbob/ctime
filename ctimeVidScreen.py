@@ -4,10 +4,11 @@ from ctimeCommon import go_fullscreen
 from ctimeButton import button
 
 class vidScreen:
-	def __init__(self, sWidth, sHeight):
+	def __init__(self, sWidth, sHeight, path):
 		go_fullscreen()
 		self.sWidth = sWidth
 		self.sHeight = sHeight
+                self.path = path
 		self.screen = pygame.display.get_surface()
 		self.screen.fill(Color(0,0,0,0), (0,0,sWidth,sHeight), 0)
                 self.gameState=2
@@ -22,12 +23,12 @@ class vidScreen:
 
 	def re_init(self):
 		try:
-                	self.image=pygame.image.load("/tmp/dcs/CAMERA1.jpg").convert()
+                	self.image=pygame.image.load("%s/CAMERA1.jpg" % (self.path)).convert()
                 	self.screen.blit(self.image,(0,210))
 			imWidth=self.image.get_width()
 			imHeight=self.image.get_height()
 			try:
-				self.image = pygame.image.load("/tmp/dcs/CAMERA2.jpg").convert()
+				self.image = pygame.image.load("%s/CAMERA2.jpg" % (self.path)).convert()
                 		self.screen.blit(self.image,(self.sWidth - imWidth,self.sHeight - imHeight))
 			except:
 				pass
