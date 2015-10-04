@@ -38,6 +38,7 @@ class mainScreen:
                 self.firstPlay=1
                 self.playlist=0
                 self.playLen = [ 10, 30 ]
+                self.path = str(conf['pic_loc'])
 		pygame.mixer.music.set_volume(self.def_vol)
 		self.re_init()
 
@@ -104,7 +105,7 @@ class mainScreen:
 		self.gameState = 2
 		self.firstPlay = 1
 #		self.playState = 1
-		self.vidScreen = vidScreen(self.sWidth, self.sHeight)
+		self.vidScreen = vidScreen(self.sWidth, self.sHeight, self.path)
 
         def clickPlayList(self):
                 self.gameState = 3

@@ -3,3 +3,4 @@ start_time: '08:00:00'
 end_time: '23:59:00'
 bob_length: 10
 frozen_length: 30
+pic_loc: '/home/pi/tmp/dcs'
