@@ -47,9 +47,7 @@ class mainScreen:
                 go_fullscreen()
                 self.screen.blit(self.image,(0,0))
                 self.playState = 1
-#                self.firstPlay=1
 		self.buttonPlay = button(self.screen, (0,0,200,200), "images/icons/PlayButton.png",(0,0,0))
-#		self.buttonChoose = button(self.screen, (self.sWidth - 200, 0, 200, 200), "images/icons/ChooseButton.png",(255,0,0))
 		self.buttonPlayList = button(self.screen, (self.sWidth - 200, 0, 200, 200), "images/icons/MusicIcon.png",(0,0,0))
 		self.buttonVideo = button(self.screen, (0, self.sHeight - 200, 200, 200), "images/icons/VideoButton.png",(0,0,0))
   		
@@ -96,21 +94,13 @@ class mainScreen:
 		pygame.mixer.music.load(newTune)
 		pygame.mixer.music.play()
 		 
-#	def clickButtonChoose(self):
-#		self.gameState = 1
-#		self.firstPlay = 1
-#		self.gameChoose = gameChoose(self.sWidth, self.sHeight)
-
 	def clickButtonVideo(self):
 		self.gameState = 2
 		self.firstPlay = 1
-#		self.playState = 1
 		self.vidScreen = vidScreen(self.sWidth, self.sHeight, self.path)
 
         def clickPlayList(self):
                 self.gameState = 3
-#                self.firstPlay = 1
-#               self.playState = 1
                 self.playList = playListScreen(self.sWidth, self.sHeight)
 
 	def playVideo(self):
@@ -142,16 +132,12 @@ class mainScreen:
 			clock.tick(FPS)
 		pygame.display.set_mode((self.sWidth, self.sHeight))
 		
-#		self.clickButtonChoose()
-
 	def checkEvent(self, event, pos):
 		if event.type == pygame.MOUSEBUTTONUP:
 # gameState 0: Main menu
 			if self.gameState == 0:
 				if (self.buttonPlay.checkClick(pos) == True):
 					self.clickButtonPlay()
-#				elif (self.buttonChoose.checkClick(pos) == True):
-#					self.clickButtonChoose()
 				elif (self.buttonVideo.checkClick(pos) == True):
 					self.clickButtonVideo()
 				elif (self.buttonPlayList.checkClick(pos) == True):
@@ -169,7 +155,6 @@ class mainScreen:
 				if self.vidScreen.checkExit(pos):
 					self.gameState = 0
 					self.updatePic()
-#					self.re_init()
 
 # gameState 3: play list
 			elif self.gameState == 3:
