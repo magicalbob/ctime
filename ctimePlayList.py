@@ -33,14 +33,12 @@ class playListScreen:
 
 	def checkClickBob(self, pos):
                 if (self.buttonBob.checkClick(pos)):
-			print ("bob")
                         return True
                 else:
                         return False
 
 	def checkClickFrozen(self, pos):
 		if (self.buttonFrozen.checkClick(pos)):
-			print ("frozen")
 			return True
                 else:
                         return False
