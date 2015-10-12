@@ -32,7 +32,7 @@ class trackListScreen:
     bRow = buttonNo / 8
 
     padX = (self.sWidth - 1200) / 9
-    padY = (self.sHeight - 720) / 5    
+    padY = (self.sHeight - 600) / 5    
 
     return [ padX + (bCol * (150 + padX)), padY + (bRow * (150 + padY)) ]
 
