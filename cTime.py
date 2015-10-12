@@ -132,6 +132,20 @@ class mainScreen:
 			pygame.display.update()
 			clock.tick(FPS)
 		pygame.display.set_mode((self.sWidth, self.sHeight))
+
+        def playTrack(self,playList, tuneNo):
+          whichList = [ "bob", "frozen" ]
+          self.playlist = playList 
+          self.tuneNo = tuneNo
+          newTune = "tunes/%s/%03d.ogg" % (whichList[playList],self.tuneNo)
+          pygame.mixer.music.load(newTune)
+          pygame.mixer.music.play()
+          self.firstPlay = 0
+          self.gameState = 0
+          self.updatePic()
+          self.re_init()
+          self.buttonPlay.changeImage("images/icons/StopButton.png")
+          self.playState = 2
 		
 	def checkEvent(self, event, pos):
 		if event.type == pygame.MOUSEBUTTONUP:
@@ -161,38 +175,20 @@ class mainScreen:
 			elif self.gameState == 3:
 				if self.playList.checkClickBob(pos):
                                   if self.playlist == -1:
-                                        self.playlist = 0
-                                        self.tuneNo = 1
-			                newTune = "tunes/bob/%03d.ogg" %self.tuneNo
-			                pygame.mixer.music.load(newTune)
-			                pygame.mixer.music.play()
-			                self.firstPlay = 0
-					self.gameState = 0
-					self.updatePic()
-					self.re_init()
-			                self.buttonPlay.changeImage("images/icons/StopButton.png")
-                                        self.playState = 2
+                                    self.playTrack(0,1)
                                   else:
                                         self.gameState = 4
+                                        self.playlist = 0
                                         self.trackList = trackListScreen(self.sWidth,
                                                                          self.sHeight,
                                                                          "bob",
                                                                          self.playLen[0])
 				elif self.playList.checkClickFrozen(pos):
                                   if self.playlist == -1:
-                                        self.playlist = 1
-                                        self.tuneNo = 1
-			                newTune = "tunes/frozen/%03d.ogg" %self.tuneNo
-			                pygame.mixer.music.load(newTune)
-			                pygame.mixer.music.play()
-			                self.firstPlay = 0
-					self.gameState = 0
-					self.updatePic()
-					self.re_init()
-			                self.buttonPlay.changeImage("images/icons/StopButton.png")
-                                        self.playState = 2
+                                    self.playTrack(1,1)
                                   else:
                                         self.gameState = 4
+                                        self.playlist = 1
                                         self.trackList = trackListScreen(self.sWidth,
                                                                          self.sHeight,
                                                                          "frozen",
@@ -206,18 +202,7 @@ class mainScreen:
 			elif self.gameState == 4:
 				trackNo, isClicked = self.trackList.checkClick(pos)
                                 if isClicked == True:
-                                        self.playlist = 1
-                                        self.tuneNo = trackNo
-			                newTune = "tunes/%s/%03d.ogg" % (self.trackList.playList,
-                                                                         self.tuneNo)
-			                pygame.mixer.music.load(newTune)
-			                pygame.mixer.music.play()
-			                self.firstPlay = 0
-					self.gameState = 0
-					self.updatePic()
-					self.re_init()
-			                self.buttonPlay.changeImage("images/icons/StopButton.png")
-                                        self.playState = 2
+                                    self.playTrack(self.playlist, trackNo)
 
 	def updatePic(self):
 		self.backNo += 1
