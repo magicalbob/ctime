@@ -3,9 +3,49 @@ from pygame.locals import *
 from ctimeCommon import go_fullscreen
 from ctimeButton import button
 
+class trackListScreen:
+  def __init__(self, sWidth, sHeight, playList, tracks):
+    self.sWidth = sWidth
+    self.sHeight = sHeight
+    self.screen = pygame.display.get_surface()
+    self.screen.fill(Color(0,0,0,0), (0,0,sWidth,sHeight), 0)
+    self.gameState=4
+    go_fullscreen()
+
+    self.playList = playList
+    self.tracks = tracks
+    self.trackList = []
+
+    trackIdx = 0
+    while trackIdx < self.tracks:
+      xPos, yPos = self.getButtonPos(trackIdx)
+      self.trackList.append(
+        button(self.screen,
+               (xPos,yPos,150,150),
+               "images/icons/%s/%03d.png" % (playList, trackIdx+1),
+               (0,0,0))
+      )
+      trackIdx += 1
+         
+  def getButtonPos(self, buttonNo):
+    bCol = buttonNo % 8
+    bRow = buttonNo / 8
+
+    padX = (self.sWidth - 1200) / 9
+    padY = (self.sHeight - 720) / 5    
+
+    return [ padX + (bCol * (150 + padX)), padY + (bRow * (150 + padY)) ]
+
+  def checkClick(self, pos):
+    trackIdx = 0
+    while trackIdx < self.tracks:
+      if self.trackList[trackIdx].checkClick(pos):
+        return [ trackIdx + 1, True ]
+      trackIdx += 1
+    return [ -1, False ]
+
 class playListScreen:
 	def __init__(self, sWidth, sHeight):
-		go_fullscreen()
 		self.sWidth = sWidth
 		self.sHeight = sHeight
 		self.screen = pygame.display.get_surface()

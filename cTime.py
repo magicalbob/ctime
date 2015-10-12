@@ -14,6 +14,7 @@ from ctimeButton import button
 from ctimeGameChoose import gameChoose
 from ctimeVidScreen import vidScreen
 from ctimePlayList import playListScreen 
+from ctimePlayList import trackListScreen 
 import yaml
 import datetime
 from time import strftime,strptime
@@ -36,7 +37,7 @@ class mainScreen:
                 self.start_time = str(conf['start_time'])
                 self.end_time = str(conf['end_time'])
                 self.firstPlay=1
-                self.playlist=0
+                self.playlist=-1
                 self.playLen = [ 10, 30 ]
                 self.path = str(conf['pic_loc'])
 		pygame.mixer.music.set_volume(self.def_vol)
@@ -159,6 +160,7 @@ class mainScreen:
 # gameState 3: play list
 			elif self.gameState == 3:
 				if self.playList.checkClickBob(pos):
+                                  if self.playlist == -1:
                                         self.playlist = 0
                                         self.tuneNo = 1
 			                newTune = "tunes/bob/%03d.ogg" %self.tuneNo
@@ -170,7 +172,14 @@ class mainScreen:
 					self.re_init()
 			                self.buttonPlay.changeImage("images/icons/StopButton.png")
                                         self.playState = 2
+                                  else:
+                                        self.gameState = 4
+                                        self.trackList = trackListScreen(self.sWidth,
+                                                                         self.sHeight,
+                                                                         "bob",
+                                                                         self.playLen[0])
 				elif self.playList.checkClickFrozen(pos):
+                                  if self.playlist == -1:
                                         self.playlist = 1
                                         self.tuneNo = 1
 			                newTune = "tunes/frozen/%03d.ogg" %self.tuneNo
@@ -182,10 +191,33 @@ class mainScreen:
 					self.re_init()
 			                self.buttonPlay.changeImage("images/icons/StopButton.png")
                                         self.playState = 2
+                                  else:
+                                        self.gameState = 4
+                                        self.trackList = trackListScreen(self.sWidth,
+                                                                         self.sHeight,
+                                                                         "frozen",
+                                                                         self.playLen[1])
 				elif self.playList.checkExit(pos):
 					self.gameState = 0
 					self.updatePic()
 					self.re_init()
+
+# gameState 4: track list
+			elif self.gameState == 4:
+				trackNo, isClicked = self.trackList.checkClick(pos)
+                                if isClicked == True:
+                                        self.playlist = 1
+                                        self.tuneNo = trackNo
+			                newTune = "tunes/%s/%03d.ogg" % (self.trackList.playList,
+                                                                         self.tuneNo)
+			                pygame.mixer.music.load(newTune)
+			                pygame.mixer.music.play()
+			                self.firstPlay = 0
+					self.gameState = 0
+					self.updatePic()
+					self.re_init()
+			                self.buttonPlay.changeImage("images/icons/StopButton.png")
+                                        self.playState = 2
 
 	def updatePic(self):
 		self.backNo += 1
