@@ -40,7 +40,10 @@ class mainScreen:
                 self.playlist=-1
                 self.playLen = [ 10, 30 ]
                 self.path = str(conf['pic_loc'])
-		pygame.mixer.music.set_volume(self.def_vol)
+                try:
+		  pygame.mixer.music.set_volume(self.def_vol)
+                except:
+                  print "pygame.music.set_volume failed"
 		self.re_init()
 
 	def re_init(self):
@@ -73,7 +76,10 @@ class mainScreen:
 			pygame.mixer.music.pause()
 			self.buttonPlay.changeImage("images/icons/PlayButton.png")
 		elif self.firstPlay == 1:
-                	pygame.mixer.init()
+                        try:
+                	  pygame.mixer.init()
+                        except:
+                          print "pygame.mixer.init() failed"
 			newTune = "tunes/bob/%03d.ogg" %self.tuneNo
 			pygame.mixer.music.load(newTune)
 			pygame.mixer.music.play()
