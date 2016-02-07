@@ -91,6 +91,8 @@ class mainScreen:
 
 
 	def playNext(self):
+                if not self.can_we_play():
+                        return
 		self.tuneNo += 1
 		if self.tuneNo > self.playLen[self.playlist]:
 			self.tuneNo = 1
