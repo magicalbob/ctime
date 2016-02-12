@@ -35,6 +35,7 @@ class switch(button):
       self.rpiPower(self.powerState)
       self.buttonTime=time.time()
       self.lightTime=time.time()
+      self.enabled=False
 
     return retVal
 
