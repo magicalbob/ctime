@@ -18,6 +18,10 @@ from ctimePlayList import trackListScreen
 import yaml
 import datetime
 from time import strftime,strptime
+from ctimerSwitch import switch
+#import os
+#if (os.uname()[1] == 'rpi21'):
+#  import RPi.GPIO as GPIO
 
 class mainScreen:
 	def __init__(self):
@@ -54,6 +58,7 @@ class mainScreen:
 		self.buttonPlay = button(self.screen, (0,0,200,200), "images/icons/PlayButton.png",(0,0,0))
 		self.buttonPlayList = button(self.screen, (self.sWidth - 200, 0, 200, 200), "images/icons/MusicIcon.png",(0,0,0))
 		self.buttonVideo = button(self.screen, (0, self.sHeight - 200, 200, 200), "images/icons/VideoButton.png",(0,0,0))
+		self.buttonPower = switch(self.screen, (self.sWidth - 200, self.sHeight - 200, 200, 200), "images/icons/VideoButton.png",(0,0,0))
   		
 	def can_we_play(self):
 		test_start = strftime('%Y-%m-%d ')+self.start_time
@@ -165,6 +170,8 @@ class mainScreen:
 					self.clickButtonVideo()
 				elif (self.buttonPlayList.checkClick(pos) == True):
 					self.clickPlayList()
+                                else:
+                                        self.buttonPower.checkClick(pos)
 # gameState 1: See Me Choose game
 			elif self.gameState == 1:
 				if self.gameChoose.checkClick(pos):
@@ -222,6 +229,7 @@ class mainScreen:
 		self.buttonPlay.redraw()
 		self.buttonPlayList.redraw()
 		self.buttonVideo.redraw()
+		self.buttonPower.redraw()
 
 theGame=mainScreen()
 oTime = time.time()
