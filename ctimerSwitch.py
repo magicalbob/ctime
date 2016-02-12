@@ -10,14 +10,31 @@ class switch(button):
     button.__init__(self, screen, rect, image, colorkey)
     self.powerState=False
     self.rpiPower(self.powerState)
+    self.enabled=True
+    self.buttonTime=time.time()
+    self.lightTime=time.time()
 
   def checkClick(self, pos):
-    print("CLICK POWER")
+    nTime = time.time()
+    if self.enabled==False:
+      if (nTime - self.buttonTime) > 10:
+        self.enabled=True
+
+    if self.powerState==True:
+      if (nTime - self.lightTime) > 60:
+        self.powerState==False
+        self.rpiPower(self.powerState)
+
+    if self.enabled == False:
+      return False
+
     retVal = button.checkClick(self, pos)
 
     if retVal == True:
       self.powerState = not(self.powerState)
       self.rpiPower(self.powerState)
+      self.buttonTime=time.time()
+      self.lightTime=time.time()
 
     return retVal
 
@@ -29,3 +46,4 @@ class switch(button):
         os.system("sudo ./rpioff.py")
     else:
       print("NOT A PI. New state: "+str(state))
+
