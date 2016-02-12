@@ -24,8 +24,8 @@ class switch(button):
   def rpiPower(self, state):
     if (os.uname()[1] == 'rpi21'):
       if state == True:
-        os.system("sudo /home/pi/ctime/rpion.py")
+        os.system("sudo ./rpion.py")
       else:
-        os.system("sudo /home/pi/ctime/rpioff.py")
+        os.system("sudo ./rpioff.py")
     else:
       print("NOT A PI. New state: "+str(state))
