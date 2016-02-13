@@ -19,9 +19,6 @@ import yaml
 import datetime
 from time import strftime,strptime
 from ctimerSwitch import switch
-#import os
-#if (os.uname()[1] == 'rpi21'):
-#  import RPi.GPIO as GPIO
 
 class mainScreen:
 	def __init__(self):
@@ -155,8 +152,7 @@ class mainScreen:
           pygame.mixer.music.play()
           self.firstPlay = 0
           self.gameState = 0
-          self.updatePic()
-          self.re_init()
+          self.refreshPic()
           self.buttonPlay.changeImage("images/icons/StopButton.png")
           self.playState = 2
 		
@@ -179,13 +175,13 @@ class mainScreen:
 					self.playVideo()
 				elif self.gameChoose.checkExit(pos):
 					self.gameState = 0
-					self.updatePic()
+					self.refreshPic()
 
 # gameState 2: Video feed from cameras
 			elif self.gameState == 2:
 				if self.vidScreen.checkExit(pos):
 					self.gameState = 0
-					self.updatePic()
+					self.refreshPic()
 
 # gameState 3: play list
 			elif self.gameState == 3:
@@ -211,8 +207,7 @@ class mainScreen:
                                                                          self.playLen[1])
 				elif self.playList.checkExit(pos):
 					self.gameState = 0
-					self.updatePic()
-					self.re_init()
+					self.refreshPic()
 
 # gameState 4: track list
 			elif self.gameState == 4:
@@ -227,9 +222,7 @@ class mainScreen:
 		self.buttonPlay.redraw()
 		self.buttonPlayList.redraw()
 		self.buttonVideo.redraw()
-                print("Check power redraw")
                 if self.buttonPower.enabled == True:
-                  print("Do power redraw")
 		  self.buttonPower.redraw()
 
 	def updatePic(self):
