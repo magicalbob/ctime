@@ -14,16 +14,18 @@ class switch(button):
     self.buttonTime=time.time()
     self.lightTime=time.time()
 
+  def checkOff(self):
+    nTime = time.time()
+    if self.powerState==True:
+      if (nTime - self.lightTime) > 3600:
+        self.powerState=False
+        self.rpiPower(self.powerState)
+
   def checkClick(self, pos):
     nTime = time.time()
     if self.enabled==False:
-      if (nTime - self.buttonTime) > 10:
+      if (nTime - self.buttonTime) > 60:
         self.enabled=True
-
-    if self.powerState==True:
-      if (nTime - self.lightTime) > 60:
-        self.powerState==False
-        self.rpiPower(self.powerState)
 
     if self.enabled == False:
       return False
