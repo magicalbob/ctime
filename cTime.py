@@ -171,7 +171,8 @@ class mainScreen:
 				elif (self.buttonPlayList.checkClick(pos) == True):
 					self.clickPlayList()
                                 else:
-                                        self.buttonPower.checkClick(pos)
+                                        if (self.buttonPower.checkClick(pos)):
+                                          self.refreshPic()
 # gameState 1: See Me Choose game
 			elif self.gameState == 1:
 				if self.gameChoose.checkClick(pos):
@@ -219,17 +220,23 @@ class mainScreen:
                                 if isClicked == True:
                                     self.playTrack(self.playlist, trackNo)
 
-	def updatePic(self):
-		self.backNo += 1
-		if self.backNo > 7:
-			self.backNo = 1
+        def refreshPic(self):
 		imageName = "images/backgrounds/%03d.jpg" %self.backNo
 		self.image = pygame.image.load(imageName).convert()
 		self.screen.blit(self.image,(0,0))
 		self.buttonPlay.redraw()
 		self.buttonPlayList.redraw()
 		self.buttonVideo.redraw()
-		self.buttonPower.redraw()
+                print("Check power redraw")
+                if self.buttonPower.enabled == True:
+                  print("Do power redraw")
+		  self.buttonPower.redraw()
+
+	def updatePic(self):
+		self.backNo += 1
+		if self.backNo > 7:
+			self.backNo = 1
+                self.refreshPic()
 
 theGame=mainScreen()
 oTime = time.time()
@@ -250,6 +257,8 @@ while True:
 			theGame.updatePic()
 			oTime = nTime
                 theGame.buttonPower.checkOff()
+                if theGame.buttonPower.checkButton() == True:
+                  theGame.refreshPic()
 
 	if theGame.gameState == 2:
 		theGame.vidScreen.re_init()

@@ -21,12 +21,16 @@ class switch(button):
         self.powerState=False
         self.rpiPower(self.powerState)
 
-  def checkClick(self, pos):
+  def checkButton(self):
     nTime = time.time()
     if self.enabled==False:
-      if (nTime - self.buttonTime) > 60:
+      if (nTime - self.buttonTime) > 15:
         self.enabled=True
+        return True
+    return False
+    
 
+  def checkClick(self, pos):
     if self.enabled == False:
       return False
 
