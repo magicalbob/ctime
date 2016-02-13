@@ -249,6 +249,7 @@ while True:
 		if (nTime - oTime) > 10:
 			theGame.updatePic()
 			oTime = nTime
+                theGame.buttonPower.checkOff()
 
 	if theGame.gameState == 2:
 		theGame.vidScreen.re_init()
