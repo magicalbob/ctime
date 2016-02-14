@@ -14,6 +14,11 @@ class button:
         def redraw(self):
                 self.screen.blit(self.image,(self.rect[0], self.rect[1]))
 
+        def reload(self,image):
+                self.image=pygame.image.load(image).convert()
+                self.image.set_colorkey(self.colorkey)
+                self.screen.blit(self.image,(self.rect[0], self.rect[1]))
+
         def changeImage(self, image):
                 self.image=pygame.image.load(image).convert()
                 self.image.set_colorkey(self.colorkey) 
