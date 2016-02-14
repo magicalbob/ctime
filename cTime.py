@@ -223,7 +223,10 @@ class mainScreen:
                                     self.playTrack(self.playlist, trackNo)
 # gameState 5: Pairs game
 			elif self.gameState == 5:
-                                self.pairs.checkClick(pos)
+                                pairState, isClicked = self.pairs.checkClick(pos)
+                                if pairState == -2:
+                                    self.gameState = 0
+                                    self.refreshPic()
 
         def refreshPic(self):
 		imageName = "images/backgrounds/%03d.jpg" %self.backNo
@@ -234,6 +237,7 @@ class mainScreen:
 		self.buttonVideo.redraw()
                 if self.buttonPower.enabled == True:
 		  self.buttonPower.redraw()
+                self.buttonPairs.redraw()
 
 	def updatePic(self):
 		self.backNo += 1
