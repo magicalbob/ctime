@@ -1,4 +1,5 @@
 import pygame
+import time
 from pygame.locals import *
 from ctimeCommon import go_fullscreen
 from ctimeCommon import shuffleList
@@ -16,6 +17,8 @@ class pairsScreen:
     self.cardCount = 8
     self.cardList = []
     self.cardBack = []
+    self.cardClicked = [-1,-1]
+    self.flipTime = 0
 
     self.buttonExit = button(self.screen,
 		             (self.sWidth - 200,0,200,200),
@@ -31,6 +34,7 @@ class pairsScreen:
                "images/pairs/Snowflake.png",
                (0,0,0))
       )
+      self.cardList[cardIdx].colorkey=(255,255,255)
       cardIdx += 1
 
     for i in range(self.cardCount):
@@ -48,7 +52,24 @@ class pairsScreen:
     return [ padX + (bCol * (200 + padX)), padY + (bRow * (400 + padY)) ]
 
   def flipCard(self, cardNum):
-    self.cardList[cardNum].reload("images/pairs/card%d.png" % (self.cardBack[cardNum]))
+    if self.cardClicked[0]==-1:
+      self.cardClicked[0]=cardNum
+      self.cardList[cardNum].reload("images/pairs/card%d.png" % (self.cardBack[cardNum]))
+    else:
+      if self.cardClicked[0]==cardNum:
+        pass
+      elif self.cardClicked[1] == -1:
+        self.cardClicked[1]=cardNum
+        self.cardList[cardNum].reload("images/pairs/card%d.png" % (self.cardBack[cardNum]))
+        self.flipTime=time.time()
+
+  def flipBack(self):
+    if self.cardClicked[1] != -1:
+      nTime = time.time()
+      if nTime - self.flipTime > 3:
+        self.cardList[self.cardClicked[0]].reload("images/pairs/Snowflake.png")
+        self.cardList[self.cardClicked[1]].reload("images/pairs/Snowflake.png")
+        self.cardClicked=[-1,-1]
 
   def checkClick(self, pos):
     for cardIdx in range(self.cardCount):
