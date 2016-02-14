@@ -46,6 +46,28 @@ class pairsScreen:
 
     self.cardBack=shuffleList(self.cardBack)
          
+  def redraw(self):
+    self.screen = pygame.display.get_surface()
+    self.screen.fill(Color(0,0,0,0), (0,0,self.sWidth,self.sHeight), 0)
+    go_fullscreen()
+
+    self.buttonExit.redraw()
+
+    for cardIdx in range(self.cardCount):
+      print("REDRAW CARD %d" % (cardIdx))
+      saveDone=self.cardList[cardIdx].cardDone
+      xPos, yPos = self.getButtonPos(cardIdx)
+      if saveDone==True:
+        image="images/pairs/card%d.png" % (self.cardBack[cardIdx])
+      else:
+        image="images/pairs/Snowflake.png"
+      self.cardList[cardIdx]= button(self.screen,
+             (xPos,yPos,200,400),
+             image,
+             (0,0,0))
+      self.cardList[cardIdx].colorkey=(255,255,255)
+      self.cardList[cardIdx].cardDone=saveDone
+
   def getButtonPos(self, buttonNo):
     bCol = buttonNo % 4
     bRow = buttonNo / 4
@@ -85,6 +107,7 @@ class pairsScreen:
 
   def checkClick(self, pos):
     if self.buttonExit.checkClick(pos):
+      print("Exit Pairs")
       return [-2, False]
 
     for cardIdx in range(self.cardCount):
@@ -93,7 +116,6 @@ class pairsScreen:
           self.flipCard(cardIdx)
           return [ cardIdx, True ]
     return [ -1, False ]
-
   def playVideo(self):
     FPS = 25
   
@@ -115,7 +137,6 @@ class pairsScreen:
         if event.type == pygame.QUIT:
           movie.stop()
           playing = False
-          pygame.display.quit()
       try:
         screen.blit(movie_screen,(0,0))
       except:
@@ -123,3 +144,4 @@ class pairsScreen:
       pygame.display.update()
       clock.tick(FPS)
     pygame.display.set_mode((self.sWidth, self.sHeight))
+    self.redraw()
