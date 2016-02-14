@@ -116,6 +116,7 @@ class pairsScreen:
           self.flipCard(cardIdx)
           return [ cardIdx, True ]
     return [ -1, False ]
+
   def playVideo(self):
     FPS = 25
   
@@ -144,4 +145,8 @@ class pairsScreen:
       pygame.display.update()
       clock.tick(FPS)
     pygame.display.set_mode((self.sWidth, self.sHeight))
-    self.redraw()
+    for cardIdx in range(self.cardCount):
+      if self.cardList[cardIdx].cardDone==False:
+        self.redraw()
+        return
+    self.__init__(self.sWidth,self.sHeight)
