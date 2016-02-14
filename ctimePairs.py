@@ -1,6 +1,7 @@
 import pygame
 from pygame.locals import *
 from ctimeCommon import go_fullscreen
+from ctimeCommon import shuffleList
 from ctimeButton import button
 
 class pairsScreen:
@@ -14,6 +15,7 @@ class pairsScreen:
 
     self.cardCount = 8
     self.cardList = []
+    self.cardBack = []
 
     self.buttonExit = button(self.screen,
 		             (self.sWidth - 200,0,200,200),
@@ -30,6 +32,11 @@ class pairsScreen:
                (0,0,0))
       )
       cardIdx += 1
+
+    for i in range(self.cardCount):
+      self.cardBack.append(i % (self.cardCount / 2))
+
+    self.cardBack=shuffleList(self.cardBack)
          
   def getButtonPos(self, buttonNo):
     bCol = buttonNo % 4
