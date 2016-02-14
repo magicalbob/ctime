@@ -1,6 +1,7 @@
 import pygame
 import random
 import time
+import os
 from pygame.locals import *
 from ctimeCommon import go_fullscreen
 from ctimeCommon import shuffleList
@@ -68,7 +69,10 @@ class pairsScreen:
         if self.cardBack[self.cardClicked[0]] == self.cardBack[self.cardClicked[1]]:
           self.cardList[self.cardClicked[0]].cardDone = True
           self.cardList[self.cardClicked[1]].cardDone = True
-          self.playVideo()
+          if (os.uname()[1] == 'rpi21'):
+            self.playVideo()
+          else:
+            print("Can only play video on Pi")
 
   def flipBack(self):
     if self.cardClicked[1] != -1:
