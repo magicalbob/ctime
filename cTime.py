@@ -221,6 +221,9 @@ class mainScreen:
 				trackNo, isClicked = self.trackList.checkClick(pos)
                                 if isClicked == True:
                                     self.playTrack(self.playlist, trackNo)
+# gameState 5: Pairs game
+			elif self.gameState == 5:
+                                self.pairs.checkClick(pos)
 
         def refreshPic(self):
 		imageName = "images/backgrounds/%03d.jpg" %self.backNo
