@@ -19,6 +19,7 @@ import yaml
 import datetime
 from time import strftime,strptime
 from ctimerSwitch import switch
+from ctimePairs import pairsScreen
 
 class mainScreen:
 	def __init__(self):
@@ -56,6 +57,7 @@ class mainScreen:
 		self.buttonPlayList = button(self.screen, (self.sWidth - 200, 0, 200, 200), "images/icons/MusicIcon.png",(0,0,0))
 		self.buttonVideo = button(self.screen, (0, self.sHeight - 200, 200, 200), "images/icons/VideoButton.png",(0,0,0))
 		self.buttonPower = switch(self.screen, (self.sWidth - 200, self.sHeight - 200, 200, 200), "images/icons/light.png",(0,0,0))
+		self.buttonPairs = button(self.screen, (self.sWidth - 200, (self.sHeight / 2) - 100, 200, 200), "images/icons/light.png",(0,0,0))
   		
 	def can_we_play(self):
 		test_start = strftime('%Y-%m-%d ')+self.start_time
@@ -114,6 +116,10 @@ class mainScreen:
                 self.gameState = 3
                 self.playList = playListScreen(self.sWidth, self.sHeight)
 
+        def clickPairs(self):
+                self.gameState = 5
+                self.pairs = pairsScreen(self.sWidth, self.sHeight)
+
 	def playVideo(self):
 		FPS = 25
 
@@ -166,9 +172,10 @@ class mainScreen:
 					self.clickButtonVideo()
 				elif (self.buttonPlayList.checkClick(pos) == True):
 					self.clickPlayList()
-                                else:
-                                        if (self.buttonPower.checkClick(pos)):
-                                          self.refreshPic()
+                                elif (self.buttonPower.checkClick(pos)):
+                                        self.refreshPic()
+                                elif (self.buttonPairs.checkClick(pos)):
+                                        self.clickPairs()
 # gameState 1: See Me Choose game
 			elif self.gameState == 1:
 				if self.gameChoose.checkClick(pos):
