@@ -115,6 +115,7 @@ class pairsScreen:
         if event.type == pygame.QUIT:
           movie.stop()
           playing = False
+          pygame.display.quit()
       try:
         screen.blit(movie_screen,(0,0))
       except:
