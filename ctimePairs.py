@@ -77,6 +77,9 @@ class pairsScreen:
         self.cardClicked=[-1,-1]
 
   def checkClick(self, pos):
+    if self.buttonExit.checkClick(pos):
+      return [-2, False]
+
     for cardIdx in range(self.cardCount):
       if self.cardList[cardIdx].checkClick(pos):
         if self.cardList[cardIdx].cardDone==False:
