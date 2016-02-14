@@ -47,10 +47,12 @@ class pairsScreen:
 
     return [ padX + (bCol * (200 + padX)), padY + (bRow * (400 + padY)) ]
 
+  def flipCard(self, cardNum):
+    print("Flipping %d (%d)" % (cardNum,self.cardBack[cardNum]))
+
   def checkClick(self, pos):
-    cardIdx = 0
-    while cardIdx < self.cardCount:
+    for cardIdx in range(self.cardCount):
       if self.cardList[cardIdx].checkClick(pos):
-        return [ CardIdx + 1, True ]
-      cardIdx += 1
+        self.flipCard(cardIdx)
+        return [ cardIdx, True ]
     return [ -1, False ]
