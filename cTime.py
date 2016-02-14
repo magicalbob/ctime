@@ -57,7 +57,7 @@ class mainScreen:
 		self.buttonPlayList = button(self.screen, (self.sWidth - 200, 0, 200, 200), "images/icons/MusicIcon.png",(0,0,0))
 		self.buttonVideo = button(self.screen, (0, self.sHeight - 200, 200, 200), "images/icons/VideoButton.png",(0,0,0))
 		self.buttonPower = switch(self.screen, (self.sWidth - 200, self.sHeight - 200, 200, 200), "images/icons/light.png",(0,0,0))
-		self.buttonPairs = button(self.screen, (self.sWidth - 200, (self.sHeight / 2) - 100, 200, 200), "images/icons/light.png",(0,0,0))
+		self.buttonPairs = button(self.screen, (self.sWidth - 200, (self.sHeight / 2) - 100, 200, 200), "images/icons/pairs.png",(0,0,0))
   		
 	def can_we_play(self):
 		test_start = strftime('%Y-%m-%d ')+self.start_time
