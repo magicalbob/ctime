@@ -48,7 +48,7 @@ class pairsScreen:
     return [ padX + (bCol * (200 + padX)), padY + (bRow * (400 + padY)) ]
 
   def flipCard(self, cardNum):
-    print("Flipping %d (%d)" % (cardNum,self.cardBack[cardNum]))
+    self.cardList[cardNum].reload("images/pairs/card%d.png" % (self.cardBack[cardNum]))
 
   def checkClick(self, pos):
     for cardIdx in range(self.cardCount):
