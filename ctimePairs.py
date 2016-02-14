@@ -1,9 +1,11 @@
 import pygame
+import random
 import time
 from pygame.locals import *
 from ctimeCommon import go_fullscreen
 from ctimeCommon import shuffleList
 from ctimeButton import button
+
 
 class pairsScreen:
   def __init__(self, sWidth, sHeight):
@@ -66,6 +68,7 @@ class pairsScreen:
         if self.cardBack[self.cardClicked[0]] == self.cardBack[self.cardClicked[1]]:
           self.cardList[self.cardClicked[0]].cardDone = True
           self.cardList[self.cardClicked[1]].cardDone = True
+          self.playVideo()
 
   def flipBack(self):
     if self.cardClicked[1] != -1:
@@ -86,3 +89,32 @@ class pairsScreen:
           self.flipCard(cardIdx)
           return [ cardIdx, True ]
     return [ -1, False ]
+
+  def playVideo(self):
+    FPS = 25
+  
+    pygame.mixer.quit()
+    clock = pygame.time.Clock()
+    movieName = "videos/%03d.MPG" %random.randint(1,3)
+    print "movieName = " + movieName
+    movie = pygame.movie.Movie(movieName)
+    screen = pygame.display.set_mode(movie.get_size())
+    movie_screen = pygame.Surface(movie.get_size()).convert()
+  
+    movie.set_display(movie_screen)
+    go_fullscreen()
+    movie.set_volume(1)
+    movie.play()
+    playing = True
+    while movie.get_busy():
+      for event in pygame.event.get():
+        if event.type == pygame.QUIT:
+          movie.stop()
+          playing = False
+      try:
+        screen.blit(movie_screen,(0,0))
+      except:
+        pass
+      pygame.display.update()
+      clock.tick(FPS)
+    pygame.display.set_mode((self.sWidth, self.sHeight))
