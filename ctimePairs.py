@@ -35,6 +35,7 @@ class pairsScreen:
                (0,0,0))
       )
       self.cardList[cardIdx].colorkey=(255,255,255)
+      self.cardList[cardIdx].cardDone=False
       cardIdx += 1
 
     for i in range(self.cardCount):
@@ -62,18 +63,23 @@ class pairsScreen:
         self.cardClicked[1]=cardNum
         self.cardList[cardNum].reload("images/pairs/card%d.png" % (self.cardBack[cardNum]))
         self.flipTime=time.time()
+        if self.cardBack[self.cardClicked[0]] == self.cardBack[self.cardClicked[1]]:
+          self.cardList[self.cardClicked[0]].cardDone = True
+          self.cardList[self.cardClicked[1]].cardDone = True
 
   def flipBack(self):
     if self.cardClicked[1] != -1:
       nTime = time.time()
       if nTime - self.flipTime > 3:
-        self.cardList[self.cardClicked[0]].reload("images/pairs/Snowflake.png")
-        self.cardList[self.cardClicked[1]].reload("images/pairs/Snowflake.png")
+        if self.cardList[self.cardClicked[0]].cardDone == False:
+          self.cardList[self.cardClicked[0]].reload("images/pairs/Snowflake.png")
+          self.cardList[self.cardClicked[1]].reload("images/pairs/Snowflake.png")
         self.cardClicked=[-1,-1]
 
   def checkClick(self, pos):
     for cardIdx in range(self.cardCount):
       if self.cardList[cardIdx].checkClick(pos):
-        self.flipCard(cardIdx)
-        return [ cardIdx, True ]
+        if self.cardList[cardIdx].cardDone==False:
+          self.flipCard(cardIdx)
+          return [ cardIdx, True ]
     return [ -1, False ]
