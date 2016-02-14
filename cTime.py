@@ -271,5 +271,8 @@ while True:
 			if theGame.can_we_play():
 				theGame.playNext()
 
+        if theGame.gameState == 5:
+                theGame.pairs.flipBack()
+
 	pygame.display.update()
 
