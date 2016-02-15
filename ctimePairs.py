@@ -91,6 +91,8 @@ class pairsScreen:
         if self.cardBack[self.cardClicked[0]] == self.cardBack[self.cardClicked[1]]:
           self.cardList[self.cardClicked[0]].cardDone = True
           self.cardList[self.cardClicked[1]].cardDone = True
+          pygame.display.update()
+          time.sleep(2)
           if (os.uname()[1] == 'rpi21'):
             self.playVideo()
           else:
