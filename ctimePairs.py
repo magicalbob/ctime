@@ -92,7 +92,8 @@ class pairsScreen:
           self.cardList[self.cardClicked[0]].cardDone = True
           self.cardList[self.cardClicked[1]].cardDone = True
           pygame.display.update()
-          time.sleep(2)
+          self.playApplause()
+          time.sleep(6)
           if (os.uname()[1] == 'rpi21'):
             self.playVideo()
           else:
@@ -152,3 +153,12 @@ class pairsScreen:
         self.redraw()
         return
     self.__init__(self.sWidth,self.sHeight)
+
+  def playApplause(self):
+    try:
+      pygame.mixer.init()
+    except:
+      print "pygame.mixer.init() failed"
+    newTune = "sounds/applause.ogg"
+    pygame.mixer.music.load(newTune)
+    pygame.mixer.music.play()
