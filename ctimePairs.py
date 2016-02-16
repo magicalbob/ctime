@@ -119,8 +119,9 @@ class pairsScreen:
     return [ -1, False ]
 
   def playVideo(self):
-    pygame.mixer.quit()
+    #pygame.mixer.quit()
     pygame.display.set_mode([self.sWidth,self.sHeight])
+    random.seed()
     movieName = "videos/%03d.MPG" %random.randint(1,3)
     os.system("mplayer -fs %s" % (movieName))
     go_fullscreen()
