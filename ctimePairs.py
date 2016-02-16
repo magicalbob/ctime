@@ -54,7 +54,6 @@ class pairsScreen:
     self.buttonExit.redraw()
 
     for cardIdx in range(self.cardCount):
-      print("REDRAW CARD %d" % (cardIdx))
       saveDone=self.cardList[cardIdx].cardDone
       xPos, yPos = self.getButtonPos(cardIdx)
       if saveDone==True:
@@ -110,7 +109,6 @@ class pairsScreen:
 
   def checkClick(self, pos):
     if self.buttonExit.checkClick(pos):
-      print("Exit Pairs")
       return [-2, False]
 
     for cardIdx in range(self.cardCount):
@@ -126,7 +124,6 @@ class pairsScreen:
     pygame.mixer.quit()
     clock = pygame.time.Clock()
     movieName = "videos/%03d.MPG" %random.randint(1,3)
-    print "movieName = " + movieName
     movie = pygame.movie.Movie(movieName)
     screen = pygame.display.set_mode(movie.get_size())
     movie_screen = pygame.Surface(movie.get_size()).convert()
