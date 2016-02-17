@@ -2,6 +2,7 @@ import pygame
 import random
 import time
 import os
+import fnmatch
 from pygame.locals import *
 from ctimeCommon import shuffleList
 from ctimeButton import button
@@ -119,7 +120,8 @@ class pairsScreen:
     #pygame.mixer.quit()
     pygame.display.set_mode([self.sWidth,self.sHeight])
     random.seed()
-    movieName = "videos/%03d.MPG" %random.randint(1,5)
+    numVid=len(fnmatch.filter(os.listdir('videos'), '*.MPG'))
+    movieName = "videos/%03d.MPG" %random.randint(1,numVid)
     os.system("mplayer -fs %s" % (movieName))
     go_fullscreen()
     for cardIdx in range(self.cardCount):
