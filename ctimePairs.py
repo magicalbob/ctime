@@ -58,7 +58,7 @@ class pairsScreen:
       saveDone=self.cardList[cardIdx].cardDone
       xPos, yPos = self.getButtonPos(cardIdx)
       if saveDone==True:
-        image="images/pairs/card%d.png" % (self.cardBack[cardIdx])
+        image=""
       else:
         image="images/pairs/Snowflake.png"
       self.cardList[cardIdx]= button(self.screen,
