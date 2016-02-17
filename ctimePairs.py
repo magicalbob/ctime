@@ -93,10 +93,7 @@ class pairsScreen:
           pygame.display.update()
           self.playApplause()
           time.sleep(6)
-          if (os.uname()[1] == 'rpi21'):
-            self.playVideo()
-          else:
-            print("Can only play video on Pi")
+          self.playVideo()
 
   def flipBack(self):
     if self.cardClicked[1] != -1:
