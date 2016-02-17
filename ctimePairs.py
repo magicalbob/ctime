@@ -119,7 +119,7 @@ class pairsScreen:
     #pygame.mixer.quit()
     pygame.display.set_mode([self.sWidth,self.sHeight])
     random.seed()
-    movieName = "videos/%03d.MPG" %random.randint(1,4)
+    movieName = "videos/%03d.MPG" %random.randint(1,5)
     os.system("mplayer -fs %s" % (movieName))
     go_fullscreen()
     for cardIdx in range(self.cardCount):
