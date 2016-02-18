@@ -50,7 +50,10 @@ class pairsScreen:
   def redraw(self):
     self.screen = pygame.display.get_surface()
     self.screen.fill(Color(0,0,0,0), (0,0,self.sWidth,self.sHeight), 0)
-    go_fullscreen()
+    if (os.uname()[1] == 'rpi21'):
+      go_fullscreen()
+    else:
+      pass
 
     self.buttonExit.redraw()
 
@@ -123,7 +126,7 @@ class pairsScreen:
     numVid=len(fnmatch.filter(os.listdir('videos'), '*.MPG'))
     movieName = "videos/%03d.MPG" %random.randint(1,numVid)
     os.system("mplayer -fs %s" % (movieName))
-    go_fullscreen()
+    #go_fullscreen()
     for cardIdx in range(self.cardCount):
       if self.cardList[cardIdx].cardDone==False:
         self.redraw()

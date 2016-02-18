@@ -2,8 +2,6 @@ import time
 import pygame
 from ctimeButton import button
 import os
-#if (os.uname()[1] == 'rpi21'):
-#  import RPi.GPIO as GPIO
 
 class switch(button):
   def __init__(self, screen, rect, image, colorkey):
