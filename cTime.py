@@ -249,6 +249,8 @@ theGame=mainScreen()
 oTime = time.time()
 
 while True:
+# Check power off of lights
+        theGame.buttonPower.checkOff()
 # Check for event. Exit if return key pressed, otherwise pass event to theGame object
 	for e in pygame.event.get():
 		if (e.type is KEYDOWN and e.key == K_RETURN):
@@ -263,7 +265,6 @@ while True:
 		if (nTime - oTime) > 10:
 			theGame.updatePic()
 			oTime = nTime
-                theGame.buttonPower.checkOff()
                 if theGame.buttonPower.checkButton() == True:
                   theGame.refreshPic()
 
