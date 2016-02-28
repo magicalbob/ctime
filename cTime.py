@@ -40,7 +40,7 @@ class mainScreen:
                 self.end_time = str(conf['end_time'])
                 self.firstPlay=1
                 self.playlist=-1
-                self.playLen = [ 10, 30 ]
+                self.playLen = [ 10, 32 ]
                 self.path = str(conf['pic_loc'])
                 try:
 		  pygame.mixer.music.set_volume(self.def_vol)
