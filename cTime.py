@@ -84,7 +84,11 @@ class mainScreen:
                 	  pygame.mixer.init()
                         except:
                           print "pygame.mixer.init() failed"
-			newTune = "tunes/bob/%03d.ogg" %self.tuneNo
+                        if self.playlist < 1:
+                          wList="bob"
+                        else:
+                          wList="frozen"
+			newTune = "tunes/%s/%03d.ogg" % (wList,self.tuneNo)
 			pygame.mixer.music.load(newTune)
 			pygame.mixer.music.play()
 			self.firstPlay = 0
