@@ -51,7 +51,8 @@ class mainScreen:
 	def re_init(self):
                 self.gameState=0
                 go_fullscreen()
-                self.screen.blit(self.image,(0,0))
+                self.screen.blit(self.image, (max(0,self.sWidth-self.image.get_rect().size[0]),
+                                              max(0,self.sHeight-self.image.get_rect().size[1])))
                 self.playState = 1
 		self.buttonPlay = button(self.screen, (0,0,200,200), "images/icons/PlayButton.png",(0,0,0))
 		self.buttonPlayList = button(self.screen, (self.sWidth - 200, 0, 200, 200), "images/icons/MusicIcon.png",(0,0,0))
@@ -235,7 +236,8 @@ class mainScreen:
         def refreshPic(self):
 		imageName = "images/backgrounds/%03d.jpg" %self.backNo
 		self.image = pygame.image.load(imageName).convert()
-		self.screen.blit(self.image,(0,0))
+                self.screen.blit(self.image, (max(0,self.sWidth-self.image.get_rect().size[0]),
+                                              max(0,self.sHeight-self.image.get_rect().size[1])))
 		self.buttonPlay.redraw()
 		self.buttonPlayList.redraw()
 		self.buttonVideo.redraw()
