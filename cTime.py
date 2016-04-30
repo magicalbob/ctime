@@ -51,6 +51,7 @@ class mainScreen:
 	def re_init(self):
                 self.gameState=0
                 go_fullscreen()
+                self.screen.fill((0,0,0))
                 self.screen.blit(self.image, (max(0,(self.sWidth-self.image.get_rect().size[0])/2),
                                               max(0,(self.sHeight-self.image.get_rect().size[1])/2)))
                 self.playState = 1
@@ -236,6 +237,7 @@ class mainScreen:
         def refreshPic(self):
 		imageName = "images/backgrounds/%03d.jpg" %self.backNo
 		self.image = pygame.image.load(imageName).convert()
+                self.screen.fill((0,0,0))
                 self.screen.blit(self.image, (max(0,(self.sWidth-self.image.get_rect().size[0])/2),
                                               max(0,(self.sHeight-self.image.get_rect().size[1])/2)))
 		self.buttonPlay.redraw()
