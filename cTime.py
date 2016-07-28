@@ -55,8 +55,13 @@ class mainScreen:
                 self.screen.blit(self.image, (max(0,(self.sWidth-self.image.get_rect().size[0])/2),
                                               max(0,(self.sHeight-self.image.get_rect().size[1])/2)))
                 self.playState = 1
-		self.buttonPlay = button(self.screen, (0,0,200,200), "images/icons/PlayButton.png",(0,0,0))
-		self.buttonPlayList = button(self.screen, (self.sWidth - 200, 0, 200, 200), "images/icons/MusicIcon.png",(0,0,0))
+                imagePlay=""
+                imageList=""
+                if self.can_we_play():
+                  imagePlay="images/icons/PlayButton.png"
+                  imageList="images/icons/MusicIcon.png"
+		self.buttonPlay = button(self.screen, (0,0,200,200), imagePlay,(0,0,0))
+		self.buttonPlayList = button(self.screen, (self.sWidth - 200, 0, 200, 200), imageList,(0,0,0))
 		self.buttonVideo = button(self.screen, (0, self.sHeight - 200, 200, 200), "images/icons/VideoButton.png",(0,0,0))
 		self.buttonPower = switch(self.screen, (self.sWidth - 200, self.sHeight - 200, 200, 200), "images/icons/light.png",(0,0,0))
 		self.buttonPairs = button(self.screen, (self.sWidth - 200, (self.sHeight / 2) - 100, 200, 200), "images/icons/pairs.png",(0,0,0))
@@ -119,6 +124,8 @@ class mainScreen:
 		self.vidScreen = vidScreen(self.sWidth, self.sHeight, self.path)
 
         def clickPlayList(self):
+		if not self.can_we_play():
+			return
                 self.gameState = 3
                 self.playList = playListScreen(self.sWidth, self.sHeight)
 
