@@ -15,6 +15,7 @@ from ctimeGameChoose import gameChoose
 from ctimeVidScreen import vidScreen
 from ctimePlayList import playListScreen 
 from ctimePlayList import trackListScreen 
+from ctimeCamera import ctimeCamera
 import yaml
 import datetime
 from time import strftime,strptime
@@ -65,6 +66,7 @@ class mainScreen:
 		self.buttonVideo = button(self.screen, (0, self.sHeight - 200, 200, 200), "images/icons/VideoButton.png",(0,0,0))
 		self.buttonPower = switch(self.screen, (self.sWidth - 200, self.sHeight - 200, 200, 200), "images/icons/light.png",(0,0,0))
 		self.buttonPairs = button(self.screen, (self.sWidth - 200, (self.sHeight / 2) - 100, 200, 200), "images/icons/pairs.png",(0,0,0))
+		self.buttonCamera = button(self.screen, (0, (self.sHeight / 2) - 100, 200, 200), "images/icons/VideoButton.png",(0,0,0))
   		
 	def can_we_play(self):
 		test_start = strftime('%Y-%m-%d ')+self.start_time
@@ -133,6 +135,10 @@ class mainScreen:
                 self.gameState = 5
                 self.pairs = pairsScreen(self.sWidth, self.sHeight)
 
+        def clickButtonCamera(self):
+                self.gameState = 6
+                self.camera = ctimeCamera(self.sWidth, self.sHeight)
+
 	def playVideo(self):
 		FPS = 25
 
@@ -189,6 +195,8 @@ class mainScreen:
                                         self.refreshPic()
                                 elif (self.buttonPairs.checkClick(pos)):
                                         self.clickPairs()
+                                elif (self.buttonCamera.checkClick(pos)):
+                                        self.clickButtonCamera()
 # gameState 1: See Me Choose game
 			elif self.gameState == 1:
 				if self.gameChoose.checkClick(pos):
@@ -240,6 +248,11 @@ class mainScreen:
                                 if pairState == -2:
                                     self.gameState = 0
                                     self.refreshPic()
+# gameState 6: Camera game
+			elif self.gameState == 6:
+				if self.camera.checkExit(pos):
+					self.gameState = 0
+					self.refreshPic()
 
         def refreshPic(self):
 		imageName = "images/backgrounds/%03d.jpg" %self.backNo
@@ -253,6 +266,7 @@ class mainScreen:
                 if self.buttonPower.enabled == True:
 		  self.buttonPower.redraw()
                 self.buttonPairs.redraw()
+                self.buttonCamera.redraw()
 
 	def updatePic(self):
 		self.backNo += 1
@@ -293,6 +307,9 @@ while True:
 
         if theGame.gameState == 5:
                 theGame.pairs.flipBack()
+
+        if theGame.gameState == 6:
+                theGame.camera.updateCamera()
 
 	pygame.display.update()
 
