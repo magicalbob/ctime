@@ -5,6 +5,7 @@
 
 import random
 import time
+import pytz
 import pygtk
 import pygame
 from pygame.locals import *
@@ -67,13 +68,14 @@ class mainScreen:
 		self.buttonPairs = button(self.screen, (self.sWidth - 200, (self.sHeight / 2) - 100, 200, 200), "images/icons/pairs.png",(0,0,0))
   		
 	def can_we_play(self):
+		uk=pytz.timezone('Europe/London')
+                now_time=datetime.datetime.now(uk)
 		test_start = strftime('%Y-%m-%d ')+self.start_time
 		test_end = strftime('%Y-%m-%d ')+self.end_time
-		if test_end < test_start:
-			test_end = str(datetime.datetime.strptime(test_end, "%Y-%m-%d %H:%M:%S") + datetime.timedelta(days=1))
-		if test_start < strftime('%Y-%m-%d %H:%M:%S'):
-			if strftime('%Y-%m-%d %H:%M:%S') < test_end:
-				return True
+		s_time=datetime.datetime.strptime(test_start, "%Y-%m-%d %H:%M:%S")
+		e_time=datetime.datetime.strptime(test_end, "%Y-%m-%d %H:%M:%S")
+		if s_time.replace(tzinfo=None) < now_time.replace(tzinfo=None) < e_time.replace(tzinfo=None):
+			return True
 
 		return False
 
