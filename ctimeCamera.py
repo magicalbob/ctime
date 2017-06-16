@@ -55,7 +55,7 @@ class ctimeCamera:
   def re_init(self):
     try:
       self.image=pygame.image.load("%s/CAMERA1.jpg" % (self.path)).convert()
-      self.screen.blit(self.image,(0,210))
+      self.screen.blit(self.image,(0,0))
       imWidth=self.image.get_width()
       imHeight=self.image.get_height()
       try:
