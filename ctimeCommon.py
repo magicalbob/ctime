@@ -30,3 +30,12 @@ def shuffleList(theList):
     theList[randNum]=val
 
   return theList
+
+def playLetItGo():
+  try:
+    pygame.mixer.init()
+  except:
+    print "pygame.mixer.init() failed"
+  newTune = "tunes/frozen/005.ogg"
+  pygame.mixer.music.load(newTune)
+  pygame.mixer.music.play()

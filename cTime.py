@@ -197,7 +197,10 @@ class mainScreen:
 			elif self.gameState == 4:
 				trackNo, isClicked = self.trackList.checkClick(pos)
                                 if isClicked == True:
-                                    self.playTrack(self.playlist, trackNo)
+                                    if (self.playlist == 1) and (trackNo == 5):
+                                      self.clickPairs()
+                                    else:
+                                      self.playTrack(self.playlist, trackNo)
 # gameState 5: Pairs game
 			elif self.gameState == 5:
                                 pairState, isClicked = self.pairs.checkClick(pos)
