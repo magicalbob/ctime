@@ -94,10 +94,7 @@ class pairsScreen:
         if self.cardBack[self.cardClicked[0]] == self.cardBack[self.cardClicked[1]]:
           self.cardList[self.cardClicked[0]].cardDone = True
           self.cardList[self.cardClicked[1]].cardDone = True
-          pygame.display.update()
-          self.playApplause()
-          time.sleep(6)
-          self.playVideo()
+          self.playSuccess()
 
   def flipBack(self):
     if self.cardClicked[1] != -1:
@@ -119,14 +116,17 @@ class pairsScreen:
           return [ cardIdx, True ]
     return [ -1, False ]
 
-  def playVideo(self):
-    #pygame.mixer.quit()
-    pygame.display.set_mode([self.sWidth,self.sHeight])
-    random.seed()
-    numVid=len(fnmatch.filter(os.listdir('videos'), '*.MPG'))
-    movieName = "videos/%03d.MPG" %random.randint(1,numVid)
-    os.system("mplayer -fs %s" % (movieName))
-    #go_fullscreen()
+  def playSuccess(self):
+    pygame.display.update()
+    self.playApplause()
+    time.sleep(6)
+    try:
+      pygame.mixer.init()
+    except:
+      print "pygame.mixer.init() failed"
+    newTune = "tunes/frozen/005.ogg"
+    pygame.mixer.music.load(newTune)
+    pygame.mixer.music.play()
     for cardIdx in range(self.cardCount):
       if self.cardList[cardIdx].cardDone==False:
         self.redraw()

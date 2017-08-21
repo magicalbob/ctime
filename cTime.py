@@ -12,7 +12,6 @@ from pygame.locals import *
 from sys import exit
 from ctimeCommon import go_fullscreen
 from ctimeButton import button
-from ctimeGameChoose import gameChoose
 from ctimePlayList import playListScreen 
 from ctimePlayList import trackListScreen 
 from ctimeCamera import ctimeCamera
@@ -135,35 +134,6 @@ class mainScreen:
                 self.gameState = 5
                 self.pairs = pairsScreen(self.sWidth, self.sHeight)
 
-	def playVideo(self):
-		FPS = 25
-
-		pygame.mixer.quit()
-		clock = pygame.time.Clock()
-		movieName = "videos/%03d.MPG" %random.randint(1,3)
-		print "movieName = " + movieName
-		movie = pygame.movie.Movie(movieName)
-		screen = pygame.display.set_mode(movie.get_size())
-		movie_screen = pygame.Surface(movie.get_size()).convert()
-
-		movie.set_display(movie_screen)
-		go_fullscreen()
-		movie.set_volume(1)
-		movie.play()
-		playing = True
-		while movie.get_busy():
-			for event in pygame.event.get():
-				if event.type == pygame.QUIT:
-					movie.stop()
-					playing = False
-			try:
-				screen.blit(movie_screen,(0,0))
-			except:
-				pass
-			pygame.display.update()
-			clock.tick(FPS)
-		pygame.display.set_mode((self.sWidth, self.sHeight))
-
         def playTrack(self,playList, tuneNo):
           whichList = [ "bob", "frozen" ]
           self.playlist = playList 
@@ -191,14 +161,6 @@ class mainScreen:
                                         self.refreshPic()
                                 elif (self.buttonPairs.checkClick(pos)):
                                         self.clickPairs()
-# gameState 1: See Me Choose game
-			elif self.gameState == 1:
-				if self.gameChoose.checkClick(pos):
-					self.playVideo()
-				elif self.gameChoose.checkExit(pos):
-					self.gameState = 0
-					self.refreshPic()
-
 # gameState 2: Video feed from cameras
 			elif self.gameState == 2:
 				if self.vidScreen.checkExit(pos):
