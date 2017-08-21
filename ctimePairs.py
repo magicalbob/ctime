@@ -7,6 +7,7 @@ from pygame.locals import *
 from ctimeCommon import shuffleList
 from ctimeButton import button
 from ctimeCommon import go_fullscreen
+from ctimeCommon import playLetItGo
 
 
 class pairsScreen:
@@ -120,13 +121,7 @@ class pairsScreen:
     pygame.display.update()
     self.playApplause()
     time.sleep(6)
-    try:
-      pygame.mixer.init()
-    except:
-      print "pygame.mixer.init() failed"
-    newTune = "tunes/frozen/005.ogg"
-    pygame.mixer.music.load(newTune)
-    pygame.mixer.music.play()
+    playLetItGo()
     for cardIdx in range(self.cardCount):
       if self.cardList[cardIdx].cardDone==False:
         self.redraw()
