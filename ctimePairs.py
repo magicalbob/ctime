@@ -117,14 +117,14 @@ class pairsScreen:
     return [ -1, False ]
 
   def playSuccess(self):
+    pygame.display.update()
+    self.playApplause()
+    time.sleep(6)
     if self.buttonExit == None:
       self.buttonExit = button(self.screen,
                                (self.sWidth - 200,0,200,200),
                                "images/icons/StopButton.png",
                                (0,0,0))
-    pygame.display.update()
-    self.playApplause()
-    time.sleep(6)
     playLetItGo()
     for cardIdx in range(self.cardCount):
       if self.cardList[cardIdx].cardDone==False:
