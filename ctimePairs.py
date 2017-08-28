@@ -25,10 +25,7 @@ class pairsScreen:
     self.cardClicked = [-1,-1]
     self.flipTime = 0
 
-    self.buttonExit = button(self.screen,
-		             (self.sWidth - 200,0,200,200),
-		             "images/icons/StopButton.png",
-		             (0,0,0))
+    self.buttonExit = None
 
     cardIdx = 0
     while cardIdx < self.cardCount:
@@ -56,7 +53,8 @@ class pairsScreen:
     else:
       pass
 
-    self.buttonExit.redraw()
+    if self.buttonExit != None:
+      self.buttonExit.redraw()
 
     for cardIdx in range(self.cardCount):
       saveDone=self.cardList[cardIdx].cardDone
@@ -107,8 +105,9 @@ class pairsScreen:
         self.cardClicked=[-1,-1]
 
   def checkClick(self, pos):
-    if self.buttonExit.checkClick(pos):
-      return [-2, False]
+    if self.buttonExit != None:
+      if self.buttonExit.checkClick(pos):
+        return [-2, False]
 
     for cardIdx in range(self.cardCount):
       if self.cardList[cardIdx].checkClick(pos):
@@ -118,6 +117,11 @@ class pairsScreen:
     return [ -1, False ]
 
   def playSuccess(self):
+    if self.buttonExit == None:
+      self.buttonExit = button(self.screen,
+                               (self.sWidth - 200,0,200,200),
+                               "images/icons/StopButton.png",
+                               (0,0,0))
     pygame.display.update()
     self.playApplause()
     time.sleep(6)
