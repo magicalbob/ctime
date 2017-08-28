@@ -170,9 +170,6 @@ class mainScreen:
 # gameState 3: play list
 			elif self.gameState == 3:
 				if self.playList.checkClickBob(pos):
-                                  if self.playlist == -1:
-                                    self.playTrack(0,1)
-                                  else:
                                         self.gameState = 4
                                         self.playlist = 0
                                         self.trackList = trackListScreen(self.sWidth,
@@ -180,9 +177,6 @@ class mainScreen:
                                                                          "bob",
                                                                          self.playLen[0])
 				elif self.playList.checkClickFrozen(pos):
-                                  if self.playlist == -1:
-                                    self.playTrack(1,1)
-                                  else:
                                         self.gameState = 4
                                         self.playlist = 1
                                         self.trackList = trackListScreen(self.sWidth,
