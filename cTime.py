@@ -1,4 +1,4 @@
-#!/usr/bin/python
+#!/usr/bin/env python
 #
 # Python program to entertain Christopher
 #
@@ -6,18 +6,17 @@
 import random
 import time
 import pytz
-import pygtk
 import pygame
 from pygame.locals import *
 from sys import exit
 from ctimeCommon import go_fullscreen
 from ctimeButton import button
-from ctimePlayList import playListScreen 
-from ctimePlayList import trackListScreen 
+from ctimePlayList import playListScreen
+from ctimePlayList import trackListScreen
 from ctimeCamera import ctimeCamera
 import yaml
 import datetime
-from time import strftime,strptime
+from time import strftime, strptime
 from ctimerSwitch import switch
 from ctimePairs import pairsScreen
 
@@ -118,7 +117,7 @@ class mainScreen:
 		  newTune = "tunes/frozen/%03d.ogg" %self.tuneNo
 		pygame.mixer.music.load(newTune)
 		pygame.mixer.music.play()
-		 
+		
 	def clickButtonVideo(self):
 		self.gameState = 2
 		self.firstPlay = 1
@@ -136,7 +135,7 @@ class mainScreen:
 
         def playTrack(self,playList, tuneNo):
           whichList = [ "bob", "frozen" ]
-          self.playlist = playList 
+          self.playlist = playList
           self.tuneNo = tuneNo
           newTune = "tunes/%s/%03d.ogg" % (whichList[playList],self.tuneNo)
           pygame.mixer.music.load(newTune)
