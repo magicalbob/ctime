@@ -14,7 +14,7 @@ from ctimePlayList import playListScreen
 from ctimePlayList import trackListScreen
 from ctime_camera import Camera
 from ctimerSwitch import switch
-from ctimePairs import pairsScreen
+from ctime_pairs import PairsScreen
 
 class MainScreen(object):
     """ The main screen of the program """
@@ -160,7 +160,7 @@ class MainScreen(object):
     def click_pairs(self):
         """ start pairs game """
         self.game_state = 5
-        self.pairs = pairsScreen(self.screen_width, self.screen_height)
+        self.pairs = PairsScreen(self.screen_width, self.screen_height)
 
     def play_track(self, play_list, tune_no):
         """ play some music """
@@ -282,7 +282,7 @@ while True:
                 THE_GAME.play_next()
 
     if THE_GAME.game_state == 5:
-        THE_GAME.pairs.flipBack()
+        THE_GAME.pairs.flip_back()
 
     if THE_GAME.game_state == 2:
         THE_GAME.video_screen.update_camera()
