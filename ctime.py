@@ -12,7 +12,7 @@ from ctimeCommon import go_fullscreen
 from ctime_button import Button
 from ctimePlayList import playListScreen
 from ctimePlayList import trackListScreen
-from ctimeCamera import ctimeCamera
+from ctime_camera import Camera
 from ctimerSwitch import switch
 from ctimePairs import pairsScreen
 
@@ -148,7 +148,7 @@ class MainScreen(object):
         """ start video show """
         self.game_state = 2
         self.first_play = 1
-        self.video_screen = ctimeCamera(self.screen_width, self.screen_height, self.path)
+        self.video_screen = Camera(self.screen_width, self.screen_height, self.path)
 
     def click_play_list(self):
         """ display play list selection (if not too late) """
@@ -193,7 +193,7 @@ class MainScreen(object):
                     self.click_pairs()
             # game_state 2: Video feed from cameras
             elif self.game_state == 2:
-                if self.video_screen.checkExit(coord):
+                if self.video_screen.check_exit(coord):
                     self.game_state = 0
                     self.refresh_pic()
 
@@ -285,6 +285,6 @@ while True:
         THE_GAME.pairs.flipBack()
 
     if THE_GAME.game_state == 2:
-        THE_GAME.video_screen.updateCamera()
+        THE_GAME.video_screen.update_camera()
 
     pygame.display.update()
