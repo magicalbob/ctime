@@ -1,19 +1,18 @@
 #!/usr/bin/env python
 """ Python program to entertain Christopher """
 
-#import random
 import time
+from time import strftime
+import datetime
 import pytz
 import pygame
 import pygame.locals
+import yaml
 from ctimeCommon import go_fullscreen
 from ctime_button import Button
 from ctimePlayList import playListScreen
 from ctimePlayList import trackListScreen
 from ctimeCamera import ctimeCamera
-import yaml
-import datetime
-from time import strftime # , strptime
 from ctimerSwitch import switch
 from ctimePairs import pairsScreen
 
