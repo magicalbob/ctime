@@ -1,7 +1,7 @@
 #!/usr/bin/env python
 """ Python program to entertain Christopher """
 
-import random
+#import random
 import time
 import pytz
 import pygame
@@ -13,7 +13,7 @@ from ctimePlayList import trackListScreen
 from ctimeCamera import ctimeCamera
 import yaml
 import datetime
-from time import strftime, strptime
+from time import strftime # , strptime
 from ctimerSwitch import switch
 from ctimePairs import pairsScreen
 
@@ -90,8 +90,7 @@ class MainScreen(object):
 
     def can_we_play(self):
         """ check the time. if too late say no """
-        uk = pytz.timezone('Europe/London')
-        now_time = datetime.datetime.now(uk)
+        now_time = datetime.datetime.now(pytz.timezone('Europe/London'))
         test_start = strftime('%Y-%m-%d ')+self.start_time
         test_end = strftime('%Y-%m-%d ')+self.end_time
         s_time = datetime.datetime.strptime(test_start, "%Y-%m-%d %H:%M:%S")
@@ -178,57 +177,58 @@ class MainScreen(object):
         self.button_play.change_image("images/icons/StopButton.png")
         self.play_state = 2
 
-    def check_event(self, event, pos):
+    def check_event(self, event, coord):
+        """ check event and decide how to react """
         if event.type == pygame.MOUSEBUTTONUP:
             # game_state 0: Main menu
             if self.game_state == 0:
-                if self.button_play.check_click(pos) == True:
+                if self.button_play.check_click(coord):
                     self.click_button_play()
-                elif self.button_video.check_click(pos) == True:
+                elif self.button_video.check_click(coord):
                     self.click_button_video()
-                elif self.button_play_list.check_click(pos) == True:
+                elif self.button_play_list.check_click(coord):
                     self.click_play_list()
-                elif self.button_power.check_click(pos):
+                elif self.button_power.check_click(coord):
                     self.refresh_pic()
-                elif self.button_pairs.check_click(pos):
+                elif self.button_pairs.check_click(coord):
                     self.click_pairs()
             # game_state 2: Video feed from cameras
             elif self.game_state == 2:
-                if self.video_screen.checkExit(pos):
+                if self.video_screen.checkExit(coord):
                     self.game_state = 0
                     self.refresh_pic()
 
             # game_state 3: play list
             elif self.game_state == 3:
-                if self.play_list.check_click_bob(pos):
+                if self.play_list.check_click_bob(coord):
                     self.game_state = 4
                     self.playlist = 0
                     self.track_list = trackListScreen(self.screen_width,
                                                       self.screen_height,
                                                       "bob",
                                                       self.play_len[0])
-                elif self.play_list.check_click_frozen(pos):
+                elif self.play_list.check_click_frozen(coord):
                     self.game_state = 4
                     self.playlist = 1
                     self.track_list = trackListScreen(self.screen_width,
                                                       self.screen_height,
                                                       "frozen",
                                                       self.play_len[1])
-                elif self.play_list.checkExit(pos):
+                elif self.play_list.checkExit(coord):
                     self.game_state = 0
                     self.refresh_pic()
 
             # game_state 4: track list
             elif self.game_state == 4:
-                track_no, is_clicked = self.track_list.check_click(pos)
-                if is_clicked == True:
+                track_no, is_clicked = self.track_list.check_click(coord)
+                if is_clicked:
                     if (self.playlist == 1) and (track_no == 5):
                         self.click_pairs()
                     else:
                         self.play_track(self.playlist, track_no)
             # game_state 5: Pairs game
             elif self.game_state == 5:
-                pair_state, is_clicked = self.pairs.check_click(pos)
+                pair_state, is_clicked = self.pairs.check_click(coord)
                 if pair_state == -2:
                     self.game_state = 0
                     self.refresh_pic()
@@ -243,7 +243,7 @@ class MainScreen(object):
         self.button_play.redraw()
         self.button_play_list.redraw()
         self.button_video.redraw()
-        if self.button_power.enabled == True:
+        if self.button_power.enabled:
             self.button_power.redraw()
         self.button_pairs.redraw()
 
@@ -254,38 +254,38 @@ class MainScreen(object):
             self.back_no = 1
         self.refresh_pic()
 
-theGame = MainScreen()
+THE_GAME = MainScreen()
 OLD_TIME = time.time()
 
 while True:
     # Check power off of lights
-    theGame.button_power.checkOff()
-    # Check for event. Exit if return key pressed, otherwise pass event to theGame object
+    THE_GAME.button_power.checkOff()
+    # Check for event. Exit if return key pressed, otherwise pass event to THE_GAME object
     for e in pygame.event.get():
         if (e.type is pygame.KEYDOWN and e.key == pygame.K_RETURN):
             pygame.display.quit()
             exit()
         pos = pygame.mouse.get_pos()
-        theGame.check_event(e, pos)
+        THE_GAME.check_event(e, pos)
 
     # Check for background picture of main screen changing
-    if theGame.game_state == 0:
+    if THE_GAME.game_state == 0:
         NEW_TIME = time.time()
         if (NEW_TIME - OLD_TIME) > 10:
-            theGame.update_pic()
+            THE_GAME.update_pic()
             OLD_TIME = NEW_TIME
-        if theGame.button_power.checkButton() == True:
-            theGame.refresh_pic()
+        if THE_GAME.button_power.checkButton():
+            THE_GAME.refresh_pic()
 
-    if theGame.play_state == 2:
-        if pygame.mixer.music.get_busy() == False:
-            if theGame.can_we_play():
-                theGame.play_next()
+    if THE_GAME.play_state == 2:
+        if not pygame.mixer.music.get_busy():
+            if THE_GAME.can_we_play():
+                THE_GAME.play_next()
 
-    if theGame.game_state == 5:
-        theGame.pairs.flipBack()
+    if THE_GAME.game_state == 5:
+        THE_GAME.pairs.flipBack()
 
-    if theGame.game_state == 2:
-        theGame.video_screen.updateCamera()
+    if THE_GAME.game_state == 2:
+        THE_GAME.video_screen.updateCamera()
 
     pygame.display.update()
