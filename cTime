@@ -6,4 +6,4 @@ else
   mkdir /tmp/dcs
 fi
 
-./cTime.py >> /tmp/cTime.log 2>&1
+./ctime.py >> /tmp/cTime.log 2>&1

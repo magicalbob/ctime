@@ -1,7 +1,5 @@
 #!/usr/bin/env python
-#
-# Python program to entertain Christopher
-#
+""" Python program to entertain Christopher """
 
 import random
 import time
