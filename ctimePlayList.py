@@ -2,7 +2,7 @@ import pygame
 from pygame.locals import *
 from ctimeCommon import go_fullscreen
 from ctimeCommon import shuffleList
-from ctimeButton import button
+from ctime_button import Button
 import random
 
 class trackListScreen:
@@ -27,7 +27,7 @@ class trackListScreen:
     while trackIdx < self.tracks:
       xPos, yPos = self.trackRandom[trackIdx]
       self.trackList.append(
-        button(self.screen,
+        Button(self.screen,
                (xPos,yPos,150,150),
                "images/icons/%s/%03d.png" % (playList, trackIdx+1),
                (0,0,0))
@@ -43,10 +43,10 @@ class trackListScreen:
 
     return [ padX + (bCol * (150 + padX)), padY + (bRow * (150 + padY)) ]
 
-  def checkClick(self, pos):
+  def check_click(self, pos):
     trackIdx = 0
     while trackIdx < self.tracks:
-      if self.trackList[trackIdx].checkClick(pos):
+      if self.trackList[trackIdx].check_click(pos):
         return [ trackIdx + 1, True ]
       trackIdx += 1
     return [ -1, False ]
@@ -82,35 +82,35 @@ class playListScreen:
     button1st=random.randint(0,1)
     button2nd=1-button1st
 
-    self.buttonExit = button(self.screen,
+    self.buttonExit = Button(self.screen,
                              (self.sWidth - 200,0,200,200),
                              "images/icons/StopButton.png",
                              (0,0,0))
 
-    self.buttonBob = button(self.screen,
+    self.buttonBob = Button(self.screen,
                             buttonPosition[button1st],
                             "images/icons/bob.png", 
                             (0,0,0))  
 
-    self.buttonFrozen = button(self.screen,
+    self.buttonFrozen = Button(self.screen,
                                buttonPosition[button2nd],
                                "images/icons/frozen.png", 
                                (0,0,0))  
 
-  def checkClickBob(self, pos):
-    if (self.buttonBob.checkClick(pos)):
+  def check_click_bob(self, pos):
+    if (self.buttonBob.check_click(pos)):
       return True
     else:
       return False
 
-  def checkClickFrozen(self, pos):
-    if (self.buttonFrozen.checkClick(pos)):
+  def check_click_frozen(self, pos):
+    if (self.buttonFrozen.check_click(pos)):
       return True
     else:
       return False
 
   def checkExit(self, pos):
-    if (self.buttonExit.checkClick(pos)):
+    if (self.buttonExit.check_click(pos)):
       return True
     else:
       return False

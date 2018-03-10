@@ -3,7 +3,7 @@
 import pygame,sys,pygame.camera
 from pygame.locals import *
 from ctimeCommon import go_fullscreen
-from ctimeButton import button
+from ctime_button import Button
 
 class ctimeCamera:
   def __init__(self, sWidth, sHeight,path):
@@ -26,7 +26,7 @@ class ctimeCamera:
     except:
       pass
 
-    self.buttonExit = button(
+    self.buttonExit = Button(
                              self.screen,
                              (self.sWidth - 200,0,200,200),
                              "images/icons/StopButton.png",
@@ -46,7 +46,7 @@ class ctimeCamera:
     self.re_init()
     
   def checkExit(self, pos):
-          if (self.buttonExit.checkClick(pos)):
+          if (self.buttonExit.check_click(pos)):
                   self.cam.stop()
                   return True
           else:
