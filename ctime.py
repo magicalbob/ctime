@@ -17,17 +17,19 @@ from time import strftime, strptime
 from ctimerSwitch import switch
 from ctimePairs import pairsScreen
 
-class MainScreen:
+class MainScreen(object):
+    """ The main screen of the program """
     def __init__(self):
-        self.sWidth = 0
-        self.sHeight = 0
+        self.screen_width = 0
+        self.screen_height = 0
         pygame.init()
-        self.screen = pygame.display.set_mode((self.sWidth, self.sHeight))
+        self.screen = pygame.display.set_mode((self.screen_width, self.screen_height))
         screen = pygame.display.get_surface()
-        self.sWidth, self.sHeight = screen.get_width(), screen.get_height()
+        self.screen_width, self.screen_height = screen.get_width(), screen.get_height()
 
         self.image = pygame.image.load("images/backgrounds/001.jpg").convert()
         self.game_state = 0
+        self.play_state = 1
         self.tune_no = 1
         self.back_no = 1
         with open('cTime.yaml', 'r') as confile:
@@ -39,6 +41,10 @@ class MainScreen:
         self.playlist = -1
         self.play_len = [10, 32]
         self.path = str(conf['pic_loc'])
+        self.video_screen = None
+        self.play_list = None
+        self.track_list = None
+        self.pairs = None
         try:
             pygame.mixer.music.set_volume(self.def_vol)
         except:
@@ -46,39 +52,44 @@ class MainScreen:
         self.re_init()
 
     def re_init(self):
+        """ re-initialise the screen - used when sub screen closes """
         self.game_state = 0
         go_fullscreen()
         self.screen.fill((0, 0, 0))
-        self.screen.blit(self.image, (max(0, (self.sWidth-self.image.get_rect().size[0])/2),
-                                      max(0, (self.sHeight-self.image.get_rect().size[1])/2)))
+        self.screen.blit(self.image, (max(0, (self.screen_width-self.image.get_rect().size[0])/2),
+                                      max(0, (self.screen_height-self.image.get_rect().size[1])/2)))
         self.play_state = 1
-        imagePlay = ""
-        imageList = ""
+        image_play = ""
+        image_list = ""
         if self.can_we_play():
-            imagePlay = "images/icons/PlayButton.png"
-            imageList = "images/icons/MusicIcon.png"
+            image_play = "images/icons/PlayButton.png"
+            image_list = "images/icons/MusicIcon.png"
         self.button_play = Button(self.screen,
                                   (0, 0, 200, 200),
-                                  imagePlay,
+                                  image_play,
                                   (0, 0, 0))
         self.button_play_list = Button(self.screen,
-                                       (self.sWidth - 200, 0, 200, 200),
-                                       imageList,
+                                       (self.screen_width - 200, 0, 200, 200),
+                                       image_list,
                                        (0, 0, 0))
         self.button_video = Button(self.screen,
-                                   (0, self.sHeight - 200, 200, 200),
+                                   (0, self.screen_height - 200, 200, 200),
                                    "images/icons/VideoButton.png",
                                    (0, 0, 0))
         self.button_power = switch(self.screen,
-                                   (self.sWidth - 200, self.sHeight - 200, 200, 200),
+                                   (self.screen_width - 200, self.screen_height - 200, 200, 200),
                                    "images/icons/light.png",
                                    (0, 0, 0))
         self.button_pairs = Button(self.screen,
-                                   (self.sWidth - 200, (self.sHeight / 2) - 100, 200, 200),
+                                   (self.screen_width - 200,
+                                    (self.screen_height / 2) - 100,
+                                    200,
+                                    200),
                                    "images/icons/pairs.png",
                                    (0, 0, 0))
 
     def can_we_play(self):
+        """ check the time. if too late say no """
         uk = pytz.timezone('Europe/London')
         now_time = datetime.datetime.now(uk)
         test_start = strftime('%Y-%m-%d ')+self.start_time
@@ -93,7 +104,8 @@ class MainScreen:
 
         return False
 
-    def clickButtonPlay(self):
+    def click_button_play(self):
+        """ if play pressed, check time, then check if play list already selected """
         if not self.can_we_play():
             return
         self.play_state += 1
@@ -108,10 +120,10 @@ class MainScreen:
             except:
                 print "pygame.mixer.init() failed"
             if self.playlist < 1:
-                wList = "bob"
+                which_list = "bob"
             else:
-                wList = "frozen"
-            new_tune = "tunes/%s/%03d.ogg" % (wList, self.tune_no)
+                which_list = "frozen"
+            new_tune = "tunes/%s/%03d.ogg" % (which_list, self.tune_no)
             pygame.mixer.music.load(new_tune)
             pygame.mixer.music.play()
             self.first_play = 0
@@ -120,7 +132,8 @@ class MainScreen:
             pygame.mixer.music.unpause()
             self.button_play.change_image("images/icons/StopButton.png")
 
-    def playNext(self):
+    def play_next(self):
+        """ when track finishes check to see what next one is (or not if too late) """
         if not self.can_we_play():
             return
         self.tune_no += 1
@@ -133,95 +146,100 @@ class MainScreen:
         pygame.mixer.music.load(new_tune)
         pygame.mixer.music.play()
 
-    def clickButtonVideo(self):
+    def click_button_video(self):
+        """ start video show """
         self.game_state = 2
         self.first_play = 1
-        self.vidScreen = ctimeCamera(self.sWidth, self.sHeight, self.path)
+        self.video_screen = ctimeCamera(self.screen_width, self.screen_height, self.path)
 
-    def clickPlayList(self):
+    def click_play_list(self):
+        """ display play list selection (if not too late) """
         if not self.can_we_play():
             return
         self.game_state = 3
-        self.play_list = playListScreen(self.sWidth, self.sHeight)
+        self.play_list = playListScreen(self.screen_width, self.screen_height)
 
-    def clickPairs(self):
+    def click_pairs(self):
+        """ start pairs game """
         self.game_state = 5
-        self.pairs = pairsScreen(self.sWidth, self.sHeight)
+        self.pairs = pairsScreen(self.screen_width, self.screen_height)
 
-    def playTrack(self, play_list, tune_no):
-        whichList = ["bob", "frozen"]
+    def play_track(self, play_list, tune_no):
+        """ play some music """
+        which_list = ["bob", "frozen"]
         self.playlist = play_list
         self.tune_no = tune_no
-        new_tune = "tunes/%s/%03d.ogg" % (whichList[play_list], self.tune_no)
+        new_tune = "tunes/%s/%03d.ogg" % (which_list[play_list], self.tune_no)
         pygame.mixer.music.load(new_tune)
         pygame.mixer.music.play()
         self.first_play = 0
         self.game_state = 0
-        self.refreshPic()
+        self.refresh_pic()
         self.button_play.change_image("images/icons/StopButton.png")
         self.play_state = 2
 
-    def checkEvent(self, event, pos):
+    def check_event(self, event, pos):
         if event.type == pygame.MOUSEBUTTONUP:
             # game_state 0: Main menu
             if self.game_state == 0:
                 if self.button_play.check_click(pos) == True:
-                    self.clickButtonPlay()
+                    self.click_button_play()
                 elif self.button_video.check_click(pos) == True:
-                    self.clickButtonVideo()
+                    self.click_button_video()
                 elif self.button_play_list.check_click(pos) == True:
-                    self.clickPlayList()
+                    self.click_play_list()
                 elif self.button_power.check_click(pos):
-                    self.refreshPic()
+                    self.refresh_pic()
                 elif self.button_pairs.check_click(pos):
-                    self.clickPairs()
+                    self.click_pairs()
             # game_state 2: Video feed from cameras
             elif self.game_state == 2:
-                if self.vidScreen.checkExit(pos):
+                if self.video_screen.checkExit(pos):
                     self.game_state = 0
-                    self.refreshPic()
+                    self.refresh_pic()
 
             # game_state 3: play list
             elif self.game_state == 3:
                 if self.play_list.check_click_bob(pos):
                     self.game_state = 4
                     self.playlist = 0
-                    self.track_list = trackListScreen(self.sWidth,
-                                                      self.sHeight,
+                    self.track_list = trackListScreen(self.screen_width,
+                                                      self.screen_height,
                                                       "bob",
                                                       self.play_len[0])
                 elif self.play_list.check_click_frozen(pos):
                     self.game_state = 4
                     self.playlist = 1
-                    self.track_list = trackListScreen(self.sWidth,
-                                                      self.sHeight,
+                    self.track_list = trackListScreen(self.screen_width,
+                                                      self.screen_height,
                                                       "frozen",
                                                       self.play_len[1])
                 elif self.play_list.checkExit(pos):
                     self.game_state = 0
-                    self.refreshPic()
+                    self.refresh_pic()
 
             # game_state 4: track list
             elif self.game_state == 4:
-                trackNo, isClicked = self.track_list.check_click(pos)
-                if isClicked == True:
-                    if (self.playlist == 1) and (trackNo == 5):
-                        self.clickPairs()
+                track_no, is_clicked = self.track_list.check_click(pos)
+                if is_clicked == True:
+                    if (self.playlist == 1) and (track_no == 5):
+                        self.click_pairs()
                     else:
-                        self.playTrack(self.playlist, trackNo)
+                        self.play_track(self.playlist, track_no)
             # game_state 5: Pairs game
             elif self.game_state == 5:
-                pairState, isClicked = self.pairs.check_click(pos)
-                if pairState == -2:
+                pair_state, is_clicked = self.pairs.check_click(pos)
+                if pair_state == -2:
                     self.game_state = 0
-                    self.refreshPic()
+                    self.refresh_pic()
 
-    def refreshPic(self):
-        imageName = "images/backgrounds/%03d.jpg" %self.back_no
-        self.image = pygame.image.load(imageName).convert()
+    def refresh_pic(self):
+        """ redraw background picture """
+        image_name = "images/backgrounds/%03d.jpg" %self.back_no
+        self.image = pygame.image.load(image_name).convert()
         self.screen.fill((0, 0, 0))
-        self.screen.blit(self.image, (max(0, (self.sWidth-self.image.get_rect().size[0])/2),
-                                      max(0, (self.sHeight-self.image.get_rect().size[1])/2)))
+        self.screen.blit(self.image, (max(0, (self.screen_width-self.image.get_rect().size[0])/2),
+                                      max(0, (self.screen_height-self.image.get_rect().size[1])/2)))
         self.button_play.redraw()
         self.button_play_list.redraw()
         self.button_video.redraw()
@@ -229,14 +247,15 @@ class MainScreen:
             self.button_power.redraw()
         self.button_pairs.redraw()
 
-    def updatePic(self):
+    def update_pic(self):
+        """ change background picture """
         self.back_no += 1
         if self.back_no > 7:
             self.back_no = 1
-        self.refreshPic()
+        self.refresh_pic()
 
 theGame = MainScreen()
-oTime = time.time()
+OLD_TIME = time.time()
 
 while True:
     # Check power off of lights
@@ -247,26 +266,26 @@ while True:
             pygame.display.quit()
             exit()
         pos = pygame.mouse.get_pos()
-        theGame.checkEvent(e, pos)
+        theGame.check_event(e, pos)
 
     # Check for background picture of main screen changing
     if theGame.game_state == 0:
-        nTime = time.time()
-        if (nTime - oTime) > 10:
-            theGame.updatePic()
-            oTime = nTime
+        NEW_TIME = time.time()
+        if (NEW_TIME - OLD_TIME) > 10:
+            theGame.update_pic()
+            OLD_TIME = NEW_TIME
         if theGame.button_power.checkButton() == True:
-            theGame.refreshPic()
+            theGame.refresh_pic()
 
     if theGame.play_state == 2:
         if pygame.mixer.music.get_busy() == False:
             if theGame.can_we_play():
-                theGame.playNext()
+                theGame.play_next()
 
     if theGame.game_state == 5:
         theGame.pairs.flipBack()
 
     if theGame.game_state == 2:
-        theGame.vidScreen.updateCamera()
+        theGame.video_screen.updateCamera()
 
     pygame.display.update()
