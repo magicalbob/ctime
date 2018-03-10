@@ -1,6 +1,6 @@
 import pygame
 from pygame.locals import *
-from ctimeCommon import go_fullscreen
+from ctime_common import go_fullscreen
 from ctime_button import Button
 
 class vidScreen:
