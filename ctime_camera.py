@@ -3,7 +3,7 @@ import logging
 import pygame
 import pygame.camera
 import pygame.locals
-from ctimeCommon import go_fullscreen
+from ctime_common import go_fullscreen
 from ctime_button import Button
 
 class Camera(object):

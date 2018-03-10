@@ -8,7 +8,7 @@ import pytz
 import pygame
 import pygame.locals
 import yaml
-from ctimeCommon import go_fullscreen
+from ctime_common import go_fullscreen
 from ctime_button import Button
 from ctimePlayList import playListScreen
 from ctimePlayList import trackListScreen

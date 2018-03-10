@@ -1,7 +1,7 @@
 import pygame
 from pygame.locals import *
-from ctimeCommon import go_fullscreen
-from ctimeCommon import shuffleList
+from ctime_common import go_fullscreen
+from ctime_common import shuffle_list
 from ctime_button import Button
 import random
 
@@ -21,7 +21,7 @@ class trackListScreen:
     self.trackRandom = []
     for tIdx in range(0,self.tracks):
       self.trackRandom.append(self.getButtonPos(tIdx))
-    self.trackRandom=shuffleList(self.trackRandom)
+    self.trackRandom=shuffle_list(self.trackRandom)
 
     trackIdx = 0
     while trackIdx < self.tracks:

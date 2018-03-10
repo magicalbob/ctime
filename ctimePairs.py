@@ -4,10 +4,10 @@ import time
 import os
 import fnmatch
 from pygame.locals import *
-from ctimeCommon import shuffleList
+from ctime_common import shuffle_list
 from ctime_button import Button
-from ctimeCommon import go_fullscreen
-from ctimeCommon import playLetItGo
+from ctime_common import go_fullscreen
+from ctime_common import play_let_it_go
 
 
 class pairsScreen:
@@ -43,7 +43,7 @@ class pairsScreen:
     for i in range(self.cardCount):
       self.cardBack.append(i % (self.cardCount / 2))
 
-    self.cardBack=shuffleList(self.cardBack)
+    self.cardBack=shuffle_list(self.cardBack)
          
   def redraw(self):
     self.screen = pygame.display.get_surface()
@@ -125,7 +125,7 @@ class pairsScreen:
                                (self.sWidth - 200,0,200,200),
                                "images/icons/StopButton.png",
                                (0,0,0))
-    playLetItGo()
+    play_let_it_go()
     for cardIdx in range(self.cardCount):
       if self.cardList[cardIdx].cardDone==False:
         self.redraw()
