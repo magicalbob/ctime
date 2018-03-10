@@ -5,8 +5,7 @@ import random
 import time
 import pytz
 import pygame
-from pygame.locals import *
-#from sys import exit
+import pygame.locals
 from ctimeCommon import go_fullscreen
 from ctimeButton import button
 from ctimePlayList import playListScreen
@@ -243,7 +242,7 @@ while True:
     theGame.buttonPower.checkOff()
     # Check for event. Exit if return key pressed, otherwise pass event to theGame object
     for e in pygame.event.get():
-        if (e.type is KEYDOWN and e.key == K_RETURN):
+        if (e.type is pygame.KEYDOWN and e.key == pygame.K_RETURN):
             pygame.display.quit()
             exit()
         pos = pygame.mouse.get_pos()
