@@ -1,11 +1,11 @@
 import time
 import pygame
-from ctimeButton import button
+from ctime_button import Button
 import os
 
-class switch(button):
+class switch(Button):
   def __init__(self, screen, rect, image, colorkey):
-    button.__init__(self, screen, rect, image, colorkey)
+    Button.__init__(self, screen, rect, image, colorkey)
     self.powerState=False
     self.rpiPower(self.powerState)
     self.enabled=True
@@ -28,11 +28,11 @@ class switch(button):
     return False
     
 
-  def checkClick(self, pos):
+  def check_click(self, pos):
     if self.enabled == False:
       return False
 
-    retVal = button.checkClick(self, pos)
+    retVal = Button.check_click(self, pos)
 
     if retVal == True:
       self.powerState = not(self.powerState)

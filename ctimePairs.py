@@ -5,7 +5,7 @@ import os
 import fnmatch
 from pygame.locals import *
 from ctimeCommon import shuffleList
-from ctimeButton import button
+from ctime_button import Button
 from ctimeCommon import go_fullscreen
 from ctimeCommon import playLetItGo
 
@@ -31,7 +31,7 @@ class pairsScreen:
     while cardIdx < self.cardCount:
       xPos, yPos = self.getButtonPos(cardIdx)
       self.cardList.append(
-        button(self.screen,
+        Button(self.screen,
                (xPos,yPos,200,400),
                "images/pairs/Snowflake.png",
                (0,0,0))
@@ -63,7 +63,7 @@ class pairsScreen:
         image=""
       else:
         image="images/pairs/Snowflake.png"
-      self.cardList[cardIdx]= button(self.screen,
+      self.cardList[cardIdx]= Button(self.screen,
              (xPos,yPos,200,400),
              image,
              (0,0,0))
@@ -104,13 +104,13 @@ class pairsScreen:
           self.cardList[self.cardClicked[1]].reload("images/pairs/Snowflake.png")
         self.cardClicked=[-1,-1]
 
-  def checkClick(self, pos):
+  def check_click(self, pos):
     if self.buttonExit != None:
-      if self.buttonExit.checkClick(pos):
+      if self.buttonExit.check_click(pos):
         return [-2, False]
 
     for cardIdx in range(self.cardCount):
-      if self.cardList[cardIdx].checkClick(pos):
+      if self.cardList[cardIdx].check_click(pos):
         if self.cardList[cardIdx].cardDone==False:
           self.flipCard(cardIdx)
           return [ cardIdx, True ]
@@ -121,7 +121,7 @@ class pairsScreen:
     self.playApplause()
     time.sleep(6)
     if self.buttonExit == None:
-      self.buttonExit = button(self.screen,
+      self.buttonExit = Button(self.screen,
                                (self.sWidth - 200,0,200,200),
                                "images/icons/StopButton.png",
                                (0,0,0))

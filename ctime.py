@@ -7,7 +7,7 @@ import pytz
 import pygame
 import pygame.locals
 from ctimeCommon import go_fullscreen
-from ctimeButton import button
+from ctime_button import Button
 from ctimePlayList import playListScreen
 from ctimePlayList import trackListScreen
 from ctimeCamera import ctimeCamera
@@ -50,21 +50,21 @@ class mainScreen:
         self.screen.fill((0, 0, 0))
         self.screen.blit(self.image, (max(0, (self.sWidth-self.image.get_rect().size[0])/2),
                                       max(0, (self.sHeight-self.image.get_rect().size[1])/2)))
-        self.playState = 1
+        self.play_state = 1
         imagePlay = ""
         imageList = ""
         if self.can_we_play():
             imagePlay = "images/icons/PlayButton.png"
             imageList = "images/icons/MusicIcon.png"
-        self.buttonPlay = button(self.screen,
-                                 (0, 0, 200, 200),
-                                 imagePlay,
-                                 (0, 0, 0))
-        self.buttonPlayList = button(self.screen,
-                                     (self.sWidth - 200, 0, 200, 200),
-                                     imageList,
-                                     (0, 0, 0))
-        self.buttonVideo = button(self.screen,
+        self.button_play = Button(self.screen,
+                                  (0, 0, 200, 200),
+                                  imagePlay,
+                                  (0, 0, 0))
+        self.button_play_list = Button(self.screen,
+                                       (self.sWidth - 200, 0, 200, 200),
+                                       imageList,
+                                       (0, 0, 0))
+        self.buttonVideo = Button(self.screen,
                                   (0, self.sHeight - 200, 200, 200),
                                   "images/icons/VideoButton.png",
                                   (0, 0, 0))
@@ -72,7 +72,7 @@ class mainScreen:
                                   (self.sWidth - 200, self.sHeight - 200, 200, 200),
                                   "images/icons/light.png",
                                   (0, 0, 0))
-        self.buttonPairs = button(self.screen,
+        self.buttonPairs = Button(self.screen,
                                   (self.sWidth - 200, (self.sHeight / 2) - 100, 200, 200),
                                   "images/icons/pairs.png",
                                   (0, 0, 0))
@@ -95,12 +95,12 @@ class mainScreen:
     def clickButtonPlay(self):
         if not self.can_we_play():
             return
-        self.playState += 1
-        if self.playState > 2:
-            self.playState = 1
-        if self.playState == 1:
+        self.play_state += 1
+        if self.play_state > 2:
+            self.play_state = 1
+        if self.play_state == 1:
             pygame.mixer.music.pause()
-            self.buttonPlay.changeImage("images/icons/PlayButton.png")
+            self.button_play.change_image("images/icons/PlayButton.png")
         elif self.firstPlay == 1:
             try:
                 pygame.mixer.init()
@@ -114,10 +114,10 @@ class mainScreen:
             pygame.mixer.music.load(newTune)
             pygame.mixer.music.play()
             self.firstPlay = 0
-            self.buttonPlay.changeImage("images/icons/StopButton.png")
+            self.button_play.change_image("images/icons/StopButton.png")
         else:
             pygame.mixer.music.unpause()
-            self.buttonPlay.changeImage("images/icons/StopButton.png")
+            self.button_play.change_image("images/icons/StopButton.png")
 
     def playNext(self):
         if not self.can_we_play():
@@ -141,38 +141,38 @@ class mainScreen:
         if not self.can_we_play():
             return
         self.gameState = 3
-        self.playList = playListScreen(self.sWidth, self.sHeight)
+        self.play_list = playListScreen(self.sWidth, self.sHeight)
 
     def clickPairs(self):
         self.gameState = 5
         self.pairs = pairsScreen(self.sWidth, self.sHeight)
 
-    def playTrack(self, playList, tuneNo):
+    def playTrack(self, play_list, tuneNo):
         whichList = ["bob", "frozen"]
-        self.playlist = playList
+        self.playlist = play_list
         self.tuneNo = tuneNo
-        newTune = "tunes/%s/%03d.ogg" % (whichList[playList], self.tuneNo)
+        newTune = "tunes/%s/%03d.ogg" % (whichList[play_list], self.tuneNo)
         pygame.mixer.music.load(newTune)
         pygame.mixer.music.play()
         self.firstPlay = 0
         self.gameState = 0
         self.refreshPic()
-        self.buttonPlay.changeImage("images/icons/StopButton.png")
-        self.playState = 2
+        self.button_play.change_image("images/icons/StopButton.png")
+        self.play_state = 2
 
     def checkEvent(self, event, pos):
         if event.type == pygame.MOUSEBUTTONUP:
             # gameState 0: Main menu
             if self.gameState == 0:
-                if self.buttonPlay.checkClick(pos) == True:
+                if self.button_play.check_click(pos) == True:
                     self.clickButtonPlay()
-                elif self.buttonVideo.checkClick(pos) == True:
+                elif self.buttonVideo.check_click(pos) == True:
                     self.clickButtonVideo()
-                elif self.buttonPlayList.checkClick(pos) == True:
+                elif self.button_play_list.check_click(pos) == True:
                     self.clickPlayList()
-                elif self.buttonPower.checkClick(pos):
+                elif self.buttonPower.check_click(pos):
                     self.refreshPic()
-                elif self.buttonPairs.checkClick(pos):
+                elif self.buttonPairs.check_click(pos):
                     self.clickPairs()
             # gameState 2: Video feed from cameras
             elif self.gameState == 2:
@@ -182,27 +182,27 @@ class mainScreen:
 
             # gameState 3: play list
             elif self.gameState == 3:
-                if self.playList.checkClickBob(pos):
+                if self.play_list.check_click_bob(pos):
                     self.gameState = 4
                     self.playlist = 0
                     self.trackList = trackListScreen(self.sWidth,
                                                      self.sHeight,
                                                      "bob",
                                                      self.playLen[0])
-                elif self.playList.checkClickFrozen(pos):
+                elif self.play_list.check_click_frozen(pos):
                     self.gameState = 4
                     self.playlist = 1
                     self.trackList = trackListScreen(self.sWidth,
                                                      self.sHeight,
                                                      "frozen",
                                                      self.playLen[1])
-                elif self.playList.checkExit(pos):
+                elif self.play_list.checkExit(pos):
                     self.gameState = 0
                     self.refreshPic()
 
             # gameState 4: track list
             elif self.gameState == 4:
-                trackNo, isClicked = self.trackList.checkClick(pos)
+                trackNo, isClicked = self.trackList.check_click(pos)
                 if isClicked == True:
                     if (self.playlist == 1) and (trackNo == 5):
                         self.clickPairs()
@@ -210,7 +210,7 @@ class mainScreen:
                         self.playTrack(self.playlist, trackNo)
             # gameState 5: Pairs game
             elif self.gameState == 5:
-                pairState, isClicked = self.pairs.checkClick(pos)
+                pairState, isClicked = self.pairs.check_click(pos)
                 if pairState == -2:
                     self.gameState = 0
                     self.refreshPic()
@@ -221,8 +221,8 @@ class mainScreen:
         self.screen.fill((0, 0, 0))
         self.screen.blit(self.image, (max(0, (self.sWidth-self.image.get_rect().size[0])/2),
                                       max(0, (self.sHeight-self.image.get_rect().size[1])/2)))
-        self.buttonPlay.redraw()
-        self.buttonPlayList.redraw()
+        self.button_play.redraw()
+        self.button_play_list.redraw()
         self.buttonVideo.redraw()
         if self.buttonPower.enabled == True:
             self.buttonPower.redraw()
@@ -257,7 +257,7 @@ while True:
         if theGame.buttonPower.checkButton() == True:
             theGame.refreshPic()
 
-    if theGame.playState == 2:
+    if theGame.play_state == 2:
         if pygame.mixer.music.get_busy() == False:
             if theGame.can_we_play():
                 theGame.playNext()
