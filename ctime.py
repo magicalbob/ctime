@@ -13,7 +13,7 @@ from ctime_button import Button
 from ctime_play_list import PlayListScreen
 from ctime_play_list import TrackListScreen
 from ctime_camera import Camera
-from ctimerSwitch import switch
+from ctime_switch import Switch
 from ctime_pairs import PairsScreen
 
 class MainScreen(object):
@@ -75,7 +75,7 @@ class MainScreen(object):
                                    (0, self.screen_height - 200, 200, 200),
                                    "images/icons/VideoButton.png",
                                    (0, 0, 0))
-        self.button_power = switch(self.screen,
+        self.button_power = Switch(self.screen,
                                    (self.screen_width - 200, self.screen_height - 200, 200, 200),
                                    "images/icons/light.png",
                                    (0, 0, 0))
@@ -258,7 +258,7 @@ OLD_TIME = time.time()
 
 while True:
     # Check power off of lights
-    THE_GAME.button_power.checkOff()
+    THE_GAME.button_power.check_off()
     # Check for event. Exit if return key pressed, otherwise pass event to THE_GAME object
     for e in pygame.event.get():
         if (e.type is pygame.KEYDOWN and e.key == pygame.K_RETURN):
@@ -273,7 +273,7 @@ while True:
         if (NEW_TIME - OLD_TIME) > 10:
             THE_GAME.update_pic()
             OLD_TIME = NEW_TIME
-        if THE_GAME.button_power.checkButton():
+        if THE_GAME.button_power.check_button():
             THE_GAME.refresh_pic()
 
     if THE_GAME.play_state == 2:
