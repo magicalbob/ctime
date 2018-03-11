@@ -10,8 +10,8 @@ import pygame.locals
 import yaml
 from ctime_common import go_fullscreen
 from ctime_button import Button
-from ctimePlayList import playListScreen
-from ctimePlayList import trackListScreen
+from ctime_play_list import PlayListScreen
+from ctime_play_list import TrackListScreen
 from ctime_camera import Camera
 from ctimerSwitch import switch
 from ctimePairs import pairsScreen
@@ -155,7 +155,7 @@ class MainScreen(object):
         if not self.can_we_play():
             return
         self.game_state = 3
-        self.play_list = playListScreen(self.screen_width, self.screen_height)
+        self.play_list = PlayListScreen(self.screen_width, self.screen_height)
 
     def click_pairs(self):
         """ start pairs game """
@@ -202,18 +202,18 @@ class MainScreen(object):
                 if self.play_list.check_click_bob(coord):
                     self.game_state = 4
                     self.playlist = 0
-                    self.track_list = trackListScreen(self.screen_width,
+                    self.track_list = TrackListScreen(self.screen_width,
                                                       self.screen_height,
                                                       "bob",
                                                       self.play_len[0])
                 elif self.play_list.check_click_frozen(coord):
                     self.game_state = 4
                     self.playlist = 1
-                    self.track_list = trackListScreen(self.screen_width,
+                    self.track_list = TrackListScreen(self.screen_width,
                                                       self.screen_height,
                                                       "frozen",
                                                       self.play_len[1])
-                elif self.play_list.checkExit(coord):
+                elif self.play_list.check_exit(coord):
                     self.game_state = 0
                     self.refresh_pic()
 
