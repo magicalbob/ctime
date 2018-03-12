@@ -9,11 +9,10 @@ from ctime_button import Button
 class Camera(object):
     """ object to display usb camera """
     def __init__(self, screen_width, screen_height, path):
-        self.screen_size = (screen_width, screen_height)
+        self.screen_size = {'width': screen_width, 'height': screen_height}
         self.path = path
 
         pygame.camera.init()
-
         self.screen = pygame.display.set_mode((screen_width, screen_height))
         go_fullscreen()
 
@@ -40,7 +39,7 @@ class Camera(object):
             image = self.cam.get_image()
             image_height = image.get_height()
             self.screen.blit(image,
-                             (0, self.screen_size[1] - image_height))
+                             (0, self.screen_size['height'] - image_height))
             pygame.display.update()
 
         self.re_init()
@@ -62,8 +61,8 @@ class Camera(object):
             try:
                 self.image = pygame.image.load("%s/CAMERA2.jpg" % (self.path)).convert()
                 self.screen.blit(self.image,
-                                 (self.screen_size[0] - image_width,
-                                  self.screen_size[1] - image_height))
+                                 (self.screen_size['width'] - image_width,
+                                  self.screen_size['height'] - image_height))
             except BaseException:
                 pass
         except BaseException:
