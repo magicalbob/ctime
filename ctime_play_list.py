@@ -1,5 +1,6 @@
 """ allow play lists and tracks to be selected """
 import random
+import os
 import pygame
 import pygame.locals
 from ctime_common import go_fullscreen
@@ -67,31 +68,47 @@ class PlayListScreen(object):
 
         button_position = []
         button_position.append(((screen_width / 4) - 100,
-                                (screen_height / 2) - 100,
+                                (screen_height / 3) - 100,
                                 200,
                                 200))
         button_position.append((((screen_width * 3) / 4) - 100,
-                                (screen_height / 2) - 100,
+                                (screen_height / 3) - 100,
+                                200,
+                                200))
+        button_position.append(((screen_width / 4) - 100,
+                                (2 * screen_height / 3) - 100,
                                 200,
                                 200))
 
-        button1st = random.randint(0, 1)
-        button2nd = 1-button1st
-
+        button_space = [0, 1, 2]
+        button_instance = []
+        button_select = random.randint(0,2)
+        button_instance.append(button_space[button_select])
+        button_space.pop(button_select)
+        button_select = random.randint(0,1)
+        button_instance.append(button_space[button_select])
+        button_space.pop(button_select)
+        button_instance.append(button_space[0])
+        
         self.button_exit = Button(self.screen,
                                   (screen_width - 200, 0, 200, 200),
                                   "images/icons/StopButton.png",
                                   (0, 0, 0))
 
         self.button_bob = Button(self.screen,
-                                 button_position[button1st],
-                                 "images/icons/bob.png",
+                                 button_position[button_instance[0]],
+                                 "images/icons/%s.png" % ("bob"),
                                  (0, 0, 0))
 
         self.button_frozen = Button(self.screen,
-                                    button_position[button2nd],
-                                    "images/icons/frozen.png",
+                                    button_position[button_instance[1]],
+                                    "images/icons/%s.png" % ("frozen"),
                                     (0, 0, 0))
+
+        self.button_showman = Button(self.screen,
+                                     button_position[button_instance[2]],
+                                     "images/icons/%s.png" % ("showman"),
+                                     (0, 0, 0))
 
     def check_click_bob(self, pos):
         """ has bob been clicked """
@@ -102,6 +119,12 @@ class PlayListScreen(object):
     def check_click_frozen(self, pos):
         """ has frozen been clicked """
         if self.button_frozen.check_click(pos):
+            return True
+        return False
+
+    def check_click_showman(self, pos):
+        """ has showman been clicked """
+        if self.button_showman.check_click(pos):
             return True
         return False
 

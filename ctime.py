@@ -38,7 +38,7 @@ class MainScreen(object):
         self.end_time = str(conf['end_time'])
         self.first_play = 1
         self.playlist = -1
-        self.play_len = [10, 32]
+        self.play_len = [10, 32, 11]
         self.path = str(conf['pic_loc'])
         self.video_screen = None
         self.play_list = None
@@ -119,8 +119,10 @@ class MainScreen(object):
                 print "pygame.mixer.init() failed"
             if self.playlist < 1:
                 which_list = "bob"
-            else:
+            elif self.playlist == 1:
                 which_list = "frozen"
+            else:
+                which_list = "showman"
             new_tune = "tunes/%s/%03d.ogg" % (which_list, self.tune_no)
             pygame.mixer.music.load(new_tune)
             pygame.mixer.music.play()
@@ -139,8 +141,10 @@ class MainScreen(object):
             self.tune_no = 1
         if self.playlist == 0:
             new_tune = "tunes/bob/%03d.ogg" %self.tune_no
-        else:
+        elif self.playlist == 1:
             new_tune = "tunes/frozen/%03d.ogg" %self.tune_no
+        else:
+            new_tune = "tunes/showman/%03d.ogg" %self.tune_no
         pygame.mixer.music.load(new_tune)
         pygame.mixer.music.play()
 
@@ -164,7 +168,7 @@ class MainScreen(object):
 
     def play_track(self, play_list, tune_no):
         """ play some music """
-        which_list = ["bob", "frozen"]
+        which_list = ["bob", "frozen", "showman"]
         self.playlist = play_list
         self.tune_no = tune_no
         new_tune = "tunes/%s/%03d.ogg" % (which_list[play_list], self.tune_no)
@@ -213,6 +217,13 @@ class MainScreen(object):
                                                       self.screen_height,
                                                       "frozen",
                                                       self.play_len[1])
+                elif self.play_list.check_click_showman(coord):
+                    self.game_state = 4
+                    self.playlist = 2
+                    self.track_list = TrackListScreen(self.screen_width,
+                                                      self.screen_height,
+                                                      "showman",
+                                                      self.play_len[2])
                 elif self.play_list.check_exit(coord):
                     self.game_state = 0
                     self.refresh_pic()
