@@ -48,7 +48,7 @@ class PairsScreen(object):
         self.screen.fill(pygame.Color(0, 0, 0, 0),
                          (0, 0, self.screen_size['width'], self.screen_size['height']),
                          0)
-        if os.uname()[1] == 'rpi21':
+        if os.uname()[1].startswith('rpi'):
             go_fullscreen()
 
         if self.button_exit != None:
