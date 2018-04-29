@@ -47,7 +47,7 @@ class Switch(Button):
 
 def rpi_power(state):
     """ turn in or off the power """
-    if os.uname()[1] == 'rpi21':
+    if os.uname()[1].startswith('rpi21'):
         if state:
             os.system("sudo ./rpion.py")
         else:
