@@ -4,6 +4,7 @@
 import time
 from time import strftime
 import datetime
+from datetime import timedelta
 import pytz
 import pygame
 import pygame.locals
@@ -36,6 +37,8 @@ class MainScreen(object):
         self.def_vol = float(conf['vol'])
         self.start_time = str(conf['start_time'])
         self.end_time = str(conf['end_time'])
+        self.max_play_length=conf['max_play_length']
+        self.play_start = datetime.datetime.now(pytz.timezone('Europe/London')) 
         self.first_play = 1
         self.playlist = -1
         self.play_len = [10, 32, 11]
@@ -106,6 +109,7 @@ class MainScreen(object):
         """ if play pressed, check time, then check if play list already selected """
         if not self.can_we_play():
             return
+        """ add 1 to play_state. If greater than 2 put it back to 1. 1 means "not playing", 2 means "playing" """
         self.play_state += 1
         if self.play_state > 2:
             self.play_state = 1
@@ -128,13 +132,21 @@ class MainScreen(object):
             pygame.mixer.music.play()
             self.first_play = 0
             self.button_play.change_image("images/icons/StopButton.png")
+            self.play_start = datetime.datetime.now(pytz.timezone('Europe/London')) 
         else:
             pygame.mixer.music.unpause()
             self.button_play.change_image("images/icons/StopButton.png")
+            self.play_start = datetime.datetime.now(pytz.timezone('Europe/London')) 
 
     def play_next(self):
         """ when track finishes check to see what next one is (or not if too late) """
         if not self.can_we_play():
+            return
+        """ have we been playing too long """
+        now_time = datetime.datetime.now(pytz.timezone('Europe/London'))
+        if now_time - self.play_start > timedelta(minutes=self.max_play_length):
+            self.play_state = 1
+            self.button_play.change_image("images/icons/PlayButton.png")
             return
         self.tune_no += 1
         if self.tune_no > self.play_len[self.playlist]:
