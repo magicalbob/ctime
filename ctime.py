@@ -146,7 +146,8 @@ class MainScreen(object):
         now_time = datetime.datetime.now(pytz.timezone('Europe/London'))
         if now_time - self.play_start > timedelta(minutes=self.max_play_length):
             self.play_state = 1
-            self.button_play.change_image("images/icons/PlayButton.png")
+            if self.game_state == 0:
+                self.button_play.change_image("images/icons/PlayButton.png")
             return
         self.tune_no += 1
         if self.tune_no > self.play_len[self.playlist]:
