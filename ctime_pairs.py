@@ -10,7 +10,7 @@ from ctime_common import play_let_it_go
 
 class PairsScreen(object):
     """ class for simple pairs game """
-    def __init__(self, screen_width, screen_height):
+    def __init__(self, screen_width, screen_height, new_game = True):
         self.screen_size = {'width': screen_width,
                             'height': screen_height}
         self.screen = pygame.display.get_surface()
@@ -22,7 +22,10 @@ class PairsScreen(object):
         self.cards = {'count': 8, 'list': [], 'back': [], 'clicked': [-1, -1]}
         self.flip_time = 0
 
-        self.button_exit = None
+        if new_game == True:
+            self.button_exit = None
+        else:
+            self.add_button_exit()
 
         card_index = 0
         while card_index < self.cards['count']:
@@ -67,6 +70,12 @@ class PairsScreen(object):
                                                     (0, 0, 0))
             self.cards['list'][card_index].colorkey = (255, 255, 255)
             self.cards['list'][card_index].cardDone = save_done
+
+    def add_button_exit(self):
+        self.button_exit = Button(self.screen,
+                                  (self.screen_size['width'] - 200, 0, 200, 200),
+                                  "images/icons/StopButton.png",
+                                  (0, 0, 0))
 
     def get_button_pos(self, button_no):
         """ get the x,y position of a button by number """
@@ -128,16 +137,14 @@ class PairsScreen(object):
         play_applause()
         time.sleep(6)
         if self.button_exit is None:
-            self.button_exit = Button(self.screen,
-                                      (self.screen_size['width'] - 200, 0, 200, 200),
-                                      "images/icons/StopButton.png",
-                                      (0, 0, 0))
+            self.add_button_exit()
         play_let_it_go()
         for card_index in range(self.cards['count']):
             if not self.cards['list'][card_index].cardDone:
                 self.redraw()
                 return
-        self.__init__(self.screen_size['width'], self.screen_size['height'])
+        """ All cards are done, so start new game """
+        self.__init__(self.screen_size['width'], self.screen_size['height'], False)
 
 def play_applause():
     """ clapping used in celebration """
