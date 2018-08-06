@@ -37,7 +37,9 @@ class MainScreen(object):
         self.def_vol = float(conf['vol'])
         self.start_time = str(conf['start_time'])
         self.end_time = str(conf['end_time'])
-        self.max_play_length=conf['max_play_length']
+        self.max_play_length = conf['max_play_length']
+        self.power_on = conf['power_on']
+        self.power_off = conf['power_off']
         self.play_start = datetime.datetime.now(pytz.timezone('Europe/London')) 
         self.first_play = 1
         self.playlist = -1
@@ -81,7 +83,9 @@ class MainScreen(object):
         self.button_power = Switch(self.screen,
                                    (self.screen_width - 200, self.screen_height - 200, 200, 200),
                                    "images/icons/light.png",
-                                   (0, 0, 0))
+                                   (0, 0, 0),
+                                   self.power_on,
+                                   self.power_off)
         self.button_pairs = Button(self.screen,
                                    (self.screen_width - 200,
                                     (self.screen_height / 2) - 100,

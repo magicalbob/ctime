@@ -5,11 +5,13 @@ from ctime_button import Button
 
 class Switch(Button):
     """ a switch for power """
-    def __init__(self, screen, rect, image, colorkey):
+    def __init__(self, screen, rect, image, colorkey, power_on, power_off):
         """ initialise the switch """
         Button.__init__(self, screen, rect, image, colorkey)
         self.power_state = False
-        rpi_power(self.power_state)
+        self.power_on = power_on
+        self.power_off = power_off
+        self.rpi_power()
         self.enabled = True
         self.button_time = time.time()
         self.light_time = time.time()
@@ -19,7 +21,7 @@ class Switch(Button):
         if self.power_state:
             if (time.time() - self.light_time) > 3600:
                 self.power_state = False
-                rpi_power(self.power_state)
+                rpi_power()
 
     def check_button(self):
         """ check if the switch should reappear """
@@ -38,19 +40,16 @@ class Switch(Button):
 
         if return_val:
             self.power_state = not self.power_state
-            rpi_power(self.power_state)
+            self.rpi_power()
             self.button_time = time.time()
             self.light_time = time.time()
             self.enabled = False
 
         return return_val
 
-def rpi_power(state):
-    """ turn in or off the power """
-    if os.uname()[1].startswith('rpi21'):
-        if state:
-            os.system("sudo ./rpion.py")
+    def rpi_power(self):
+        """ turn in or off the power """
+        if self.power_state:
+            os.system(self.power_on)
         else:
-            os.system("sudo ./rpioff.py")
-    else:
-        print "NOT A PI. New state: "+str(state)
+            os.system(self.power_off)
