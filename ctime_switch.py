@@ -21,7 +21,7 @@ class Switch(Button):
         if self.power_state:
             if (time.time() - self.light_time) > 3600:
                 self.power_state = False
-                rpi_power()
+                self.rpi_power()
 
     def check_button(self):
         """ check if the switch should reappear """

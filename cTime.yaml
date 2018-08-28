@@ -5,5 +5,5 @@ bob_length: 10
 frozen_length: 30
 pic_loc: '/home/pi/tmp/dcs'
 max_play_length: 15
-power_on: 'sudo ./rpion.py'
-power_off: 'sudo ./rpioff.py'
+power_on: 'echo /home/pi/ctime/rpion.py | ssh 10.0.0.200'
+power_off: 'echo /home/pi/ctime/rpioff.py | ssh 10.0.0.200'
