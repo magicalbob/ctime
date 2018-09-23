@@ -16,6 +16,7 @@ from ctime_play_list import TrackListScreen
 from ctime_camera import Camera
 from ctime_switch import Switch
 from ctime_pairs import PairsScreen
+from ctime_skype import CtimeSkype
 
 class MainScreen(object):
     """ The main screen of the program """
