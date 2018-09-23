@@ -38,8 +38,14 @@ class MainScreen(object):
         self.start_time = str(conf['start_time'])
         self.end_time = str(conf['end_time'])
         self.max_play_length = conf['max_play_length']
-        self.power_on = conf['power_on']
-        self.power_off = conf['power_off']
+        try:
+            self.power_on = conf['power_on']
+        except:
+            self.power_on = ''
+        try:
+            self.power_off = conf['power_off']
+        except:
+            self.power_off = ''
         self.play_start = datetime.datetime.now(pytz.timezone('Europe/London')) 
         self.first_play = 1
         self.playlist = -1
