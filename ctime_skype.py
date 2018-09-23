@@ -4,6 +4,7 @@
 import time
 import pygame
 from skpy import Skype, SkypeChats
+from ctime_common import go_fullscreen
 
 class CtimeSkype(object):
     """ A Skype object """

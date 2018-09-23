@@ -100,6 +100,13 @@ class MainScreen(object):
                                     200),
                                    "images/icons/pairs.png",
                                    (0, 0, 0))
+        self.button_skype = Button(self.screen,
+                                   (0,
+                                    (self.screen_height / 2) - 100,
+                                    200,
+                                    200),
+                                  image_play,
+                                  (0, 0, 0))
 
     def can_we_play(self):
         """ check the time. if too late say no """
@@ -219,6 +226,8 @@ class MainScreen(object):
                     self.refresh_pic()
                 elif self.button_pairs.check_click(coord):
                     self.click_pairs()
+                elif self.button_skype.check_click(coord):
+                    CtimeSkype()
             # game_state 2: Video feed from cameras
             elif self.game_state == 2:
                 if self.video_screen.check_exit(coord):
