@@ -34,3 +34,10 @@ class CtimeSkype(object):
                                       max(0, (self.screen_height-self.image.get_rect().size[1])/2)))
         self.button_exit.redraw()
         pygame.display.update()
+
+    def check_click(self, pos):
+        """ check if exit has been clicked """
+        if self.button_exit.check_click(pos):
+            return True
+
+        return False

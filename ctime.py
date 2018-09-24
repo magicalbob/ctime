@@ -280,6 +280,12 @@ class MainScreen(object):
                 if pair_state == -2:
                     self.game_state = 0
                     self.refresh_pic()
+            # game_state 6: Skype chat
+            elif self.game_state == 6:
+                is_clicked = self.skype.check_click(coord)
+                if is_clicked:
+                    self.game_state = 0
+                    self.refresh_pic()
 
     def refresh_pic(self):
         """ redraw background picture """
