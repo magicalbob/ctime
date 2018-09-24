@@ -197,6 +197,11 @@ class MainScreen(object):
         self.game_state = 5
         self.pairs = PairsScreen(self.screen_width, self.screen_height)
 
+    def click_skype(self):
+        """ start skype chat """
+        self.game_state = 6
+        self.skype = CtimeSkype()
+
     def play_track(self, play_list, tune_no):
         """ play some music """
         which_list = ["bob", "frozen", "showman"]
@@ -227,7 +232,7 @@ class MainScreen(object):
                 elif self.button_pairs.check_click(coord):
                     self.click_pairs()
                 elif self.button_skype.check_click(coord):
-                    CtimeSkype()
+                    self.click_skype()
             # game_state 2: Video feed from cameras
             elif self.game_state == 2:
                 if self.video_screen.check_exit(coord):
