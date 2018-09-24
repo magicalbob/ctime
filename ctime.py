@@ -105,8 +105,8 @@ class MainScreen(object):
                                     (self.screen_height / 2) - 100,
                                     200,
                                     200),
-                                  image_play,
-                                  (0, 0, 0))
+                                   "images/icons/Phone.png",
+                                   (0, 0, 0))
 
     def can_we_play(self):
         """ check the time. if too late say no """
