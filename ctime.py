@@ -300,6 +300,7 @@ class MainScreen(object):
         if self.button_power.enabled:
             self.button_power.redraw()
         self.button_pairs.redraw()
+        self.button_skype.redraw()
 
     def update_pic(self):
         """ change background picture """
