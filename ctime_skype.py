@@ -11,9 +11,10 @@ from selenium.webdriver.common.keys import Keys
 
 class CtimeSkype(object):
     """ A Skype object """
-    def __init__(self,skype_user, skype_pass):
+    def __init__(self, ctime, skype_user, skype_pass):
         self.screen_width = 0
         self.screen_height = 0
+        self.ctime = ctime
         self.skype_user = skype_user
         self.skype_pass = skype_pass
         pygame.init()
@@ -42,7 +43,14 @@ class CtimeSkype(object):
         })
         driver = webdriver.Chrome(chrome_options=options)
         driver.get("https://skype.ellisbs.co.uk")
-        assert "Skype for Chris" in driver.title
+        try:
+          assert "Skype for Chris" in driver.title
+        except:
+          driver.close()
+          self.ctime.game_state = 0
+          self.ctime.refresh_pic()
+          go_fullscreen()
+          return
         elem = driver.find_element_by_class_name("lwc-chat-button")
         elem.click()
         time.sleep(3)
@@ -84,4 +92,4 @@ class CtimeSkype(object):
 
         return False
 
-#driver.close()
+

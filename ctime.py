@@ -202,7 +202,7 @@ class MainScreen(object):
     def click_skype(self):
         """ start skype chat """
         self.game_state = 6
-        self.skype = CtimeSkype(self.skype_user, self.skype_pass)
+        self.skype = CtimeSkype(self, self.skype_user, self.skype_pass)
 
     def play_track(self, play_list, tune_no):
         """ play some music """
