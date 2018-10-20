@@ -64,6 +64,7 @@ class CtimeSkype(object):
           if win != old_win:
             new_win=win
         driver.switch_to_window(new_win)
+        driver.set_window_size(0, 0)
         time.sleep(3)
         elem = driver.find_element_by_name("loginfmt")
         elem.send_keys(self.skype_user)
