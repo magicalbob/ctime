@@ -50,6 +50,6 @@ class Switch(Button):
     def rpi_power(self):
         """ turn in or off the power """
         if self.power_state:
-            os.system(self.power_on)
+            os.spawnl(os.P_NOWAIT,self.power_on)
         else:
-            os.system(self.power_off)
+            os.spawnl(os.P_NOWAIT,self.power_off)
