@@ -6,12 +6,16 @@ import pygame
 from skpy import Skype, SkypeChats
 from ctime_common import go_fullscreen
 from ctime_button import Button
+from selenium import webdriver
+from selenium.webdriver.common.keys import Keys
 
 class CtimeSkype(object):
     """ A Skype object """
-    def __init__(self):
+    def __init__(self,skype_user, skype_pass):
         self.screen_width = 0
         self.screen_height = 0
+        self.skype_user = skype_user
+        self.skype_pass = skype_pass
         pygame.init()
         self.screen = pygame.display.set_mode((self.screen_width, self.screen_height))
         screen = pygame.display.get_surface()
@@ -25,15 +29,59 @@ class CtimeSkype(object):
 
     def re_init(self):
         """ re-initialise the screen - used when sub screen closes """
-        self.game_state = 0
-        go_fullscreen()
-        self.screen.fill((0, 0, 0))
-        self.button_exit.redraw()
-        pygame.display.update()
+        options = webdriver.ChromeOptions()
+        options.add_argument('--ignore-certificate-errors')
+        options.add_argument("--disable-infobars")
+        options.add_argument("start-maximized")
+        options.add_argument("--kiosk")
+        options.add_experimental_option("prefs", {
+            "profile.default_content_setting_values.media_stream_mic": 1, 
+            "profile.default_content_setting_values.media_stream_camera": 1,
+            "profile.default_content_setting_values.geolocation": 1, 
+            "profile.default_content_setting_values.notifications": 1 
+        })
+        driver = webdriver.Chrome(chrome_options=options)
+        driver.get("https://skype.ellisbs.co.uk")
+        assert "Skype for Chris" in driver.title
+        elem = driver.find_element_by_class_name("lwc-chat-button")
+        elem.click()
+        time.sleep(3)
+        frame = driver.find_element_by_class_name("lwc-chat-frame")
+        driver.switch_to.frame(frame)
+        elem = driver.find_element_by_class_name("sign-in-button")
+        elem.click()
+        new_win=None
+        old_win=driver.current_window_handle
+        for win in driver.window_handles:
+          if win != old_win:
+            new_win=win
+        driver.switch_to_window(new_win)
+        time.sleep(3)
+        elem = driver.find_element_by_name("loginfmt")
+        elem.send_keys(self.skype_user)
+        elem.send_keys(Keys.RETURN)
+        time.sleep(3)
+        elem = driver.find_element_by_name("passwd")
+        elem.send_keys(self.skype_pass)
+        elem.send_keys(Keys.RETURN)
+        time.sleep(3)
+        driver.switch_to_window(old_win)
+        driver.get("https://skype.ellisbs.co.uk")
+        assert "Skype for Chris" in driver.title
+        elem = driver.find_element_by_class_name("lwc-chat-button")
+        elem.click()
+        time.sleep(3)
+        frame = driver.find_element_by_class_name("lwc-chat-frame")
+        driver.switch_to.frame(frame)
+        elem = driver.find_element_by_class_name("calling")
+        elem.click()
 
     def check_click(self, pos):
         """ check if exit has been clicked """
         if self.button_exit.check_click(pos):
+            go_fullscreen()
             return True
 
         return False
+
+#driver.close()
