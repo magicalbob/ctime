@@ -47,6 +47,8 @@ class MainScreen(object):
             self.power_off = conf['power_off']
         except:
             self.power_off = ''
+        self.skype_user = conf['skype_user']
+        self.skype_pass = conf['skype_pass']
         self.play_start = datetime.datetime.now(pytz.timezone('Europe/London')) 
         self.first_play = 1
         self.playlist = -1
@@ -200,7 +202,7 @@ class MainScreen(object):
     def click_skype(self):
         """ start skype chat """
         self.game_state = 6
-        self.skype = CtimeSkype()
+        self.skype = CtimeSkype(self.skype_user, self.skype_pass)
 
     def play_track(self, play_list, tune_no):
         """ play some music """
