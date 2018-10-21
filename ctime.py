@@ -63,6 +63,11 @@ class MainScreen(object):
           self.skype_end = conf['skype_end']
         except:
           self.skype_end = None
+        try:
+          self.skype_timeout = conf['skype_timeout']
+        except:
+          self.skype_timeout = None
+        self.skype_exit = None
         self.play_start = datetime.datetime.now(pytz.timezone('Europe/London')) 
         self.first_play = 1
         self.playlist = -1
@@ -135,6 +140,7 @@ class MainScreen(object):
             self.skype_end   == None):
            """ not according to config """
            return False
+
         """ check the time. if too late say no """
         now_time = datetime.datetime.now(pytz.timezone('Europe/London'))
         test_start = strftime('%Y-%m-%d ')+self.skype_start
@@ -145,6 +151,18 @@ class MainScreen(object):
                 tzinfo=None) < now_time.replace(
                     tzinfo=None) < e_time.replace(
                         tzinfo=None):
+            pass
+        else:
+            return False
+
+        """ check that skype hasn't been used to recently """
+        if self.skype_timeout == None:
+            return True
+
+        if self.skype_exit == None:
+            return True
+
+        if time.time() - self.skype_exit > self.skype_timeout:
             return True
 
         return False
@@ -274,6 +292,7 @@ class MainScreen(object):
                     self.click_pairs()
                 elif self.button_skype != None:
                     if self.button_skype.check_click(coord):
+                        self.button_skype = None
                         self.click_skype()
             # game_state 2: Video feed from cameras
             elif self.game_state == 2:

@@ -48,6 +48,7 @@ class CtimeSkype(object):
           """ turm mouse back on, close selenium, go back to main screen """
           os.system('xinput set-prop 12 "Device Enabled" 1')
           driver.close()
+          self.ctime.skype_exit = time.time()
           self.ctime.game_state = 0
           self.ctime.refresh_pic()
           go_fullscreen()
@@ -111,6 +112,7 @@ class CtimeSkype(object):
             """ turm mouse back on, close selenium, go back to main screen """
             os.system('xinput set-prop 12 "Device Enabled" 1')
             driver.close()
+            self.ctime.skype_exit = time.time()
             self.ctime.game_state = 0
             self.ctime.refresh_pic()
             go_fullscreen()
