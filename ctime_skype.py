@@ -95,21 +95,40 @@ class CtimeSkype(object):
         elem.click()
         """ check the call is in progress by polling for callScreen """
         call_started = False
+        call_time = time.time()
         while call_started == False:
           try:
             elem = driver.find_element_by_class_name("callScreen")
             call_started = True
             print "Call started"
           except:
-            pass
+            if time.time() - call_time > 30:
+                """ turn mouse back on, close selenium, go back to main screen """
+                os.system('xinput set-prop 12 "Device Enabled" 1')
+                driver.close()
+                self.ctime.skype_exit = time.time()
+                self.ctime.game_state = 0
+                self.ctime.refresh_pic()
+                go_fullscreen()
+                return
+
 
         """ now call has started, poll for it ending by looking for callScreen disappearing """
         while True:
           try:
             elem = driver.find_element_by_class_name("callScreen")
+            if time.time() - call_time > 30:
+                """ turn mouse back on, close selenium, go back to main screen """
+                os.system('xinput set-prop 12 "Device Enabled" 1')
+                driver.close()
+                self.ctime.skype_exit = time.time()
+                self.ctime.game_state = 0
+                self.ctime.refresh_pic()
+                go_fullscreen()
+                return
           except:
             print "Call ended"
-            """ turm mouse back on, close selenium, go back to main screen """
+            """ turn mouse back on, close selenium, go back to main screen """
             os.system('xinput set-prop 12 "Device Enabled" 1')
             driver.close()
             self.ctime.skype_exit = time.time()
