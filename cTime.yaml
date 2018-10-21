@@ -9,3 +9,6 @@ power_on: 'echo /home/pi/ctime/rpion.py | ssh 10.0.0.200'
 power_off: 'echo /home/pi/ctime/rpioff.py | ssh 10.0.0.200'
 skype_user: 
 skype_pass: 
+skype_start: 
+skype_end: 
+skype_timeout: 
