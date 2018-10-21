@@ -47,8 +47,14 @@ class MainScreen(object):
             self.power_off = conf['power_off']
         except:
             self.power_off = ''
-        self.skype_user = conf['skype_user']
-        self.skype_pass = conf['skype_pass']
+        try:
+          self.skype_user = conf['skype_user']
+        except:
+          self.skype_user = None
+        try:
+          self.skype_pass = conf['skype_pass']
+        except:
+          self.skype_pass = None
         self.play_start = datetime.datetime.now(pytz.timezone('Europe/London')) 
         self.first_play = 1
         self.playlist = -1
@@ -102,13 +108,16 @@ class MainScreen(object):
                                     200),
                                    "images/icons/pairs.png",
                                    (0, 0, 0))
-        self.button_skype = Button(self.screen,
-                                   (0,
-                                    (self.screen_height / 2) - 100,
-                                    200,
-                                    200),
-                                   "images/icons/Phone.png",
-                                   (0, 0, 0))
+        if self.skype_user != None and self.skype_pass != None:
+            self.button_skype = Button(self.screen,
+                                       (0,
+                                        (self.screen_height / 2) - 100,
+                                        200,
+                                        200),
+                                       "images/icons/Phone.png",
+                                       (0, 0, 0))
+        else:
+            self.button_skype = None
 
     def can_we_play(self):
         """ check the time. if too late say no """
@@ -233,8 +242,9 @@ class MainScreen(object):
                     self.refresh_pic()
                 elif self.button_pairs.check_click(coord):
                     self.click_pairs()
-                elif self.button_skype.check_click(coord):
-                    self.click_skype()
+                elif self.button_skype != None:
+                    if self.button_skype.check_click(coord):
+                        self.click_skype()
             # game_state 2: Video feed from cameras
             elif self.game_state == 2:
                 if self.video_screen.check_exit(coord):
@@ -299,7 +309,8 @@ class MainScreen(object):
         if self.button_power.enabled:
             self.button_power.redraw()
         self.button_pairs.redraw()
-        self.button_skype.redraw()
+        if self.button_skype != None:
+            self.button_skype.redraw()
 
     def update_pic(self):
         """ change background picture """
