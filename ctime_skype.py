@@ -84,6 +84,26 @@ class CtimeSkype(object):
         driver.switch_to.frame(frame)
         elem = driver.find_element_by_class_name("calling")
         elem.click()
+        call_started = False
+        while call_started == False:
+          try:
+            elem = driver.find_element_by_class_name("callScreen")
+            call_started = True
+            print "Call started"
+          except:
+            pass
+
+        while True:
+          try:
+            elem = driver.find_element_by_class_name("callScreen")
+          except:
+            print "Call ended"
+            driver.close()
+            self.ctime.game_state = 0
+            self.ctime.refresh_pic()
+            go_fullscreen()
+            return
+
 
     def check_click(self, pos):
         """ check if exit has been clicked """
