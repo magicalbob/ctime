@@ -4,7 +4,6 @@
 import time
 import pygame
 import os
-from skpy import Skype, SkypeChats
 from ctime_common import go_fullscreen
 from ctime_button import Button
 from selenium import webdriver
