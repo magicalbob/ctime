@@ -22,11 +22,6 @@ class CtimeSkype(object):
         screen = pygame.display.get_surface()
         self.screen_width, self.screen_height = screen.get_width(), screen.get_height()
 
-        self.button_exit = Button(self.screen,
-                                  (self.screen_width - 200, 0, 200, 200),
-                                  "images/icons/StopButton.png",
-                                  (0, 0, 0))
-
         """ set Chrome options """
         options = webdriver.ChromeOptions()
         options.add_argument('--ignore-certificate-errors')
@@ -112,14 +107,3 @@ class CtimeSkype(object):
             self.ctime.refresh_pic()
             go_fullscreen()
             return
-
-
-    def check_click(self, pos):
-        """ check if exit has been clicked """
-        if self.button_exit.check_click(pos):
-            go_fullscreen()
-            return True
-
-        return False
-
-
