@@ -283,11 +283,8 @@ class MainScreen(object):
                     self.game_state = 0
                     self.refresh_pic()
             # game_state 6: Skype chat
-            elif self.game_state == 6:
-                is_clicked = self.skype.check_click(coord)
-                if is_clicked:
-                    self.game_state = 0
-                    self.refresh_pic()
+            #               no buttons to check
+            #               selenium handles all interactions
 
     def refresh_pic(self):
         """ redraw background picture """
