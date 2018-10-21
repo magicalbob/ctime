@@ -26,10 +26,8 @@ class CtimeSkype(object):
                                   (self.screen_width - 200, 0, 200, 200),
                                   "images/icons/StopButton.png",
                                   (0, 0, 0))
-        self.re_init()
 
-    def re_init(self):
-        """ re-initialise the screen - used when sub screen closes """
+        """ set Chrome options """
         options = webdriver.ChromeOptions()
         options.add_argument('--ignore-certificate-errors')
         options.add_argument("--disable-infobars")
@@ -41,8 +39,10 @@ class CtimeSkype(object):
             "profile.default_content_setting_values.geolocation": 1, 
             "profile.default_content_setting_values.notifications": 1 
         })
+        """ load Chrome using selenium and get the skype page """
         driver = webdriver.Chrome(chrome_options=options)
         driver.get("https://skype.ellisbs.co.uk")
+        """ handle skype not being available """
         try:
           assert "Skype for Chris" in driver.title
         except:
@@ -51,9 +51,11 @@ class CtimeSkype(object):
           self.ctime.refresh_pic()
           go_fullscreen()
           return
+        """ click the skype chat button and wait for chat frame """
         elem = driver.find_element_by_class_name("lwc-chat-button")
         elem.click()
         time.sleep(3)
+        """ get the chat frame and click to sign in. switch to sign in window """
         frame = driver.find_element_by_class_name("lwc-chat-frame")
         driver.switch_to.frame(frame)
         elem = driver.find_element_by_class_name("sign-in-button")
@@ -64,8 +66,10 @@ class CtimeSkype(object):
           if win != old_win:
             new_win=win
         driver.switch_to_window(new_win)
+        """ make sign in window minimal to avoid someone clicking its controls """
         driver.set_window_size(0, 0)
         time.sleep(3)
+        """ log in to skype with details from config """
         elem = driver.find_element_by_name("loginfmt")
         elem.send_keys(self.skype_user)
         elem.send_keys(Keys.RETURN)
@@ -74,9 +78,12 @@ class CtimeSkype(object):
         elem.send_keys(self.skype_pass)
         elem.send_keys(Keys.RETURN)
         time.sleep(3)
+        """ go back to the original window, and reload it (login
+            does not trigger auto reload) """
         driver.switch_to_window(old_win)
         driver.get("https://skype.ellisbs.co.uk")
         assert "Skype for Chris" in driver.title
+        """ start the video call """
         elem = driver.find_element_by_class_name("lwc-chat-button")
         elem.click()
         time.sleep(3)
@@ -84,6 +91,7 @@ class CtimeSkype(object):
         driver.switch_to.frame(frame)
         elem = driver.find_element_by_class_name("calling")
         elem.click()
+        """ check the call is in progress by polling for callScreen """
         call_started = False
         while call_started == False:
           try:
@@ -93,6 +101,7 @@ class CtimeSkype(object):
           except:
             pass
 
+        """ now call has started, poll for it ending by looking for callScreen disappearing """
         while True:
           try:
             elem = driver.find_element_by_class_name("callScreen")
