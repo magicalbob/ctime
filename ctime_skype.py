@@ -3,6 +3,7 @@
 
 import time
 import pygame
+import os
 from skpy import Skype, SkypeChats
 from ctime_common import go_fullscreen
 from ctime_button import Button
@@ -21,6 +22,9 @@ class CtimeSkype(object):
         self.screen = pygame.display.set_mode((self.screen_width, self.screen_height))
         screen = pygame.display.get_surface()
         self.screen_width, self.screen_height = screen.get_width(), screen.get_height()
+
+        """ prevent someone clicking something they shouldn't """
+        os.system('xinput set-prop 12 "Device Enabled" 0')
 
         """ set Chrome options """
         options = webdriver.ChromeOptions()
@@ -41,6 +45,8 @@ class CtimeSkype(object):
         try:
           assert "Skype for Chris" in driver.title
         except:
+          """ turm mouse back on, close selenium, go back to main screen """
+          os.system('xinput set-prop 12 "Device Enabled" 1')
           driver.close()
           self.ctime.game_state = 0
           self.ctime.refresh_pic()
@@ -102,6 +108,8 @@ class CtimeSkype(object):
             elem = driver.find_element_by_class_name("callScreen")
           except:
             print "Call ended"
+            """ turm mouse back on, close selenium, go back to main screen """
+            os.system('xinput set-prop 12 "Device Enabled" 1')
             driver.close()
             self.ctime.game_state = 0
             self.ctime.refresh_pic()
