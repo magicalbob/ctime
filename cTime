@@ -6,4 +6,9 @@ else
   mkdir /tmp/dcs
 fi
 
+WORK_DIR=$(dirname $0)
+cd ${WORK_DIR}
+
+export PATH=${PATH}:${WORK_DIR}/selenium
+
 ./ctime.py >> /tmp/cTime.log 2>&1
