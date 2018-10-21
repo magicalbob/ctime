@@ -58,11 +58,11 @@ class MainScreen(object):
         try:
           self.skype_start = conf['skype_start']
         except:
-          self.skype_start =None
+          self.skype_start = None
         try:
           self.skype_end = conf['skype_end']
         except:
-          self.skype_end =None
+          self.skype_end = None
         self.play_start = datetime.datetime.now(pytz.timezone('Europe/London')) 
         self.first_play = 1
         self.playlist = -1
