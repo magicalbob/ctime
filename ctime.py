@@ -55,6 +55,14 @@ class MainScreen(object):
           self.skype_pass = conf['skype_pass']
         except:
           self.skype_pass = None
+        try:
+          self.skype_start = conf['skype_start']
+        except:
+          self.skype_start =None
+        try:
+          self.skype_end = conf['skype_end']
+        except:
+          self.skype_end =None
         self.play_start = datetime.datetime.now(pytz.timezone('Europe/London')) 
         self.first_play = 1
         self.playlist = -1
@@ -108,7 +116,7 @@ class MainScreen(object):
                                     200),
                                    "images/icons/pairs.png",
                                    (0, 0, 0))
-        if self.skype_user != None and self.skype_pass != None:
+        if self.can_we_skype():
             self.button_skype = Button(self.screen,
                                        (0,
                                         (self.screen_height / 2) - 100,
@@ -118,6 +126,28 @@ class MainScreen(object):
                                        (0, 0, 0))
         else:
             self.button_skype = None
+
+    def can_we_skype(self):
+        """ check config settings available """
+        if (self.skype_user  == None or 
+            self.skype_pass  == None or
+            self.skype_start == None or
+            self.skype_end   == None):
+           """ not according to config """
+           return False
+        """ check the time. if too late say no """
+        now_time = datetime.datetime.now(pytz.timezone('Europe/London'))
+        test_start = strftime('%Y-%m-%d ')+self.skype_start
+        test_end   = strftime('%Y-%m-%d ')+self.skype_end
+        s_time = datetime.datetime.strptime(test_start, "%Y-%m-%d %H:%M:%S")
+        e_time = datetime.datetime.strptime(test_end, "%Y-%m-%d %H:%M:%S")
+        if s_time.replace(
+                tzinfo=None) < now_time.replace(
+                    tzinfo=None) < e_time.replace(
+                        tzinfo=None):
+            return True
+
+        return False
 
     def can_we_play(self):
         """ check the time. if too late say no """
@@ -309,8 +339,17 @@ class MainScreen(object):
         if self.button_power.enabled:
             self.button_power.redraw()
         self.button_pairs.redraw()
-        if self.button_skype != None:
-            self.button_skype.redraw()
+        if self.can_we_skype():
+            if self.button_skype == None:
+                self.button_skype = Button(self.screen,
+                                           (0,
+                                            (self.screen_height / 2) - 100,
+                                            200,
+                                            200),
+                                           "images/icons/Phone.png",
+                                           (0, 0, 0))
+            else:
+                self.button_skype.redraw()
 
     def update_pic(self):
         """ change background picture """
