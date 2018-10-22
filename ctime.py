@@ -240,12 +240,14 @@ class MainScreen(object):
 
     def click_button_video(self):
         """ start video show """
+        print "start video show"
         self.game_state = 2
         self.first_play = 1
         self.video_screen = Camera(self.screen_width, self.screen_height, self.path)
 
     def click_play_list(self):
         """ display play list selection (if not too late) """
+        print "display play list selection (if not too late)"
         if not self.can_we_play():
             return
         self.game_state = 3
@@ -253,16 +255,19 @@ class MainScreen(object):
 
     def click_pairs(self):
         """ start pairs game """
+        print "start pairs game"
         self.game_state = 5
         self.pairs = PairsScreen(self.screen_width, self.screen_height)
 
     def click_skype(self):
         """ start skype chat """
+        print "start skype chat"
         self.game_state = 6
         self.skype = CtimeSkype(self, self.skype_user, self.skype_pass)
 
     def play_track(self, play_list, tune_no):
         """ play some music """
+        print "play some music"
         which_list = ["bob", "frozen", "showman"]
         self.playlist = play_list
         self.tune_no = tune_no
@@ -281,17 +286,23 @@ class MainScreen(object):
             # game_state 0: Main menu
             if self.game_state == 0:
                 if self.button_play.check_click(coord):
+                    print "button_play clicked"
                     self.click_button_play()
                 elif self.button_video.check_click(coord):
+                    print "button_video clicked"
                     self.click_button_video()
                 elif self.button_play_list.check_click(coord):
+                    print "button_play_list clicked"
                     self.click_play_list()
                 elif self.button_power.check_click(coord):
+                    print "button_power clicked"
                     self.refresh_pic()
                 elif self.button_pairs.check_click(coord):
+                    print "button_pairs clicked"
                     self.click_pairs()
                 elif self.button_skype != None:
                     if self.button_skype.check_click(coord):
+                        print "button_skype clicked"
                         self.button_skype = None
                         self.click_skype()
             # game_state 2: Video feed from cameras
