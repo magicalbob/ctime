@@ -9,6 +9,7 @@ import pytz
 import pygame
 import pygame.locals
 import yaml
+import os
 from ctime_common import go_fullscreen
 from ctime_button import Button
 from ctime_play_list import PlayListScreen
@@ -104,10 +105,13 @@ class MainScreen(object):
                                        (self.screen_width - 200, 0, 200, 200),
                                        image_list,
                                        (0, 0, 0))
-        self.button_video = Button(self.screen,
-                                   (0, self.screen_height - 200, 200, 200),
-                                   "images/icons/VideoButton.png",
-                                   (0, 0, 0))
+        if os.path.exists("/dev/video0"):
+            self.button_video = Button(self.screen,
+                                       (0, self.screen_height - 200, 200, 200),
+                                       "images/icons/VideoButton.png",
+                                       (0, 0, 0))
+        else:
+            self.button_video = None
         self.button_power = Switch(self.screen,
                                    (self.screen_width - 200, self.screen_height - 200, 200, 200),
                                    "images/icons/light.png",
@@ -288,7 +292,8 @@ class MainScreen(object):
                 if self.button_play.check_click(coord):
                     print "button_play clicked"
                     self.click_button_play()
-                elif self.button_video.check_click(coord):
+                elif (self.button_video != None and
+                      self.button_video.check_click(coord)):
                     print "button_video clicked"
                     self.click_button_video()
                 elif self.button_play_list.check_click(coord):
@@ -365,7 +370,8 @@ class MainScreen(object):
                                       max(0, (self.screen_height-self.image.get_rect().size[1])/2)))
         self.button_play.redraw()
         self.button_play_list.redraw()
-        self.button_video.redraw()
+        if self.button_video != None:
+            self.button_video.redraw()
         if self.button_power.enabled:
             self.button_power.redraw()
         self.button_pairs.redraw()
