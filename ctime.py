@@ -138,7 +138,8 @@ class MainScreen(object):
 
     def can_we_skype(self):
         """ check config settings available """
-        if (self.skype_user  == None or 
+        if (not os.path.exists("/dev/video0") or
+            self.skype_user  == None or 
             self.skype_pass  == None or
             self.skype_start == None or
             self.skype_end   == None):
