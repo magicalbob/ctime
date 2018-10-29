@@ -110,8 +110,14 @@ class CtimeSkype(object):
         frame = driver.find_element_by_class_name("lwc-chat-frame")
         driver.switch_to.frame(frame)
         print "click calling"
-        elem = driver.find_element_by_class_name("calling")
-        elem.click()
+        try:
+          elem = driver.find_element_by_class_name("calling")
+          elem.click()
+        except:
+          print "calling not available"
+          self.abort_skype()
+          return
+
         """ check the call is in progress by polling for callScreen """
         call_started = False
         call_time = time.time()
