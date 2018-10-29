@@ -49,12 +49,7 @@ class CtimeSkype(object):
         except:
           """ turm mouse back on, close selenium, go back to main screen """
           print "no skype for Chris"
-          os.system('xinput set-prop 12 "Device Enabled" 1')
-          driver.close()
-          self.ctime.skype_exit = time.time()
-          self.ctime.game_state = 0
-          self.ctime.refresh_pic()
-          go_fullscreen()
+          self.abort_skype()
           return
         """ click the skype chat button and wait for chat frame """
         print "click the skype chat button"
@@ -129,13 +124,7 @@ class CtimeSkype(object):
           except:
             if time.time() - call_time > 30:
                 print "call failed to start"
-                """ turn mouse back on, close selenium, go back to main screen """
-                os.system('xinput set-prop 12 "Device Enabled" 1')
-                driver.close()
-                self.ctime.skype_exit = time.time()
-                self.ctime.game_state = 0
-                self.ctime.refresh_pic()
-                go_fullscreen()
+                self.abort_skype()
                 return
         
         """ now call has started, poll for it ending by looking for callScreen disappearing """
@@ -145,19 +134,31 @@ class CtimeSkype(object):
             elem = driver.find_element_by_class_name("callScreen")
           except:
             print "Call ended"
-            """ turn mouse back on, close selenium, go back to main screen """
-            os.system('xinput set-prop 12 "Device Enabled" 1')
-            try:
-              driver.close()
-            except:
-              pass
-            self.ctime.skype_exit = time.time()
-            self.ctime.game_state = 0
-            self.ctime.refresh_pic()
-            go_fullscreen()
+            self.abort_skype()
             return
+
         try:
           print "close selenium"
           driver.close()
         except:
           print "selenium close failed?"
+
+    def abort_skype(self):
+        """ turn mouse back on, close selenium, go back to main screen """
+        print "closing down skype"
+        print "re-enable mouse"
+        os.system('xinput set-prop 12 "Device Enabled" 1')
+        print "close selenium driver"
+        try:
+          driver.close()
+        except:
+          print "selenium driver did not like closing"
+        print "set time that skype finished"
+        self.ctime.skype_exit = time.time()
+        print "back to main menu game state"
+        self.ctime.game_state = 0
+        print "re-draw main screen"
+        self.ctime.refresh_pic()
+        print "make sure in full screen mode"
+        go_fullscreen()
+        print "return to main screen"
