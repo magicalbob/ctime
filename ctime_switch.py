@@ -58,7 +58,7 @@ class Switch(Button):
         print "turn on or off the power"
         if self.power_state:
             print "turn power on"
-            os.spawnl(os.P_NOWAIT,self.power_on)
+            os.system(self.power_on)
         else:
             print "turn power off"
-            os.spawnl(os.P_NOWAIT,self.power_off)
+            os.system(self.power_off)
