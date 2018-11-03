@@ -11,4 +11,4 @@ cd ${WORK_DIR}
 
 export PATH=${PATH}:${WORK_DIR}/selenium
 
-./ctime.py >> /tmp/cTime.log 2>&1
+./ctime.py

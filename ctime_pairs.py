@@ -3,6 +3,7 @@ import time
 import os
 import pygame
 import pygame.locals
+import logging
 from ctime_button import Button
 from ctime_common import shuffle_list
 from ctime_common import go_fullscreen
@@ -151,7 +152,7 @@ def play_applause():
     try:
         pygame.mixer.init()
     except BaseException:
-        print "pygame.mixer.init() failed"
+        logger.error('pygame.mixer.init() failed')
     new_tune = "sounds/applause.ogg"
     pygame.mixer.music.load(new_tune)
     pygame.mixer.music.play()
