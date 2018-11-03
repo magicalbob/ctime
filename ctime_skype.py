@@ -4,6 +4,7 @@
 import time
 import pygame
 import os
+import logging
 from ctime_common import go_fullscreen
 from ctime_button import Button
 from selenium import webdriver
@@ -12,6 +13,7 @@ from selenium.webdriver.common.keys import Keys
 class CtimeSkype(object):
     """ A Skype object """
     def __init__(self, ctime, skype_user, skype_pass):
+        logging.info('New Skype object')
         self.screen_width = 0
         self.screen_height = 0
         self.ctime = ctime
@@ -26,7 +28,7 @@ class CtimeSkype(object):
         os.system('xinput set-prop 12 "Device Enabled" 0')
 
         """ set Chrome options """
-        print "Set Chrome options"
+        logging.info('Set Chrome options')
         options = webdriver.ChromeOptions()
         options.add_argument('--ignore-certificate-errors')
         options.add_argument("--disable-infobars")
@@ -38,77 +40,84 @@ class CtimeSkype(object):
             "profile.default_content_setting_values.notifications": 1 
         })
         """ load Chrome using selenium and get the skype page """
-        print "Load Chrome using selenium"
+        logging.info('Load Chrome using selenium')
         driver = webdriver.Chrome(chrome_options=options)
-        print "Get skype page"
+        logging.info('Get skype page')
         driver.get("https://skype.ellisbs.co.uk")
         """ handle skype not being available """
-        print "make sure skype page loaded"
+        logging.info('make sure skype page loaded')
         try:
           assert "Skype for Chris" in driver.title
         except:
-          """ turm mouse back on, close selenium, go back to main screen """
-          print "no skype for Chris"
+          """ turn mouse back on, close selenium, go back to main screen """
+          logging.error('no skype for Chris')
           self.abort_skype()
           return
         """ click the skype chat button and wait for chat frame """
-        print "click the skype chat button"
+        logging.info('click the skype chat button')
         elem = driver.find_element_by_class_name("lwc-chat-button")
         elem.click()
         time.sleep(3)
         """ get the chat frame and click to sign in. switch to sign in window """
-        print "get the chat frame"
+        logging.info('get the chat frame')
         frame = driver.find_element_by_class_name("lwc-chat-frame")
         driver.switch_to.frame(frame)
         do_login=True
         try:
-          print "click sign in button"
+          logging.info('click sign in button')
           elem = driver.find_element_by_class_name("sign-in-button")
           elem.click()
         except:
-          print "already signed in?"
+          logging.info('already signed in?')
           do_login=False
         old_win=driver.current_window_handle
         if do_login==True:
-          print "log in"
+          logging.info('log in')
           new_win=None
-          print "find log in window"
+          logging.info('find log in window')
           for win in driver.window_handles:
             if win != old_win:
               new_win=win
-          print "switch to log in window"
+          logging.info('switch to log in window')
           driver.switch_to_window(new_win)
           """ make sign in window minimal to avoid someone clicking its controls """
-          print "minimise log in window"
+          logging.info('minimise log in window')
           driver.set_window_size(0, 0)
           time.sleep(3)
           """ log in to skype with details from config """
-          print "enter log in id"
+          logging.info('enter log in id')
           elem = driver.find_element_by_name("loginfmt")
           elem.send_keys(self.skype_user)
           elem.send_keys(Keys.RETURN)
           time.sleep(3)
-          print "enter password"
+          logging.info('enter password')
           elem = driver.find_element_by_name("passwd")
           elem.send_keys(self.skype_pass)
           elem.send_keys(Keys.RETURN)
           time.sleep(3)
         """ go back to the original window, and reload it (login
             does not trigger auto reload) """
-        print "back to chat window"
+        logging.info('back to chat window')
         driver.switch_to_window(old_win)
-        print "reload skype page"
+        logging.info('reload skype page')
         driver.get("https://skype.ellisbs.co.uk")
-        print "check skype page re-loaded"
-        assert "Skype for Chris" in driver.title
+        logging.info('check skype page re-loaded')
+        try:
+          assert "Skype for Chris" in driver.title
+        except:
+          """ turn mouse back on, close selenium, go back to main screen """
+          logging.error('reload of skype for Chris failed')
+          self.abort_skype()
+          return
         """ start the video call """
-        print "start video call"
+        logging.info('start video call')
         elem = driver.find_element_by_class_name("lwc-chat-button")
         elem.click()
         time.sleep(3)
-        print "switch to chat frame"
+        logging.info('switch to chat frame')
         frame = driver.find_element_by_class_name("lwc-chat-frame")
         driver.switch_to.frame(frame)
+        logging.info('click calling')
         print "click calling"
         try:
           elem = driver.find_element_by_class_name("calling")
@@ -121,50 +130,50 @@ class CtimeSkype(object):
         """ check the call is in progress by polling for callScreen """
         call_started = False
         call_time = time.time()
-        print "wait for call to start"
+        logging.info('wait for call to start')
         while call_started == False:
           try:
             elem = driver.find_element_by_class_name("callScreen")
             call_started = True
-            print "Call started"
+            logging.info('Call started')
           except:
             if time.time() - call_time > 30:
-                print "call failed to start"
+                logging.warning('call failed to start')
                 self.abort_skype()
                 return
         
         """ now call has started, poll for it ending by looking for callScreen disappearing """
-        print "wait for call screen to disappear to wrap up"
+        logging.info('wait for call screen to disappear to wrap up')
         while True:
           try:
             elem = driver.find_element_by_class_name("callScreen")
           except:
-            print "Call ended"
+            logging.info('Call ended')
             self.abort_skype()
             return
 
         try:
-          print "close selenium"
+          logging.info('close selenium')
           driver.close()
         except:
-          print "selenium close failed?"
+          logging.info('selenium close failed?')
 
     def abort_skype(self):
         """ turn mouse back on, close selenium, go back to main screen """
-        print "closing down skype"
-        print "re-enable mouse"
+        logging.info('closing down skype')
+        logging.info('re-enable mouse')
         os.system('xinput set-prop 12 "Device Enabled" 1')
-        print "close selenium driver"
+        logging.info('close selenium driver')
         try:
           driver.close()
         except:
-          print "selenium driver did not like closing"
-        print "set time that skype finished"
+          logging.warning('selenium driver did not like closing')
+        logging.info('set time that skype finished')
         self.ctime.skype_exit = time.time()
-        print "back to main menu game state"
+        logging.info('back to main menu game state')
         self.ctime.game_state = 0
-        print "re-draw main screen"
+        logging.info('re-draw main screen')
         self.ctime.refresh_pic()
-        print "make sure in full screen mode"
+        logging.info('make sure in full screen mode')
         go_fullscreen()
-        print "return to main screen"
+        logging.info('return to main screen')
