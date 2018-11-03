@@ -25,8 +25,14 @@ class CtimeSkype(object):
         self.screen_width, self.screen_height = screen.get_width(), screen.get_height()
 
         """ prevent someone clicking something they shouldn't """
-        os.system('xinput set-prop 12 "Device Enabled" 0')
-
+        if self.ctime.disable_mouse == None:
+            logging.info('No command provided to disable mouse')
+        else:
+            try:
+                logging.info("Disable the mouse with %s" % (self.ctime.disable_mouse))
+                os.system(self.ctime.disable_mouse)
+            except Exception as e:
+                logging.info("Unable to disable mouse: %s" % (e))
         """ set Chrome options """
         logging.info('Set Chrome options')
         options = webdriver.ChromeOptions()
@@ -160,8 +166,14 @@ class CtimeSkype(object):
     def abort_skype(self):
         """ turn mouse back on, close selenium, go back to main screen """
         logging.info('closing down skype')
-        logging.info('re-enable mouse')
-        os.system('xinput set-prop 12 "Device Enabled" 1')
+        if self.ctime.enable_mouse == None:
+            logging.info('No command provided to enable mouse')
+        else:
+            try:
+                logging.info("Enable the mouse with %s" % (self.ctime.enable_mouse))
+                os.system(self.ctime.enable_mouse)
+            except Exception as e:
+                logging.info("Unable to enable mouse: %s" % (e))
         logging.info('close selenium driver')
         try:
           driver.close()

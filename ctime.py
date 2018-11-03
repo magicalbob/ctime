@@ -71,6 +71,15 @@ class MainScreen(object):
           self.skype_timeout = conf['skype_timeout']
         except:
           self.skype_timeout = None
+        try:
+          self.disable_mouse = conf['disable_mouse']
+        except:
+          self.disable_mouse = None
+        try:
+          self.enable_mouse = conf['enable_mouse']
+        except:
+          self.enable_mouse = None
+          self.disable_mouse = None
         self.skype_exit = None
         self.play_start = datetime.datetime.now(pytz.timezone('Europe/London')) 
         self.first_play = 1

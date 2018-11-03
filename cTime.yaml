@@ -12,3 +12,5 @@ skype_pass:
 skype_start: 
 skype_end: 
 skype_timeout: 
+enable_mouse: xinput --enable 9
+disable_mouse: xinput --disable 9
