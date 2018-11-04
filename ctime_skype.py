@@ -66,8 +66,13 @@ class CtimeSkype(object):
         time.sleep(3)
         """ get the chat frame and click to sign in. switch to sign in window """
         logging.info('get the chat frame')
-        frame = driver.find_element_by_class_name("lwc-chat-frame")
-        driver.switch_to.frame(frame)
+        try:
+          frame = driver.find_element_by_class_name("lwc-chat-frame")
+          driver.switch_to.frame(frame)
+        except Exception as e:
+          logging.error("could not switch to lwc-chat-frame: %s" % (e))
+          self.abort_skype()
+          return
         do_login=True
         try:
           logging.info('click sign in button')
@@ -75,8 +80,15 @@ class CtimeSkype(object):
           elem.click()
         except:
           logging.info('already signed in?')
-          do_login=False
-        old_win=driver.current_window_handle
+          do_login = False
+        old_win = None
+        try:
+          logging.info('save old window')
+          old_win=driver.current_window_handle
+        except Exception as e:
+          logging.error("could not save old window: %s" % (e))
+          self.abort_skype()
+          return
         if do_login==True:
           logging.info('log in')
           new_win=None
@@ -154,7 +166,7 @@ class CtimeSkype(object):
             elem = driver.find_element_by_class_name("callScreen")
           except:
             logging.info('Call ended')
-            self.abort_skype()
+            self.abort_skype(hide_skype = True)
             return
 
         try:
@@ -163,7 +175,7 @@ class CtimeSkype(object):
         except:
           logging.info('selenium close failed?')
 
-    def abort_skype(self):
+    def abort_skype(self,hide_skype = False):
         """ turn mouse back on, close selenium, go back to main screen """
         logging.info('closing down skype')
         if self.ctime.enable_mouse == None:
@@ -180,7 +192,10 @@ class CtimeSkype(object):
         except:
           logging.warning('selenium driver did not like closing')
         logging.info('set time that skype finished')
-        self.ctime.skype_exit = time.time()
+        if hide_skype == True:
+          self.ctime.skype_exit = time.time()
+        else:
+          self.ctime.skype_exit = 0
         logging.info('back to main menu game state')
         self.ctime.game_state = 0
         logging.info('re-draw main screen')
