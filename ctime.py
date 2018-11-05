@@ -23,7 +23,7 @@ from ctime_skype import CtimeSkype
 class MainScreen(object):
     """ The main screen of the program """
     def __init__(self):
-        logging.basicConfig(filename='ctime.log',level=logging.INFO)
+        logging.basicConfig(filename='ctime.log',level=logging.INFO,format='%(asctime)s %(message)s')
         logging.info('started up')
         self.screen_width = 0
         self.screen_height = 0
