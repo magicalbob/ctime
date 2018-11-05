@@ -144,8 +144,10 @@ class CtimeSkype(object):
             found_calling = True
           except Exception as e:
             logging.error("calling not available: %s" % (e))
-            if time.time() - call_time > 30:
+            time.sleep(1)
+            if time.time() - call_time > 5:
                 logging.warning('call not available')
+                logging.warning(driver.page_source)
                 self.abort_skype()
                 return
 
