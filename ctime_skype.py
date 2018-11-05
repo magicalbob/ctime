@@ -137,12 +137,17 @@ class CtimeSkype(object):
         driver.switch_to.frame(frame)
         logging.info('click calling')
         found_calling=False
+        call_time = time.time()
         while found_calling == False:
           try:
             elem = driver.find_element_by_xpath('//*[@title="Start a video call"]').click()
             found_calling = True
           except Exception as e:
             logging.error("calling not available: %s" % (e))
+            if time.time() - call_time > 30:
+                logging.warning('call not available')
+                self.abort_skype()
+                return
 
         """ check the call is in progress by polling for callScreen """
         call_started = False
