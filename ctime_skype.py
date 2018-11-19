@@ -6,6 +6,7 @@ import pygame
 import os
 import logging
 import pyautogui
+import subprocess
 from ctime_common import go_fullscreen
 from ctime_button import Button
 
@@ -36,9 +37,9 @@ class CtimeSkype(object):
         """ load skype """
         try:
           os.system("skype")
-          time.sleep(5)
+          time.sleep(20)
           pyautogui.hotkey('alt', 'f')
-          time.sleep(2)
+          time.sleep(5)
           pyautogui.typewrite(['down','down','down','enter'])
           time.sleep(1)
           pyautogui.typewrite(['tab','tab','tab','enter'])
@@ -49,19 +50,32 @@ class CtimeSkype(object):
         call_time = time.time()
 
         """ now wait up to a minute for call to start """
-        while (os.system("pgrep -a skype | grep enable-plugin") != 0):
+        call_started = False
+        while (call_started == False):
+            time.sleep(1)
             if time.time() - call_time > 60:
                 logging.warning('call not available')
                 self.abort_skype()
                 return
+            call_started = self.call_started()
 
+        logging.info('call started')
         """ now wait for call to end """
-        while (os.system("pgrep -a skype | grep enable-plugin") == 0):
-            pass
+        while (self.call_started()):
+            time.sleep(1)
 
-        logging.warning('call ended')
+        logging.info('call ended')
         self.abort_skype(hide_skype = True)
         return
+
+    def call_started(self):
+        out = subprocess.Popen(['./countskype.sh'],stdout=subprocess.PIPE,stderr=subprocess.STDOUT)
+        stdout,stderr = out.communicate()
+        scount = int(stdout)
+        logging.info("process count = %d" % scount)
+        if scount < 5:
+            return False
+        return True
 
     def abort_skype(self,hide_skype = False):
         """ turn mouse back on, close skype, go back to main screen """
@@ -75,7 +89,8 @@ class CtimeSkype(object):
             except Exception as e:
                 logging.info("Unable to enable mouse: %s" % (e))
         logging.info('close skype')
-        os.system("kill -9 $(pgrep skype)")
+        if os.system('pgrep skype > /dev/null') == 0:
+            os.system('kill -9 $(pgrep skype) > /dev/null')
         logging.info('set time that skype finished')
         if hide_skype == True:
           self.ctime.skype_exit = time.time()
