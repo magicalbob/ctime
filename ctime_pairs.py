@@ -12,6 +12,7 @@ from ctime_common import play_let_it_go
 class PairsScreen(object):
     """ class for simple pairs game """
     def __init__(self, screen_width, screen_height, new_game = True):
+        logging.info('New PairsScreen')
         self.screen_size = {'width': screen_width,
                             'height': screen_height}
         self.screen = pygame.display.get_surface()
@@ -24,8 +25,10 @@ class PairsScreen(object):
         self.flip_time = 0
 
         if new_game == True:
+            logging.info('New pairs game. No exit button')
             self.button_exit = None
         else:
+            logging.info('Another pairs game. Add exit button')
             self.add_button_exit()
 
         card_index = 0
@@ -48,6 +51,7 @@ class PairsScreen(object):
 
     def redraw(self):
         """ redraw the cards in their current state """
+        logging.info('Redraw the cards in their current state')
         self.screen = pygame.display.get_surface()
         self.screen.fill(pygame.Color(0, 0, 0, 0),
                          (0, 0, self.screen_size['width'], self.screen_size['height']),
@@ -55,7 +59,9 @@ class PairsScreen(object):
         if os.uname()[1].startswith('rpi'):
             go_fullscreen()
 
+        logging.info('If exit button set, redraw it')
         if self.button_exit != None:
+            logging.info('Redraw exit button')
             self.button_exit.redraw()
 
         for card_index in range(self.cards['count']):
@@ -90,6 +96,7 @@ class PairsScreen(object):
 
     def flip_card(self, card_num):
         """ turn a card over """
+        logging.info("Turn a card over: %d" % (card_num))
         if self.cards['clicked'][0] == -1:
             self.cards['clicked'][0] = card_num
             self.cards['list'][card_num].reload(
