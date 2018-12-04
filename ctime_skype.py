@@ -161,7 +161,7 @@ class CtimeSkype(object):
             call_started = True
             logging.info('Call started')
           except:
-            if time.time() - call_time > 60:
+            if time.time() - call_time > 90:
                 logging.warning('call failed to start')
                 self.abort_skype()
                 return
