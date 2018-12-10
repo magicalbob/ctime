@@ -51,10 +51,16 @@ class CtimeSkype(object):
 
         """ now wait up to a minute for call to start """
         call_started = False
-        while (call_started == False):
-            time.sleep(1)
-            if time.time() - call_time > 60:
-                logging.warning('call not available')
+        call_time = time.time()
+        logging.info('wait for call to start')
+        while call_started == False:
+          try:
+            elem = driver.find_element_by_class_name("callScreen")
+            call_started = True
+            logging.info('Call started')
+          except:
+            if time.time() - call_time > 90:
+                logging.warning('call failed to start')
                 self.abort_skype()
                 return
             call_started = self.call_started()
