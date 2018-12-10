@@ -170,12 +170,14 @@ class CtimeSkype(object):
             logging.info('Call ended')
             self.abort_skype(hide_skype = True)
             return
-
-        try:
-          logging.info('close selenium')
-          self.driver.close()
-        except:
-          logging.info('selenium close failed?')
+          try:
+            elem = self.driver.find_element_by_id("callParticipantsClose")
+            if elem.isDisplayed():
+              logging.info('Call ended with feedback')
+              self.abort_skype(hide_skype = True)
+              return
+          except:
+            pass
 
     def abort_skype(self,hide_skype = False):
         """ turn mouse back on, close selenium, go back to main screen """
