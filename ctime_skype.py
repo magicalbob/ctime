@@ -6,6 +6,7 @@ import pygame
 import os
 import logging
 from ctime_common import go_fullscreen
+from ctime_common import go_minimal
 from ctime_button import Button
 from selenium import webdriver
 from selenium.webdriver.common.keys import Keys
@@ -14,15 +15,9 @@ class CtimeSkype(object):
     """ A Skype object """
     def __init__(self, ctime, skype_user, skype_pass):
         logging.info('New Skype object')
-        self.screen_width = 0
-        self.screen_height = 0
         self.ctime = ctime
         self.skype_user = skype_user
         self.skype_pass = skype_pass
-        pygame.init()
-        self.screen = pygame.display.set_mode((self.screen_width, self.screen_height))
-        screen = pygame.display.get_surface()
-        self.screen_width, self.screen_height = screen.get_width(), screen.get_height()
 
         """ prevent someone clicking something they shouldn't """
         self.mouse_change(self.ctime.disable_mouse)
@@ -120,6 +115,13 @@ class CtimeSkype(object):
           logging.error('reload of skype for Chris failed')
           self.abort_skype()
           return
+        """ allow clicking again """
+        self.mouse_change(self.ctime.enable_mouse)
+
+    def make_call(self):
+        """ prevent someone clicking something they shouldn't """
+        self.mouse_change(self.ctime.disable_mouse)
+        go_minimal()
         """ start the video call """
         logging.info('start video call')
         elem = self.driver.find_element_by_class_name("lwc-chat-button")
@@ -189,6 +191,7 @@ class CtimeSkype(object):
           self.ctime.skype_exit = time.time()
         else:
           self.ctime.skype_exit = 0
+        self.ctime.skype = CtimeSkype(self.ctime, self.ctime.skype_user, self.ctime.skype_pass)
         logging.info('back to main menu game state')
         self.ctime.game_state = 0
         logging.info('re-draw main screen')

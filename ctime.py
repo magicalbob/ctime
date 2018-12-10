@@ -94,6 +94,7 @@ class MainScreen(object):
             pygame.mixer.music.set_volume(self.def_vol)
         except:
             logging.error('pygame.music.set_volume failed')
+        self.skype = CtimeSkype(self, self.skype_user, self.skype_pass)
         self.re_init()
 
     def re_init(self):
@@ -280,7 +281,7 @@ class MainScreen(object):
         """ start skype chat """
         logging.info('start skype chat')
         self.game_state = 6
-        self.skype = CtimeSkype(self, self.skype_user, self.skype_pass)
+        self.skype.make_call()
 
     def play_track(self, play_list, tune_no):
         """ play some music """
