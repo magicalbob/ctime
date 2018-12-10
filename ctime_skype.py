@@ -69,6 +69,9 @@ class CtimeSkype(object):
         except:
           logging.info('already signed in?')
           do_login = False
+        self.skype_signin(do_login)
+
+    def skype_signin(self,do_login):
         old_win = None
         try:
           logging.info('save old window')
@@ -115,8 +118,24 @@ class CtimeSkype(object):
           logging.error('reload of skype for Chris failed')
           self.abort_skype()
           return
+        """ record last time connection checked """
+        self.check_connect = time.time()
         """ allow clicking again """
         self.mouse_change(self.ctime.enable_mouse)
+
+    def check_signin(self):
+        self.check_connect = time.time()
+        self.driver.get("https://skype.ellisbs.co.uk")
+        logging.info('checking that still logged in to skype')
+        try:
+          frame = self.driver.find_element_by_class_name("lwc-chat-frame")
+          self.driver.switch_to.frame(frame)
+          elem = self.driver.find_element_by_class_name("sign-in-button")
+          elem.click()
+          logging.info('sign in button clicked, so currently logged out')
+          self.skype_signin(True)
+        except:
+          logging.info('no sign in button, so currently logged in')
 
     def make_call(self):
         """ prevent someone clicking something they shouldn't """
