@@ -25,14 +25,7 @@ class CtimeSkype(object):
         self.screen_width, self.screen_height = screen.get_width(), screen.get_height()
 
         """ prevent someone clicking something they shouldn't """
-        if self.ctime.disable_mouse == None:
-            logging.info('No command provided to disable mouse')
-        else:
-            try:
-                logging.info("Disable the mouse with %s" % (self.ctime.disable_mouse))
-                os.system(self.ctime.disable_mouse)
-            except Exception as e:
-                logging.info("Unable to disable mouse: %s" % (e))
+        self.mouse_change(self.ctime.disable_mouse)
         """ set Chrome options """
         logging.info('Set Chrome options')
         options = webdriver.ChromeOptions()
@@ -185,14 +178,7 @@ class CtimeSkype(object):
     def abort_skype(self,hide_skype = False):
         """ turn mouse back on, close selenium, go back to main screen """
         logging.info('closing down skype')
-        if self.ctime.enable_mouse == None:
-            logging.info('No command provided to enable mouse')
-        else:
-            try:
-                logging.info("Enable the mouse with %s" % (self.ctime.enable_mouse))
-                os.system(self.ctime.enable_mouse)
-            except Exception as e:
-                logging.info("Unable to enable mouse: %s" % (e))
+        self.mouse_change(self.ctime.enable_mouse)
         logging.info('close selenium driver')
         try:
           driver.close()
@@ -210,3 +196,14 @@ class CtimeSkype(object):
         logging.info('make sure in full screen mode')
         go_fullscreen()
         logging.info('return to main screen')
+
+    def mouse_change(self,mouse_command):
+        """ prevent/enable someone clicking something they shouldn't/should """
+        if mouse_command == None:
+            logging.info('No command provided for mouse')
+        else:
+            try:
+                logging.info("Enable/Disable the mouse with %s" % (mouse_command))
+                os.system(mouse_command)
+            except Exception as e:
+                logging.info("Unable to enable/disable mouse with %s: %s" % (mouse_command,e))
