@@ -25,6 +25,26 @@ def go_fullscreen():
 
     return screen
 
+def go_minimal():
+    """ switch display to full screen mode """
+    screen = pygame.display.get_surface()
+    tmp = screen.convert()
+    caption = pygame.display.get_caption()
+    cursor = pygame.mouse.get_cursor()  # Duoas 16-04-2007
+
+    screen_width, screen_height = 0, 0
+
+    pygame.display.init()
+    screen = pygame.display.set_mode((screen_width, screen_height))
+    screen.blit(tmp, (0, 0))
+    pygame.display.set_caption(*caption)
+
+    pygame.key.set_mods(0) #HACK: work-a-round for a SDL bug??
+
+    pygame.mouse.set_cursor(*cursor)  # Duoas 16-04-2007
+
+    return screen
+
 def shuffle_list(the_list):
     """ shuffle elements of a list into random order """
     for i, val in enumerate(the_list):
