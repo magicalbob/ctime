@@ -412,6 +412,11 @@ THE_GAME = MainScreen()
 OLD_TIME = time.time()
 
 while True:
+    # check still logged in to skype every 15 minutes
+    if time.time() - THE_GAME.skype.check_connect > 900:
+        THE_GAME.skype.check_signin()
+        THE_GAME.skype.check_connect = time.time()
+
     # Check power off of lights
     THE_GAME.button_power.check_off()
     # Check for event. Exit if return key pressed, otherwise pass event to THE_GAME object
