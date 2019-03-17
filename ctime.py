@@ -94,7 +94,7 @@ class MainScreen(object):
             pygame.mixer.music.set_volume(self.def_vol)
         except:
             logging.error('pygame.music.set_volume failed')
-        self.skype = CtimeSkype(self, self.skype_user, self.skype_pass)
+        #self.skype = CtimeSkype(self, self.skype_user, self.skype_pass)
         self.re_init()
 
     def re_init(self):
@@ -151,6 +151,7 @@ class MainScreen(object):
 
     def can_we_skype(self):
         """ check config settings available """
+        return False
         if (not os.path.exists("/dev/video0") or
             self.skype_user  == None or 
             self.skype_pass  == None or
@@ -413,9 +414,9 @@ OLD_TIME = time.time()
 
 while True:
     # check still logged in to skype every 15 minutes
-    if time.time() - THE_GAME.skype.check_connect > 900:
-        THE_GAME.skype.check_signin()
-        THE_GAME.skype.check_connect = time.time()
+    #if time.time() - THE_GAME.skype.check_connect > 900:
+    #    THE_GAME.skype.check_signin()
+    #    THE_GAME.skype.check_connect = time.time()
 
     # Check power off of lights
     THE_GAME.button_power.check_off()
