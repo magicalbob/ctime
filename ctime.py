@@ -18,7 +18,7 @@ from ctime_play_list import TrackListScreen
 from ctime_camera import Camera
 from ctime_switch import Switch
 from ctime_pairs import PairsScreen
-from ctime_skype import CtimeSkype
+from ctime_facebook import CtimeFacebook
 
 class MainScreen(object):
     """ The main screen of the program """
@@ -52,25 +52,25 @@ class MainScreen(object):
         except:
             self.power_off = ''
         try:
-          self.skype_user = conf['skype_user']
+          self.facebook_user = conf['facebook_user']
         except:
-          self.skype_user = None
+          self.facebook_user = None
         try:
-          self.skype_pass = conf['skype_pass']
+          self.facebook_pass = conf['facebook_pass']
         except:
-          self.skype_pass = None
+          self.facebook_pass = None
         try:
-          self.skype_start = conf['skype_start']
+          self.facebook_start = conf['facebook_start']
         except:
-          self.skype_start = None
+          self.facebook_start = None
         try:
-          self.skype_end = conf['skype_end']
+          self.facebook_end = conf['facebook_end']
         except:
-          self.skype_end = None
+          self.facebook_end = None
         try:
-          self.skype_timeout = conf['skype_timeout']
+          self.facebook_timeout = conf['facebook_timeout']
         except:
-          self.skype_timeout = None
+          self.facebook_timeout = None
         try:
           self.disable_mouse = conf['disable_mouse']
         except:
@@ -80,7 +80,7 @@ class MainScreen(object):
         except:
           self.enable_mouse = None
           self.disable_mouse = None
-        self.skype_exit = None
+        self.facebook_exit = None
         self.play_start = datetime.datetime.now(pytz.timezone('Europe/London')) 
         self.first_play = 1
         self.playlist = -1
@@ -94,7 +94,7 @@ class MainScreen(object):
             pygame.mixer.music.set_volume(self.def_vol)
         except:
             logging.error('pygame.music.set_volume failed')
-        #self.skype = CtimeSkype(self, self.skype_user, self.skype_pass)
+        self.facebook = CtimeFacebook(self, self.facebook_user, self.facebook_pass)
         self.re_init()
 
     def re_init(self):
@@ -138,32 +138,32 @@ class MainScreen(object):
                                     200),
                                    "images/icons/pairs.png",
                                    (0, 0, 0))
-        if self.can_we_skype():
-            self.button_skype = Button(self.screen,
-                                       (0,
-                                        (self.screen_height / 2) - 100,
-                                        200,
-                                        200),
-                                       "images/icons/Phone.png",
-                                       (0, 0, 0))
+        if self.can_we_facebook():
+            self.button_facebook = Button(self.screen,
+                                          (0,
+                                           (self.screen_height / 2) - 100,
+                                           200,
+                                           200),
+                                          "images/icons/Phone.png",
+                                          (0, 0, 0))
         else:
-            self.button_skype = None
+            self.button_facebook = None
 
-    def can_we_skype(self):
+    def can_we_facebook(self):
         """ check config settings available """
-        return False
         if (not os.path.exists("/dev/video0") or
-            self.skype_user  == None or 
-            self.skype_pass  == None or
-            self.skype_start == None or
-            self.skype_end   == None):
+            self.facebook_user  == None or 
+            self.facebook_pass  == None or
+            self.facebook_start == None or
+            self.facebook_end   == None):
            """ not according to config """
+           logging.info('no video device, no facebook')
            return False
 
         """ check the time. if too late say no """
         now_time = datetime.datetime.now(pytz.timezone('Europe/London'))
-        test_start = strftime('%Y-%m-%d ')+self.skype_start
-        test_end   = strftime('%Y-%m-%d ')+self.skype_end
+        test_start = strftime('%Y-%m-%d ')+self.facebook_start
+        test_end   = strftime('%Y-%m-%d ')+self.facebook_end
         s_time = datetime.datetime.strptime(test_start, "%Y-%m-%d %H:%M:%S")
         e_time = datetime.datetime.strptime(test_end, "%Y-%m-%d %H:%M:%S")
         if s_time.replace(
@@ -172,18 +172,24 @@ class MainScreen(object):
                         tzinfo=None):
             pass
         else:
+            logging.info('too late for facebook')
             return False
 
-        """ check that skype hasn't been used to recently """
-        if self.skype_timeout == None:
+        """ check that facebook hasn't been used too recently """
+        if self.facebook_timeout == None:
+            logging.info('facebook timeout not set, so facebook ok')
             return True
 
-        if self.skype_exit == None:
+        if self.facebook_exit == None:
+            logging.info('facebook exit not set, so facebook ok')
             return True
 
-        if time.time() - self.skype_exit > self.skype_timeout:
+        if time.time() - self.facebook_exit > self.facebook_timeout:
+            logging.info("more than facebook timeout (%d) since facebook exit (%d), so facebook ok" % (self.facebook_timeout,
+                                                                                                       self.facebook_exit))
             return True
 
+        logging.info('no facebook now')
         return False
 
     def can_we_play(self):
@@ -276,13 +282,13 @@ class MainScreen(object):
         """ start pairs game """
         logging.info('start pairs game')
         self.game_state = 5
-        self.pairs = PairsScreen(self.screen_width, self.screen_height)
+        self.pairs = PairsScreen(self.screen_width, self.screen_height, self)
 
-    def click_skype(self):
-        """ start skype chat """
-        logging.info('start skype chat')
+    def click_facebook(self):
+        """ start facebook chat """
+        logging.info('start facebook chat')
         self.game_state = 6
-        self.skype.make_call()
+        self.facebook.make_call()
 
     def play_track(self, play_list, tune_no):
         """ play some music """
@@ -320,11 +326,12 @@ class MainScreen(object):
                 elif self.button_pairs.check_click(coord):
                     logging.info('button_pairs clicked')
                     self.click_pairs()
-                elif self.button_skype != None:
-                    if self.button_skype.check_click(coord):
-                        logging.info('button_skype clicked')
-                        self.button_skype = None
-                        self.click_skype()
+                elif self.button_facebook != None:
+                    if self.button_facebook.check_click(coord):
+                        logging.info('button_facebook clicked')
+                        self.button_facebook = None
+                        self.re_init()
+                        self.click_facebook()
             # game_state 2: Video feed from cameras
             elif self.game_state == 2:
                 if self.video_screen.check_exit(coord):
@@ -390,17 +397,17 @@ class MainScreen(object):
         if self.button_power.enabled:
             self.button_power.redraw()
         self.button_pairs.redraw()
-        if self.can_we_skype():
-            if self.button_skype == None:
-                self.button_skype = Button(self.screen,
-                                           (0,
-                                            (self.screen_height / 2) - 100,
-                                            200,
-                                            200),
-                                           "images/icons/Phone.png",
-                                           (0, 0, 0))
+        if self.can_we_facebook():
+            if self.button_facebook == None:
+                self.button_facebook = Button(self.screen,
+                                              (0,
+                                               (self.screen_height / 2) - 100,
+                                               200,
+                                               200),
+                                              "images/icons/Phone.png",
+                                              (0, 0, 0))
             else:
-                self.button_skype.redraw()
+                self.button_facebook.redraw()
 
     def update_pic(self):
         """ change background picture """
@@ -413,10 +420,12 @@ THE_GAME = MainScreen()
 OLD_TIME = time.time()
 
 while True:
-    # check still logged in to skype every 15 minutes
-    #if time.time() - THE_GAME.skype.check_connect > 900:
-    #    THE_GAME.skype.check_signin()
-    #    THE_GAME.skype.check_connect = time.time()
+    # check still logged in to facebook every 15 minutes
+    if time.time() - THE_GAME.facebook.check_connect > 900:
+        logging.info('check facebook signin')
+        THE_GAME.facebook.check_signin()
+        logging.info('reset last facebook signin check time')
+        THE_GAME.facebook.check_connect = time.time()
 
     # Check power off of lights
     THE_GAME.button_power.check_off()

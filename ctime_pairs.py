@@ -11,7 +11,7 @@ from ctime_common import play_let_it_go
 
 class PairsScreen(object):
     """ class for simple pairs game """
-    def __init__(self, screen_width, screen_height, new_game = True):
+    def __init__(self, screen_width, screen_height, ctime, new_game = True):
         logging.info('New PairsScreen')
         self.screen_size = {'width': screen_width,
                             'height': screen_height}
@@ -31,6 +31,8 @@ class PairsScreen(object):
             logging.info('Another pairs game. Add exit button')
             self.add_button_exit()
 
+        self.ctime = ctime
+
         card_index = 0
         while card_index < self.cards['count']:
             x_pos, y_pos = self.get_button_pos(card_index)
@@ -48,6 +50,8 @@ class PairsScreen(object):
             self.cards['back'].append(i % (self.cards['count'] / 2))
 
         self.cards['back'] = shuffle_list(self.cards['back'])
+
+        self.draw_facebook()
 
     def redraw(self):
         """ redraw the cards in their current state """
@@ -77,6 +81,20 @@ class PairsScreen(object):
                                                     (0, 0, 0))
             self.cards['list'][card_index].colorkey = (255, 255, 255)
             self.cards['list'][card_index].cardDone = save_done
+
+        self.draw_facebook()
+
+    def draw_facebook(self):
+        if self.ctime.can_we_facebook():
+            self.button_facebook = Button(self.screen,
+                                          (self.screen_size['width'] - 200,
+                                           self.screen_size['height'] - 200,
+                                           200,
+                                           200),
+                                          "images/icons/Phone.png",
+                                          (0, 0, 0))
+        else:
+            self.button_facebook = None
 
     def add_button_exit(self):
         self.button_exit = Button(self.screen,
@@ -127,11 +145,21 @@ class PairsScreen(object):
                 self.cards['clicked'] = [-1, -1]
 
     def check_click(self, pos):
-        """ check if a card has been clicked """
+        """ check if exit button has been clicked """
         if self.button_exit != None:
             if self.button_exit.check_click(pos):
                 return [-2, False]
 
+        """ check if facebook button has been clicked """
+        if self.button_facebook != None:
+            if self.button_facebook.check_click(pos):
+                logging.info('button_facebook clicked')
+                self.ctime.button_facebook = None
+                self.button_facebook = None
+                self.redraw()
+                self.ctime.click_facebook()
+
+        """ check if a card has been clicked """
         for card_index in range(self.cards['count']):
             if self.cards['list'][card_index].check_click(pos):
                 if not self.cards['list'][card_index].cardDone:
