@@ -1,3 +1,4 @@
 *.pyc
 localpy
 ctime.log
+geckodriver.log
