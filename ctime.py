@@ -19,6 +19,7 @@ from ctime_camera import Camera
 from ctime_switch import Switch
 from ctime_pairs import PairsScreen
 from ctime_facebook import CtimeFacebook
+from ctime_blank import BlankScreen
 
 class MainScreen(object):
     """ The main screen of the program """
@@ -446,6 +447,7 @@ while True:
         if THE_GAME.button_power.check_button():
             THE_GAME.refresh_pic()
 
+    # If music is playing check still in hours before playing next track
     if THE_GAME.play_state == 2:
         if not pygame.mixer.music.get_busy():
             if THE_GAME.can_we_play():
@@ -456,5 +458,17 @@ while True:
 
     if THE_GAME.game_state == 2:
         THE_GAME.video_screen.update_camera()
+
+    # if on the blank screen, check whether in hours. Re-display main screen if so.
+    # otherwise check if now out of hours, display blank screen if so.
+    if THE_GAME.game_state == 7:
+        if THE_GAME.can_we_play():
+            THE_GAME.game_state = 0
+            THE_GAME.update_pic()
+            THE_GAME.refresh_pic()
+    else:
+        if not THE_GAME.can_we_play():
+            THE_GAME.game_state = 7
+            BlankScreen(THE_GAME.screen_width, THE_GAME.screen_height)
 
     pygame.display.update()
