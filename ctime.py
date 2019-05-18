@@ -95,7 +95,10 @@ class MainScreen(object):
             pygame.mixer.music.set_volume(self.def_vol)
         except:
             logging.error('pygame.music.set_volume failed')
-        self.facebook = CtimeFacebook(self, self.facebook_user, self.facebook_pass)
+        try:
+          self.facebook = CtimeFacebook(self, self.facebook_user, self.facebook_pass)
+        except:
+          self.facebook = None
         self.re_init()
 
     def re_init(self):
@@ -153,6 +156,7 @@ class MainScreen(object):
     def can_we_facebook(self):
         """ check config settings available """
         if (not os.path.exists("/dev/video0") or
+            self.facebook == None or
             self.facebook_user  == None or 
             self.facebook_pass  == None or
             self.facebook_start == None or
@@ -422,11 +426,12 @@ OLD_TIME = time.time()
 
 while True:
     # check still logged in to facebook every 15 minutes
-    if time.time() - THE_GAME.facebook.check_connect > 900:
-        logging.info('check facebook signin')
-        THE_GAME.facebook.check_signin()
-        logging.info('reset last facebook signin check time')
-        THE_GAME.facebook.check_connect = time.time()
+    if not THE_GAME.facebook == None:
+        if time.time() - THE_GAME.facebook.check_connect > 900:
+            logging.info('check facebook signin')
+            THE_GAME.facebook.check_signin()
+            logging.info('reset last facebook signin check time')
+            THE_GAME.facebook.check_connect = time.time()
 
     # Check power off of lights
     THE_GAME.button_power.check_off()
