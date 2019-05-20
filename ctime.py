@@ -474,6 +474,6 @@ while True:
     else:
         if not THE_GAME.can_we_play():
             THE_GAME.game_state = 7
-            BlankScreen(THE_GAME.screen_width, THE_GAME.screen_height)
+            BlankScreen(THE_GAME,THE_GAME.screen_width, THE_GAME.screen_height)
 
     pygame.display.update()
