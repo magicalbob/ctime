@@ -39,7 +39,7 @@ class MainScreen(object):
         self.tune_no = 1
         self.back_no = 1
         with open('cTime.yaml', 'r') as confile:
-            conf = yaml.load(confile)
+            conf = yaml.safe_load(confile)
         self.def_vol = float(conf['vol'])
         self.start_time = str(conf['start_time'])
         self.end_time = str(conf['end_time'])
