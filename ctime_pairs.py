@@ -105,7 +105,7 @@ class PairsScreen(object):
     def get_button_pos(self, button_no):
         """ get the x,y position of a button by number """
         button_col = button_no % 4
-        button_row = button_no / 4
+        button_row = int(button_no / 4)
 
         pad_x = (self.screen_size['width'] - 800) / 6
         pad_y = (self.screen_size['height'] - 800) / 3

@@ -40,7 +40,7 @@ class TrackListScreen(object):
     def get_button_pos(self, button_no):
         """ get x,y position of button by number """
         button_col = button_no % 8
-        button_row = button_no / 8
+        button_row = int(button_no / 8)
 
         pad_x = (self.screen_size['width'] - 1200) / 9
         pad_y = (self.screen_size['height'] - 600) / 5

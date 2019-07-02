@@ -59,7 +59,7 @@ def play_let_it_go():
     try:
         pygame.mixer.init()
     except BaseException:
-        print "pygame.mixer.init() failed"
+        print("pygame.mixer.init() failed")
 
     pygame.mixer.music.load("tunes/frozen/005.ogg")
     pygame.mixer.music.play()
