@@ -134,16 +134,22 @@ class MainScreen(object):
         self.button_play = Button(self.screen,
                                   (0, 0, 200, 200),
                                   image_play,
-                                  (0, 0, 0))
+                                  (0, 0, 0),
+                                  "Play",
+                                  self.log)
         self.button_play_list = Button(self.screen,
                                        (self.screen_width - 200, 0, 200, 200),
                                        image_list,
-                                       (0, 0, 0))
+                                       (0, 0, 0),
+                                       "PlayList",
+                                       self.log)
         if os.path.exists("/dev/video0"):
             self.button_video = Button(self.screen,
                                        (0, self.screen_height - 200, 200, 200),
                                        "images/icons/VideoButton.png",
-                                       (0, 0, 0))
+                                       (0, 0, 0),
+                                       "Camera",
+                                       self.log)
         else:
             self.button_video = None
         self.button_power = Switch(self.screen,
@@ -159,7 +165,9 @@ class MainScreen(object):
                                     200,
                                     200),
                                    "images/icons/pairs.png",
-                                   (0, 0, 0))
+                                   (0, 0, 0),
+                                   "Pairs",
+                                   self.log)
         if self.can_we_facebook():
             self.button_facebook = Button(self.screen,
                                           (0,
@@ -167,7 +175,9 @@ class MainScreen(object):
                                            200,
                                            200),
                                           "images/icons/Phone.png",
-                                          (0, 0, 0))
+                                          (0, 0, 0),
+                                          "Facebook",
+                                          self.log)
         else:
             self.button_facebook = None
 
@@ -299,7 +309,7 @@ class MainScreen(object):
         if not self.can_we_play():
             return
         self.game_state = 3
-        self.play_list = PlayListScreen(self.screen_width, self.screen_height)
+        self.play_list = PlayListScreen(self.screen_width, self.screen_height, self.log)
 
     def click_pairs(self):
         """ start pairs game """
@@ -369,21 +379,24 @@ class MainScreen(object):
                     self.track_list = TrackListScreen(self.screen_width,
                                                       self.screen_height,
                                                       "bob",
-                                                      self.play_len[0])
+                                                      self.play_len[0],
+                                                      self.log)
                 elif self.play_list.check_click_frozen(coord):
                     self.game_state = 4
                     self.playlist = 1
                     self.track_list = TrackListScreen(self.screen_width,
                                                       self.screen_height,
                                                       "frozen",
-                                                      self.play_len[1])
+                                                      self.play_len[1],
+                                                      self.log)
                 elif self.play_list.check_click_showman(coord):
                     self.game_state = 4
                     self.playlist = 2
                     self.track_list = TrackListScreen(self.screen_width,
                                                       self.screen_height,
                                                       "showman",
-                                                      self.play_len[2])
+                                                      self.play_len[2],
+                                                      self.log)
                 elif self.play_list.check_exit(coord):
                     self.game_state = 0
                     self.refresh_pic()
@@ -428,7 +441,9 @@ class MainScreen(object):
                                                200,
                                                200),
                                               "images/icons/Phone.png",
-                                              (0, 0, 0))
+                                              (0, 0, 0),
+                                              "Facebook",
+                                              self.log)
             else:
                 self.button_facebook.redraw()
 

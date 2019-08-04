@@ -5,15 +5,22 @@ import pygame
 
 class Button(object):
     """ a simple button object """
-    def __init__(self, screen, rect, image, colorkey):
+    def __init__(self, screen, rect, image, colorkey, name, log):
+        self.name = name
+        self.log = log
+        self.log.info('Button %s' % (self.name))
         self.rect = rect
         self.colorkey = colorkey
         self.screen = screen
         self.old_time = time.time()
         if image:
-            self.image = pygame.image.load(image).convert()
-            self.image.set_colorkey(colorkey)
-            self.screen.blit(self.image, (self.rect[0], self.rect[1]))
+            self.log.info('Set image of Button %s' % (self.name))
+            try:
+                self.image = pygame.image.load(image).convert()
+                self.image.set_colorkey(colorkey)
+                self.screen.blit(self.image, (self.rect[0], self.rect[1]))
+            except:
+                self.log.error('Failed to set image of Button %s' % (self.name))
         else:
             self.image = None
 
@@ -46,5 +53,6 @@ class Button(object):
                     (pos[0] <= self.rect[0] + self.rect[2])):
                 if ((pos[1] >= self.rect[1]) and
                         (pos[1] <= self.rect[1] + self.rect[3])):
+                    self.log.info('Button clicked %s' % (self.name))
                     return_value = True
         return return_value

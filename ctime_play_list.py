@@ -9,8 +9,10 @@ from ctime_button import Button
 
 class TrackListScreen(object):
     """ list tracks to select """
-    def __init__(self, screen_width, screen_height, play_list, tracks):
+    def __init__(self, screen_width, screen_height, play_list, tracks, log):
         """ initialise track list """
+        self.log = log
+
         self.screen_size = {'width': screen_width, 'height': screen_height}
         self.screen = pygame.display.get_surface()
         self.screen.fill(pygame.Color(0, 0, 0, 0),
@@ -34,7 +36,9 @@ class TrackListScreen(object):
                                           (x_pos, y_pos, 150, 150),
                                           "images/icons/%s/%03d.png" % (play_list,
                                                                         track_index+1),
-                                          (0, 0, 0)))
+                                          (0, 0, 0),
+                                          "Track%s" % (track_index),
+                                          self.log))
             track_index += 1
 
     def get_button_pos(self, button_no):
@@ -58,8 +62,9 @@ class TrackListScreen(object):
 
 class PlayListScreen(object):
     """ allow play lists to be selected """
-    def __init__(self, screen_width, screen_height):
+    def __init__(self, screen_width, screen_height, log):
         """ initalise play list """
+        self.log = log
         self.screen = pygame.display.get_surface()
         self.screen.fill(pygame.Color(0, 0, 0, 0),
                          (0, 0, screen_width, screen_height),
@@ -93,22 +98,30 @@ class PlayListScreen(object):
         self.button_exit = Button(self.screen,
                                   (screen_width - 200, 0, 200, 200),
                                   "images/icons/StopButton.png",
-                                  (0, 0, 0))
+                                  (0, 0, 0),
+                                  "TrackListExit",
+                                  self.log)
 
         self.button_bob = Button(self.screen,
                                  button_position[button_instance[0]],
                                  "images/icons/%s.png" % ("bob"),
-                                 (0, 0, 0))
+                                 (0, 0, 0),
+                                 "Bob",
+                                 self.log)
 
         self.button_frozen = Button(self.screen,
                                     button_position[button_instance[1]],
                                     "images/icons/%s.png" % ("frozen"),
-                                    (0, 0, 0))
+                                    (0, 0, 0),
+                                    "Frozen",
+                                    self.log)
 
         self.button_showman = Button(self.screen,
                                      button_position[button_instance[2]],
                                      "images/icons/%s.png" % ("showman"),
-                                     (0, 0, 0))
+                                     (0, 0, 0),
+                                     "Showman",
+                                     self.log)
 
     def check_click_bob(self, pos):
         """ has bob been clicked """
