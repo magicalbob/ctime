@@ -7,7 +7,6 @@ import os
 import re    
 from ctime_common import go_fullscreen
 from ctime_common import go_minimal
-from ctime_button import Button
 from selenium import webdriver
 from selenium.webdriver.common.keys import Keys
 from selenium.webdriver.common.by import By
