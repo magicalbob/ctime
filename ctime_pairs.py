@@ -40,7 +40,9 @@ class PairsScreen(object):
                 Button(self.screen,
                        (x_pos, y_pos, 200, 400),
                        "images/pairs/Snowflake.png",
-                       (0, 0, 0))
+                       (0, 0, 0),
+                       "CardButton%s" % (card_index),
+                       self.log)
             )
             self.cards['list'][card_index].colorkey = (255, 255, 255)
             self.cards['list'][card_index].cardDone = False
@@ -78,7 +80,9 @@ class PairsScreen(object):
             self.cards['list'][card_index] = Button(self.screen,
                                                     (x_pos, y_pos, 200, 400),
                                                     image,
-                                                    (0, 0, 0))
+                                                    (0, 0, 0),
+                                                    "CardButton%s" % (card_index),
+                                                    self.log)
             self.cards['list'][card_index].colorkey = (255, 255, 255)
             self.cards['list'][card_index].cardDone = save_done
 
@@ -92,7 +96,9 @@ class PairsScreen(object):
                                            200,
                                            200),
                                           "images/icons/Phone.png",
-                                          (0, 0, 0))
+                                          (0, 0, 0),
+                                          "FacebookButton",
+                                          self.log)
         else:
             self.button_facebook = None
 
@@ -100,7 +106,9 @@ class PairsScreen(object):
         self.button_exit = Button(self.screen,
                                   (self.screen_size['width'] - 200, 0, 200, 200),
                                   "images/icons/StopButton.png",
-                                  (0, 0, 0))
+                                  (0, 0, 0),
+                                  "FacebookExit",
+                                  self.log)
 
     def get_button_pos(self, button_no):
         """ get the x,y position of a button by number """

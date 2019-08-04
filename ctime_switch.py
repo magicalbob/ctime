@@ -9,7 +9,7 @@ class Switch(Button):
         """ initialise the switch """
         self.log = log
         self.log.info('initialise power switch')
-        Button.__init__(self, screen, rect, image, colorkey)
+        Button.__init__(self, screen, rect, image, colorkey, "Switch", self.log)
         self.power_state = False
         self.power_on = power_on
         self.power_off = power_off
