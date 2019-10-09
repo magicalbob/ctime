@@ -20,12 +20,11 @@ from ctime_switch import Switch
 from ctime_pairs import PairsScreen
 from ctime_facebook import CtimeFacebook
 from ctime_blank import BlankScreen
+from cmreslogging.handlers import CMRESHandler
 
 class MainScreen(object):
     """ The main screen of the program """
     def __init__(self):
-        logging.basicConfig(filename='ctime.log',level=logging.INFO,format='%(asctime)s %(message)s')
-        logging.info('started up')
         self.screen_width = 0
         self.screen_height = 0
         pygame.init()
@@ -81,6 +80,24 @@ class MainScreen(object):
         except:
           self.enable_mouse = None
           self.disable_mouse = None
+        try:
+          log_host = conf['log_host']
+          log_port = conf['log_port']
+          log_index = conf['log_index']
+        except:
+          log_host = None
+        if log_host == None:
+          self.log = logging
+          self.log.basicConfig(filename='ctime.log',level=logging.INFO,format='%(asctime)s %(message)s')
+        else:
+          handler = CMRESHandler(hosts=[{'host': log_host, 'port': int(log_port)}],
+                                auth_type=CMRESHandler.AuthType.NO_AUTH,
+                                es_index_name=log_index)
+          self.log = logging.getLogger("elasticsearch")
+          self.log.setLevel(logging.INFO)
+          self.log.addHandler(handler)
+        self.log.info('started up')
+
         self.facebook_exit = None
         self.play_start = datetime.datetime.now(pytz.timezone('Europe/London')) 
         self.first_play = 1
@@ -94,9 +111,9 @@ class MainScreen(object):
         try:
             pygame.mixer.music.set_volume(self.def_vol)
         except:
-            logging.error('pygame.music.set_volume failed')
+            self.log.error('pygame.music.set_volume failed')
         try:
-          self.facebook = CtimeFacebook(self, self.facebook_user, self.facebook_pass)
+          self.facebook = CtimeFacebook(self, self.facebook_user, self.facebook_pass,self.log)
         except:
           self.facebook = None
         self.re_init()
@@ -117,16 +134,22 @@ class MainScreen(object):
         self.button_play = Button(self.screen,
                                   (0, 0, 200, 200),
                                   image_play,
-                                  (0, 0, 0))
+                                  (0, 0, 0),
+                                  "Play",
+                                  self.log)
         self.button_play_list = Button(self.screen,
                                        (self.screen_width - 200, 0, 200, 200),
                                        image_list,
-                                       (0, 0, 0))
+                                       (0, 0, 0),
+                                       "PlayList",
+                                       self.log)
         if os.path.exists("/dev/video0"):
             self.button_video = Button(self.screen,
                                        (0, self.screen_height - 200, 200, 200),
                                        "images/icons/VideoButton.png",
-                                       (0, 0, 0))
+                                       (0, 0, 0),
+                                       "Camera",
+                                       self.log)
         else:
             self.button_video = None
         self.button_power = Switch(self.screen,
@@ -134,14 +157,17 @@ class MainScreen(object):
                                    "images/icons/light.png",
                                    (0, 0, 0),
                                    self.power_on,
-                                   self.power_off)
+                                   self.power_off,
+                                   self.log)
         self.button_pairs = Button(self.screen,
                                    (self.screen_width - 200,
                                     (self.screen_height / 2) - 100,
                                     200,
                                     200),
                                    "images/icons/pairs.png",
-                                   (0, 0, 0))
+                                   (0, 0, 0),
+                                   "Pairs",
+                                   self.log)
         if self.can_we_facebook():
             self.button_facebook = Button(self.screen,
                                           (0,
@@ -149,7 +175,9 @@ class MainScreen(object):
                                            200,
                                            200),
                                           "images/icons/Phone.png",
-                                          (0, 0, 0))
+                                          (0, 0, 0),
+                                          "Facebook",
+                                          self.log)
         else:
             self.button_facebook = None
 
@@ -162,7 +190,7 @@ class MainScreen(object):
             self.facebook_start == None or
             self.facebook_end   == None):
            """ not according to config """
-           logging.info('no video device, no facebook')
+           self.log.info('no video device, no facebook')
            return False
 
         """ check the time. if too late say no """
@@ -177,24 +205,24 @@ class MainScreen(object):
                         tzinfo=None):
             pass
         else:
-            logging.info('too late for facebook')
+            self.log.info('too late for facebook')
             return False
 
         """ check that facebook hasn't been used too recently """
         if self.facebook_timeout == None:
-            logging.info('facebook timeout not set, so facebook ok')
+            self.log.info('facebook timeout not set, so facebook ok')
             return True
 
         if self.facebook_exit == None:
-            logging.info('facebook exit not set, so facebook ok')
+            self.log.info('facebook exit not set, so facebook ok')
             return True
 
         if time.time() - self.facebook_exit > self.facebook_timeout:
-            logging.info("more than facebook timeout (%d) since facebook exit (%d), so facebook ok" % (self.facebook_timeout,
+            self.log.info("more than facebook timeout (%d) since facebook exit (%d), so facebook ok" % (self.facebook_timeout,
                                                                                                        self.facebook_exit))
             return True
 
-        logging.info('no facebook now')
+        self.log.info('no facebook now')
         return False
 
     def can_we_play(self):
@@ -227,7 +255,7 @@ class MainScreen(object):
             try:
                 pygame.mixer.init()
             except:
-                logging.error('pygame.mixer.init() failed')
+                self.log.error('pygame.mixer.init() failed')
             if self.playlist < 1:
                 which_list = "bob"
             elif self.playlist == 1:
@@ -270,34 +298,34 @@ class MainScreen(object):
 
     def click_button_video(self):
         """ start video show """
-        logging.info('start video show')
+        self.log.info('start video show')
         self.game_state = 2
         self.first_play = 1
-        self.video_screen = Camera(self.screen_width, self.screen_height, self.path)
+        self.video_screen = Camera(self.screen_width, self.screen_height, self.path, self.log)
 
     def click_play_list(self):
         """ display play list selection (if not too late) """
-        logging.info('display play list selection (if not too late)')
+        self.log.info('display play list selection (if not too late)')
         if not self.can_we_play():
             return
         self.game_state = 3
-        self.play_list = PlayListScreen(self.screen_width, self.screen_height)
+        self.play_list = PlayListScreen(self.screen_width, self.screen_height, self.log)
 
     def click_pairs(self):
         """ start pairs game """
-        logging.info('start pairs game')
+        self.log.info('start pairs game')
         self.game_state = 5
         self.pairs = PairsScreen(self.screen_width, self.screen_height, self)
 
     def click_facebook(self):
         """ start facebook chat """
-        logging.info('start facebook chat')
+        self.log.info('start facebook chat')
         self.game_state = 6
         self.facebook.make_call()
 
     def play_track(self, play_list, tune_no):
         """ play some music """
-        logging.info('play some music')
+        self.log.info('play some music')
         which_list = ["bob", "frozen", "showman"]
         self.playlist = play_list
         self.tune_no = tune_no
@@ -316,24 +344,24 @@ class MainScreen(object):
             # game_state 0: Main menu
             if self.game_state == 0:
                 if self.button_play.check_click(coord):
-                    logging.info('button_play clicked')
+                    self.log.info('button_play clicked')
                     self.click_button_play()
                 elif (self.button_video != None and
                       self.button_video.check_click(coord)):
-                    logging.info('button_video clicked')
+                    self.log.info('button_video clicked')
                     self.click_button_video()
                 elif self.button_play_list.check_click(coord):
-                    logging.info('button_play_list clicked')
+                    self.log.info('button_play_list clicked')
                     self.click_play_list()
                 elif self.button_power.check_click(coord):
-                    logging.info('button_power clicked')
+                    self.log.info('button_power clicked')
                     self.refresh_pic()
                 elif self.button_pairs.check_click(coord):
-                    logging.info('button_pairs clicked')
+                    self.log.info('button_pairs clicked')
                     self.click_pairs()
                 elif self.button_facebook != None:
                     if self.button_facebook.check_click(coord):
-                        logging.info('button_facebook clicked')
+                        self.log.info('button_facebook clicked')
                         self.button_facebook = None
                         self.re_init()
                         self.click_facebook()
@@ -351,21 +379,24 @@ class MainScreen(object):
                     self.track_list = TrackListScreen(self.screen_width,
                                                       self.screen_height,
                                                       "bob",
-                                                      self.play_len[0])
+                                                      self.play_len[0],
+                                                      self.log)
                 elif self.play_list.check_click_frozen(coord):
                     self.game_state = 4
                     self.playlist = 1
                     self.track_list = TrackListScreen(self.screen_width,
                                                       self.screen_height,
                                                       "frozen",
-                                                      self.play_len[1])
+                                                      self.play_len[1],
+                                                      self.log)
                 elif self.play_list.check_click_showman(coord):
                     self.game_state = 4
                     self.playlist = 2
                     self.track_list = TrackListScreen(self.screen_width,
                                                       self.screen_height,
                                                       "showman",
-                                                      self.play_len[2])
+                                                      self.play_len[2],
+                                                      self.log)
                 elif self.play_list.check_exit(coord):
                     self.game_state = 0
                     self.refresh_pic()
@@ -410,7 +441,9 @@ class MainScreen(object):
                                                200,
                                                200),
                                               "images/icons/Phone.png",
-                                              (0, 0, 0))
+                                              (0, 0, 0),
+                                              "Facebook",
+                                              self.log)
             else:
                 self.button_facebook.redraw()
 
@@ -428,9 +461,9 @@ while True:
     # check still logged in to facebook every 15 minutes
     if not THE_GAME.facebook == None:
         if time.time() - THE_GAME.facebook.check_connect > 900:
-            logging.info('check facebook signin')
+            THE_GAME.log.info('check facebook signin')
             THE_GAME.facebook.check_signin()
-            logging.info('reset last facebook signin check time')
+            THE_GAME.log.info('reset last facebook signin check time')
             THE_GAME.facebook.check_connect = time.time()
 
     # Check power off of lights
@@ -474,6 +507,6 @@ while True:
     else:
         if not THE_GAME.can_we_play():
             THE_GAME.game_state = 7
-            BlankScreen(THE_GAME,THE_GAME.screen_width, THE_GAME.screen_height)
+            BlankScreen(THE_GAME,THE_GAME.screen_width, THE_GAME.screen_height,THE_GAME.log)
 
     pygame.display.update()

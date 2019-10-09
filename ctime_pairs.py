@@ -3,7 +3,6 @@ import time
 import os
 import pygame
 import pygame.locals
-import logging
 from ctime_button import Button
 from ctime_common import shuffle_list
 from ctime_common import go_fullscreen
@@ -12,7 +11,8 @@ from ctime_common import play_let_it_go
 class PairsScreen(object):
     """ class for simple pairs game """
     def __init__(self, screen_width, screen_height, ctime, new_game = True):
-        logging.info('New PairsScreen')
+        self.log = ctime.log
+        self.log.info('New PairsScreen')
         self.screen_size = {'width': screen_width,
                             'height': screen_height}
         self.screen = pygame.display.get_surface()
@@ -25,10 +25,10 @@ class PairsScreen(object):
         self.flip_time = 0
 
         if new_game == True:
-            logging.info('New pairs game. No exit button')
+            self.log.info('New pairs game. No exit button')
             self.button_exit = None
         else:
-            logging.info('Another pairs game. Add exit button')
+            self.log.info('Another pairs game. Add exit button')
             self.add_button_exit()
 
         self.ctime = ctime
@@ -40,7 +40,9 @@ class PairsScreen(object):
                 Button(self.screen,
                        (x_pos, y_pos, 200, 400),
                        "images/pairs/Snowflake.png",
-                       (0, 0, 0))
+                       (0, 0, 0),
+                       "CardButton%s" % (card_index),
+                       self.log)
             )
             self.cards['list'][card_index].colorkey = (255, 255, 255)
             self.cards['list'][card_index].cardDone = False
@@ -55,7 +57,7 @@ class PairsScreen(object):
 
     def redraw(self):
         """ redraw the cards in their current state """
-        logging.info('Redraw the cards in their current state')
+        self.log.info('Redraw the cards in their current state')
         self.screen = pygame.display.get_surface()
         self.screen.fill(pygame.Color(0, 0, 0, 0),
                          (0, 0, self.screen_size['width'], self.screen_size['height']),
@@ -63,9 +65,9 @@ class PairsScreen(object):
         if os.uname()[1].startswith('rpi'):
             go_fullscreen()
 
-        logging.info('If exit button set, redraw it')
+        self.log.info('If exit button set, redraw it')
         if self.button_exit != None:
-            logging.info('Redraw exit button')
+            self.log.info('Redraw exit button')
             self.button_exit.redraw()
 
         for card_index in range(self.cards['count']):
@@ -78,7 +80,9 @@ class PairsScreen(object):
             self.cards['list'][card_index] = Button(self.screen,
                                                     (x_pos, y_pos, 200, 400),
                                                     image,
-                                                    (0, 0, 0))
+                                                    (0, 0, 0),
+                                                    "CardButton%s" % (card_index),
+                                                    self.log)
             self.cards['list'][card_index].colorkey = (255, 255, 255)
             self.cards['list'][card_index].cardDone = save_done
 
@@ -92,7 +96,9 @@ class PairsScreen(object):
                                            200,
                                            200),
                                           "images/icons/Phone.png",
-                                          (0, 0, 0))
+                                          (0, 0, 0),
+                                          "FacebookButton",
+                                          self.log)
         else:
             self.button_facebook = None
 
@@ -100,7 +106,9 @@ class PairsScreen(object):
         self.button_exit = Button(self.screen,
                                   (self.screen_size['width'] - 200, 0, 200, 200),
                                   "images/icons/StopButton.png",
-                                  (0, 0, 0))
+                                  (0, 0, 0),
+                                  "FacebookExit",
+                                  self.log)
 
     def get_button_pos(self, button_no):
         """ get the x,y position of a button by number """
@@ -114,7 +122,7 @@ class PairsScreen(object):
 
     def flip_card(self, card_num):
         """ turn a card over """
-        logging.info("Turn a card over: %d" % (card_num))
+        self.log.info("Turn a card over: %d" % (card_num))
         if self.cards['clicked'][0] == -1:
             self.cards['clicked'][0] = card_num
             self.cards['list'][card_num].reload(
@@ -153,7 +161,7 @@ class PairsScreen(object):
         """ check if facebook button has been clicked """
         if self.button_facebook != None:
             if self.button_facebook.check_click(pos):
-                logging.info('button_facebook clicked')
+                self.log.info('button_facebook clicked')
                 self.ctime.button_facebook = None
                 self.button_facebook = None
                 self.redraw()

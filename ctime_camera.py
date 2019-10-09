@@ -1,5 +1,4 @@
 """ handle display of usb camera """
-import logging
 import pygame
 import pygame.camera
 import pygame.locals
@@ -8,9 +7,10 @@ from ctime_button import Button
 
 class Camera(object):
     """ object to display usb camera """
-    def __init__(self, screen_width, screen_height, path):
+    def __init__(self, screen_width, screen_height, path, log):
         self.screen_size = {'width': screen_width, 'height': screen_height}
         self.path = path
+        self.log = log
 
         pygame.camera.init()
         self.screen = pygame.display.set_mode((screen_width, screen_height))
@@ -24,12 +24,14 @@ class Camera(object):
             self.cam.start()
             self.usb_camera = True
         except BaseException as camera_exception:
-            logging.exception("Open camera: %s", camera_exception)
+            self.log.exception("Open camera: %s", camera_exception)
 
         self.button_exit = Button(self.screen,
                                   (screen_width - 200, 0, 200, 200),
                                   "images/icons/StopButton.png",
-                                  (0, 0, 0))
+                                  (0, 0, 0),
+                                  "CameraExit",
+                                  self.log)
 
         self.re_init()
 
