@@ -1,15 +1,15 @@
 """ version of button that turns on/off power to light """
 import time
 import os
-import logging
 from ctime_button import Button
 
 class Switch(Button):
     """ a switch for power """
-    def __init__(self, screen, rect, image, colorkey, power_on, power_off):
+    def __init__(self, screen, rect, image, colorkey, power_on, power_off, log):
         """ initialise the switch """
-        logging.info('initialise power switch')
-        Button.__init__(self, screen, rect, image, colorkey)
+        self.log = log
+        self.log.info('initialise power switch')
+        Button.__init__(self, screen, rect, image, colorkey, "Switch", self.log)
         self.power_state = False
         self.power_on = power_on
         self.power_off = power_off
@@ -41,25 +41,25 @@ class Switch(Button):
         return_val = Button.check_click(self, pos)
 
         if return_val:
-            logging.info('power switch clicked')
+            self.log.info('power switch clicked')
             self.power_state = not self.power_state
-            logging.info('call rpi_power')
+            self.log.info('call rpi_power')
             self.rpi_power()
-            logging.info('set button off time')
+            self.log.info('set button off time')
             self.button_time = time.time()
-            logging.info('set light on time')
+            self.log.info('set light on time')
             self.light_time = time.time()
-            logging.info('disable switch')
+            self.log.info('disable switch')
             self.enabled = False
 
         return return_val
 
     def rpi_power(self):
         """ turn on or off the power """
-        logging.info('turn on or off the power')
+        self.log.info('turn on or off the power')
         if self.power_state:
-            logging.info('turn power on')
+            self.log.info('turn power on')
             os.system(self.power_on)
         else:
-            logging.info('turn power off')
+            self.log.info('turn power off')
             os.system(self.power_off)
