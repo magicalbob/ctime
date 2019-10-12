@@ -72,15 +72,13 @@ class CtimeFacebook(object):
         self.log.info('Find target for call')
         try:
           # Find Jackie
-          elem = self.driver.find_element_by_id("row_header_id_user:1464426309")
-#          elem = self.driver.find_element_by_id("row_header_id_user:794646869")
+          elem = self.driver.find_element_by_id("js_a")
           self.log.info('Target for call found')
         except:
           self.log.warning('Target for call not found at first, try again')
           time.sleep(3)
           # Find Jackie
-          elem = self.driver.find_element_by_id("row_header_id_user:1464426309")
-#          elem = self.driver.find_element_by_id("row_header_id_user:794646869")
+          elem = self.driver.find_element_by_id("js_a")
           self.log.error('Target for call still not found')
           self.abort_facebook()
           return
