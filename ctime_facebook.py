@@ -44,7 +44,7 @@ class CtimeFacebook(object):
         """ handle facebook not being available """
         self.log.info('make sure facebook page loaded')
         try:
-          assert "Log in to Facebook" in self.driver.title
+          assert "Facebook" in self.driver.title
         except:
           """ turn mouse back on, close selenium, go back to main screen """
           self.log.error('no facebook for Chris')
@@ -57,35 +57,20 @@ class CtimeFacebook(object):
         self.check_connect = time.time()
         # Enter facebook username
         self.log.info('Enter facebook username')
-        elem = self.driver.find_element(By.XPATH,"//input[@placeholder='Email address or phone number']")
+        elem = self.driver.find_element_by_id("email")
         elem.send_keys(self.facebook_user)
         # Enter facebook password
         self.log.info('Enter facebook password')
-        elem = self.driver.find_element(By.XPATH,"//input[@placeholder='Password']")
+        elem = self.driver.find_element_by_id("pass")
         elem.send_keys(self.facebook_pass)
         # Press return and wait a little
         self.log.info('Press return to logon')
         elem.send_keys(Keys.RETURN)
         time.sleep(3)
+        self.driver.get("https://www.facebook.com/messages/t/jackie.ellis.92?cquick=jsc_c_n&cquick_token=AQ5xFClU5W6qw_cqOJk&ctarget=https%3A%2F%2Fwww.facebook.com")
 
     def make_call(self):
         self.log.info('Find target for call')
-        try:
-          # Find Jackie
-          elem = self.driver.find_element_by_id("js_a")
-          self.log.info('Target for call found')
-        except:
-          self.log.warning('Target for call not found at first, try again')
-          time.sleep(3)
-          # Find Jackie
-          elem = self.driver.find_element_by_id("js_8")
-          self.log.error('Target for call still not found')
-          self.abort_facebook()
-          return
-
-        # Select the target
-        self.log.info('Click target')
-        elem.click()
         # Start the video chat
         self.log.info('Start the video chat')
         elem = self.driver.find_element_by_xpath('//*[@title="Start a video chat"]').click()
@@ -155,7 +140,7 @@ class CtimeFacebook(object):
         self.log.info('make sure facebook page loaded')
         still_logged_in = True
         try:
-          assert "Log in to Facebook" in self.driver.title
+          assert "Facebook" in self.driver.title
           self.log.info('No longer logged in to facebook, login again')
           still_logged_in = False
           self.facebook_login()

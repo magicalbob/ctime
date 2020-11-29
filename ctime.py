@@ -114,8 +114,10 @@ class MainScreen(object):
             self.log.error('pygame.music.set_volume failed')
         try:
           self.facebook = CtimeFacebook(self, self.facebook_user, self.facebook_pass,self.log)
+          self.log.info("got facebook!")
         except:
           self.facebook = None
+          self.log.info("oh dear no facebook")
         self.re_init()
 
     def re_init(self):
@@ -191,6 +193,11 @@ class MainScreen(object):
             self.facebook_end   == None):
            """ not according to config """
            self.log.info('no video device, no facebook')
+           self.log.info(self.facebook)
+           self.log.info(self.facebook_user)
+           self.log.info(self.facebook_pass)
+           self.log.info(self.facebook_start)
+           self.log.info(self.facebook_end)
            return False
 
         """ check the time. if too late say no """
