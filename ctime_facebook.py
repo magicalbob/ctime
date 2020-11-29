@@ -98,10 +98,12 @@ class CtimeFacebook(object):
         inCall = True
         allow_one_exception = True
         while inCall == True:
+            print("DEBUG: In Call")
             try:
                 self.log.info('check still in call')
                 src = self.driver.page_source
-                text_found = re.search(r'Please rate the quality of your video call', src)
+                print("DEBUG: Got Page Source")
+                text_found = re.search(r'Please rate the quality of your video chat', src)
                 if text_found != None:
                     self.log.info('no longer in call')
                     inCall = False
