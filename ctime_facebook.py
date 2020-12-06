@@ -67,7 +67,8 @@ class CtimeFacebook(object):
         self.log.info('Press return to logon')
         elem.send_keys(Keys.RETURN)
         time.sleep(3)
-        self.driver.get("https://www.facebook.com/messages/t/jackie.ellis.92?cquick=jsc_c_n&cquick_token=AQ5xFClU5W6qw_cqOJk&ctarget=https%3A%2F%2Fwww.facebook.com")
+        #self.driver.get("https://www.facebook.com/messages/t/ian.ellis.5895?cquick=jsc_c_n&cquick_token=AQ6FgU758TSNMWZGPcY&ctarget=https%253A%252F%252Fwww.facebook.com")
+        self.driver.get("https://www.facebook.com/messages/t/jackie.ellis.92?cquick=jsc_c_n&cquick_token=AQ6FgU758TSNMWZGPcY&ctarget=https%25253A%25252F%25252Fwww.facebook.com")
 
     def make_call(self):
         self.log.info('Find target for call')
