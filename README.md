@@ -10,7 +10,8 @@ There's a Dockerfile, build it like this:
 
 	docker build -t local:ctime docker
 
-and run it like this:
+and run it like this (assuming you are in docker directory):
 
-	docker run -ti  -v /tmp/.X11-unix:/tmp/.X11-unix  -v ${PWD}/..:/opt/ctime -e "DISPLAY=:0" local:ctime
+	docker run -d  -v /tmp/.X11-unix:/tmp/.X11-unix  -v ${PWD}/..:/opt/ctime -e "DISPLAY=:0" --privileged local:ctime
 
+To exit, alt-tab back to shell and `docker rm -f $(docker ps -q)` or similar.
