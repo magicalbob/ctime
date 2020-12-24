@@ -12,3 +12,4 @@ RUN pip3 install PySDL2
 RUN pip3 install pygame
 RUN apt-get -y install x11-apps
 RUN ln -s /usr/bin/python3.8 /usr/bin/python3.6
+RUN apt-get -y install libasound2
