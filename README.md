@@ -12,6 +12,6 @@ There's a Dockerfile, build it like this:
 
 and run it like this (assuming you are in docker directory):
 
-	docker run -d  -v /tmp/.X11-unix:/tmp/.X11-unix  -v ${PWD}/..:/opt/ctime -e "DISPLAY=:0" --privileged local:ctime
+	docker run -d  -v /tmp/.X11-unix:/tmp/.X11-unix  -v ${PWD}/..:/opt/ctime --privileged local:ctime
 
 To exit, alt-tab back to shell and `docker rm -f $(docker ps -q)` or similar.

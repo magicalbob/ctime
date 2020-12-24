@@ -1,5 +1,7 @@
 FROM ubuntu
 
+ENV DISPLAY=:0
+
 RUN apt-get update \
  && apt-get -y upgrade \
  && apt-get -y install python3 \
