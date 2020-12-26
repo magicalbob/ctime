@@ -15,5 +15,9 @@ RUN apt-get update \
  && apt-get -y install x11-apps \
  && ln -s /usr/bin/python3.8 /usr/bin/python3.6 \
  && apt-get -y install libasound2
+RUN ln -fs /usr/share/zoneinfo/Europe/London /etc/localtime
+RUN export DEBIAN_FRONTEND=noninteractive
+RUN apt-get install -y tzdata
+RUN apt-get -y install firefox
 
 ENTRYPOINT /opt/ctime/cTime
