@@ -8,7 +8,7 @@ from ctime_common import shuffle_list
 from ctime_common import go_fullscreen
 from ctime_common import play_let_it_go
 
-class PairsScreen(object):
+class PairsScreen():
     """ class for simple pairs game """
     def __init__(self, screen_width, screen_height, ctime, new_game = True):
         self.log = ctime.log

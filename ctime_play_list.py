@@ -7,7 +7,7 @@ from ctime_common import go_fullscreen
 from ctime_common import shuffle_list
 from ctime_button import Button
 
-class TrackListScreen(object):
+class TrackListScreen():
     """ list tracks to select """
     def __init__(self, screen_width, screen_height, play_list, tracks, log):
         """ initialise track list """
@@ -94,7 +94,7 @@ class PlayListScreen(object):
         button_instance.append(button_space[button_select])
         button_space.pop(button_select)
         button_instance.append(button_space[0])
-        
+
         self.button_exit = Button(self.screen,
                                   (screen_width - 200, 0, 200, 200),
                                   "images/icons/StopButton.png",
