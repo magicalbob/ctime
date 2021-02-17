@@ -22,7 +22,7 @@ from ctime_facebook import CtimeFacebook
 from ctime_blank import BlankScreen
 from cmreslogging.handlers import CMRESHandler
 
-class MainScreen(object):
+class MainScreen():
     """ The main screen of the program """
     def __init__(self):
         self.screen_width = 0
@@ -52,54 +52,56 @@ class MainScreen(object):
         except:
             self.power_off = ''
         try:
-          self.facebook_user = conf['facebook_user']
+            self.facebook_user = conf['facebook_user']
         except:
-          self.facebook_user = None
+            self.facebook_user = None
         try:
-          self.facebook_pass = conf['facebook_pass']
+            self.facebook_pass = conf['facebook_pass']
         except:
-          self.facebook_pass = None
+            self.facebook_pass = None
         try:
-          self.facebook_start = conf['facebook_start']
+            self.facebook_start = conf['facebook_start']
         except:
-          self.facebook_start = None
+            self.facebook_start = None
         try:
-          self.facebook_end = conf['facebook_end']
+            self.facebook_end = conf['facebook_end']
         except:
-          self.facebook_end = None
+            self.facebook_end = None
         try:
-          self.facebook_timeout = conf['facebook_timeout']
+            self.facebook_timeout = conf['facebook_timeout']
         except:
-          self.facebook_timeout = None
+            self.facebook_timeout = None
         try:
-          self.disable_mouse = conf['disable_mouse']
+            self.disable_mouse = conf['disable_mouse']
         except:
-          self.disable_mouse = None
+            self.disable_mouse = None
         try:
-          self.enable_mouse = conf['enable_mouse']
+            self.enable_mouse = conf['enable_mouse']
         except:
-          self.enable_mouse = None
-          self.disable_mouse = None
+            self.enable_mouse = None
+            self.disable_mouse = None
         try:
-          log_host = conf['log_host']
-          log_port = conf['log_port']
-          log_index = conf['log_index']
+            log_host = conf['log_host']
+            log_port = conf['log_port']
+            log_index = conf['log_index']
         except:
-          log_host = None
+            log_host = None
         if log_host == None:
-          self.log = logging
-          self.log.basicConfig(filename='ctime.log',level=logging.INFO,format='%(asctime)s %(message)s')
+            self.log = logging
+            self.log.basicConfig(filename='ctime.log',
+                                 level=logging.INFO,
+                                 format='%(asctime)s %(message)s')
         else:
-          handler = CMRESHandler(hosts=[{'host': log_host, 'port': int(log_port)}],
+            handler = CMRESHandler(hosts=[{'host': log_host, 'port': int(log_port)}],
                                 auth_type=CMRESHandler.AuthType.NO_AUTH,
                                 es_index_name=log_index)
-          self.log = logging.getLogger("elasticsearch")
-          self.log.setLevel(logging.INFO)
-          self.log.addHandler(handler)
+            self.log = logging.getLogger("elasticsearch")
+            self.log.setLevel(logging.INFO)
+            self.log.addHandler(handler)
         self.log.info('started up')
 
         self.facebook_exit = None
-        self.play_start = datetime.datetime.now(pytz.timezone('Europe/London')) 
+        self.play_start = datetime.datetime.now(pytz.timezone('Europe/London'))
         self.first_play = 1
         self.playlist = -1
         self.play_len = [10, 32, 11]
@@ -113,11 +115,11 @@ class MainScreen(object):
         except:
             self.log.error('pygame.music.set_volume failed')
         try:
-          self.facebook = CtimeFacebook(self, self.facebook_user, self.facebook_pass,self.log)
-          self.log.info("got facebook!")
+            self.facebook = CtimeFacebook(self, self.facebook_user, self.facebook_pass,self.log)
+            self.log.info("got facebook!")
         except:
-          self.facebook = None
-          self.log.info("oh dear no facebook")
+            self.facebook = None
+            self.log.info("oh dear no facebook")
         self.re_init()
 
     def re_init(self):
@@ -187,18 +189,18 @@ class MainScreen(object):
         """ check config settings available """
         if (not os.path.exists("/dev/video0") or
             self.facebook == None or
-            self.facebook_user  == None or 
+            self.facebook_user  == None or
             self.facebook_pass  == None or
             self.facebook_start == None or
             self.facebook_end   == None):
-           """ not according to config """
-           self.log.info('no video device, no facebook')
-           self.log.info(self.facebook)
-           self.log.info(self.facebook_user)
-           self.log.info(self.facebook_pass)
-           self.log.info(self.facebook_start)
-           self.log.info(self.facebook_end)
-           return False
+            """ not according to config """
+            self.log.info('no video device, no facebook')
+            self.log.info(self.facebook)
+            self.log.info(self.facebook_user)
+            self.log.info(self.facebook_pass)
+            self.log.info(self.facebook_start)
+            self.log.info(self.facebook_end)
+            return False
 
         """ check the time. if too late say no """
         now_time = datetime.datetime.now(pytz.timezone('Europe/London'))
@@ -225,8 +227,10 @@ class MainScreen(object):
             return True
 
         if time.time() - self.facebook_exit > self.facebook_timeout:
-            self.log.info("more than facebook timeout (%d) since facebook exit (%d), so facebook ok" % (self.facebook_timeout,
-                                                                                                       self.facebook_exit))
+            LOG_MSG = "more than facebook timeout (%d) since facebook exit (%d), so facebook ok"
+            self.log.info(LOG_MSG % (
+                self.facebook_timeout,
+                self.facebook_exit))
             return True
 
         self.log.info('no facebook now')
@@ -251,7 +255,8 @@ class MainScreen(object):
         """ if play pressed, check time, then check if play list already selected """
         if not self.can_we_play():
             return
-        """ add 1 to play_state. If greater than 2 put it back to 1. 1 means "not playing", 2 means "playing" """
+        """ add 1 to play_state. If greater than 2 put it back to 1.
+            1 means "not playing", 2 means "playing" """
         self.play_state += 1
         if self.play_state > 2:
             self.play_state = 1
@@ -274,11 +279,11 @@ class MainScreen(object):
             pygame.mixer.music.play()
             self.first_play = 0
             self.button_play.change_image("images/icons/StopButton.png")
-            self.play_start = datetime.datetime.now(pytz.timezone('Europe/London')) 
+            self.play_start = datetime.datetime.now(pytz.timezone('Europe/London'))
         else:
             pygame.mixer.music.unpause()
             self.button_play.change_image("images/icons/StopButton.png")
-            self.play_start = datetime.datetime.now(pytz.timezone('Europe/London')) 
+            self.play_start = datetime.datetime.now(pytz.timezone('Europe/London'))
 
     def play_next(self):
         """ when track finishes check to see what next one is (or not if too late) """

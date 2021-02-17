@@ -3,7 +3,7 @@
 import time
 import pygame
 
-class Button(object):
+class Button():
     """ a simple button object """
     def __init__(self, screen, rect, image, colorkey, name, log):
         self.name = name

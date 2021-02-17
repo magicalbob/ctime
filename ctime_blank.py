@@ -5,7 +5,7 @@ import pygame
 import pygame.locals
 from ctime_common import go_fullscreen
 
-class BlankScreen(object):
+class BlankScreen():
     """ a blank screen with no controls """
     def __init__(self, ctime, screen_width, screen_height, log):
         log.info('Time for bed said Zeberdee')
