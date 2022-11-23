@@ -5,7 +5,7 @@ elasticsearch==7.0.5
 idna==2.8
 pip==21.1
 pygame==1.9.6
-pytz==2019.3
+pytz==2022.6
 PyYAML==5.4
 requests==2.22.0
 selenium==3.141.0
