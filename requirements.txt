@@ -4,7 +4,7 @@ CMRESHandler==1.0.0
 elasticsearch==7.0.5
 idna==2.8
 pip==21.1
-pygame==1.9.6
+pygame==2.1.2
 pytz==2019.3
 PyYAML==5.4
 requests==2.22.0
