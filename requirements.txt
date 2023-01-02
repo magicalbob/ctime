@@ -1,5 +1,5 @@
 certifi==2022.9.24
-chardet==3.0.4
+chardet==5.1.0
 CMRESHandler==1.0.0
 elasticsearch==7.0.5
 idna==2.8
