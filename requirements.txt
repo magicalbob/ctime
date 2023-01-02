@@ -1,7 +1,7 @@
 certifi==2022.9.24
 chardet==5.1.0
 CMRESHandler==1.0.0
-elasticsearch==7.0.5
+elasticsearch==7.17.7
 idna==2.8
 pip==21.1
 pygame==1.9.6
