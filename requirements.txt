@@ -9,7 +9,7 @@ pytz==2019.3
 PyYAML==5.4
 requests==2.22.0
 selenium==3.141.0
-setuptools==28.8.0
+setuptools==65.5.1
 urllib3==1.26.5
 wheel==0.29.0
 
