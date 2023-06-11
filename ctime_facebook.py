@@ -38,7 +38,7 @@ class CtimeFacebook():
 
         """ load Firefox using selenium and get the facebook page """
         self.log.info('Load Firefox using selenium')
-        self.driver = webdriver.Firefox(firefox_options=options, firefox_profile = profile)
+        self.driver = webdriver.Firefox(options=options, firefox_profile = profile)
         self.log.info('Get facebook page')
         self.driver.get("https://www.facebook.com/messages")
         """ handle facebook not being available """
