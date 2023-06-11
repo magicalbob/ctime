@@ -1,3 +1,7 @@
+stages:
+#  - test
+ - scan
+
 #test_job:
 #  stage: test
 #  tags:
