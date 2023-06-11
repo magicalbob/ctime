@@ -1,0 +1,21 @@
+#test_job:
+#  stage: test
+#  tags:
+#    - linux
+#  script:
+#    - python3 -m venv ~/.py3flask
+#    - . ~/.py3flask/bin/activate
+#    - pip install --upgrade pip
+#    - pip install -r requirements.txt
+#    - ./app_unittest.py
+
+scan_job:
+  stage: scan
+  tags:
+    - linux
+  image: sonarsource/sonar-scanner-cli
+  variables:
+    SONAR_TOKEN: sqp_1220f7cfc2bd3dfdffbcb884da7e8f13f70dde38
+    SONAR_HOST_URL: https://sonarqube.ellisbs.co.uk
+  script:
+    - ~/sonar-scanner-4.8.0.2856-linux/bin/sonar-scanner -Dsonar.projectKey=ctime   -Dsonar.sources=.   -Dsonar.host.url=${SONAR_HOST_URL}   -Dsonar.token=${SONAR_TOKEN}
