@@ -120,7 +120,7 @@ class MainScreen():
         except:
             self.facebook = None
             self.log.info("oh dear no facebook")
-        self.OLD_TIME=0
+        self.old_time=0
         self.re_init()
 
     def re_init(self):
@@ -467,74 +467,74 @@ class MainScreen():
             self.back_no = 1
         self.refresh_pic()
 
-def check_facebook(THE_GAME):
-    if THE_GAME.facebook and time.time() - THE_GAME.facebook.check_connect > 900:
-        THE_GAME.log.info('check facebook signin')
-        THE_GAME.facebook.check_signin()
-        THE_GAME.log.info('reset last facebook signin check time')
-        THE_GAME.facebook.check_connect = time.time()
+def check_facebook(the_game):
+    if the_game.facebook and time.time() - the_game.facebook.check_connect > 900:
+        the_game.log.info('check facebook signin')
+        the_game.facebook.check_signin()
+        the_game.log.info('reset last facebook signin check time')
+        the_game.facebook.check_connect = time.time()
 
 
 
-def check_event(THE_GAME, event):
+def check_event(the_game, event):
     if event.type is pygame.KEYDOWN and event.key == pygame.K_RETURN:
         pygame.display.quit()
         exit()
     pos = pygame.mouse.get_pos()
-    THE_GAME.check_event(event, pos)
+    the_game.check_event(event, pos)
 
 
-def check_update_pic(THE_GAME):
-    if THE_GAME.game_state == 0:
-        NEW_TIME = time.time()
-        if (NEW_TIME - THE_GAME.OLD_TIME) > 10:
-            THE_GAME.update_pic()
-            THE_GAME.OLD_TIME = NEW_TIME
-        if THE_GAME.button_power.check_button():
-            THE_GAME.refresh_pic()
+def check_update_pic(the_game):
+    if the_game.game_state == 0:
+        new_time = time.time()
+        if (new_time - the_game.old_time) > 10:
+            the_game.update_pic()
+            the_game.old_time = new_time
+        if the_game.button_power.check_button():
+            the_game.refresh_pic()
 
 
-def check_music(THE_GAME):
-    if THE_GAME.play_state == 2:
+def check_music(the_game):
+    if the_game.play_state == 2:
         if not pygame.mixer.music.get_busy():
-            if THE_GAME.can_we_play():
-                THE_GAME.play_next()
+            if the_game.can_we_play():
+                the_game.play_next()
 
 
-def check_game_state(THE_GAME):
-    if THE_GAME.game_state == 5:
-        THE_GAME.pairs.flip_back()
+def check_game_state(the_game):
+    if the_game.game_state == 5:
+        the_game.pairs.flip_back()
 
-    if THE_GAME.game_state == 2:
-        THE_GAME.video_screen.update_camera()
+    if the_game.game_state == 2:
+        the_game.video_screen.update_camera()
 
-    if THE_GAME.game_state == 7:
-        if THE_GAME.can_we_play():
-            THE_GAME.game_state = 0
-            THE_GAME.update_pic()
-            THE_GAME.refresh_pic()
+    if the_game.game_state == 7:
+        if the_game.can_we_play():
+            the_game.game_state = 0
+            the_game.update_pic()
+            the_game.refresh_pic()
     else:
-        if not THE_GAME.can_we_play():
-            THE_GAME.game_state = 7
-            BlankScreen(THE_GAME, THE_GAME.screen_width, THE_GAME.screen_height, THE_GAME.log)
+        if not the_game.can_we_play():
+            the_game.game_state = 7
+            BlankScreen(the_game, the_game.screen_width, the_game.screen_height, the_game.log)
 
 
 def main():
     screen_width = 800  # Set the desired screen width
     screen_height = 600  # Set the desired screen height
-    THE_GAME = MainScreen(screen_width, screen_height)
-    THE_GAME.OLD_TIME = time.time()
+    the_game = MainScreen(screen_width, screen_height)
+    the_game.old_time = time.time()
 
     while True:
-        check_facebook(THE_GAME)
-        THE_GAME.button_power.check_off()
+        check_facebook(the_game)
+        the_game.button_power.check_off()
         
         for e in pygame.event.get():
-            check_event(THE_GAME, e)
+            check_event(the_game, e)
         
-        check_update_pic(THE_GAME)
-        check_music(THE_GAME)
-        check_game_state(THE_GAME)
+        check_update_pic(the_game)
+        check_music(the_game)
+        check_game_state(the_game)
         pygame.display.update()
 
 
