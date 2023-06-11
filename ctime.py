@@ -24,9 +24,9 @@ from cmreslogging.handlers import CMRESHandler
 
 class MainScreen():
     """ The main screen of the program """
-    def __init__(self):
-        self.screen_width = 0
-        self.screen_height = 0
+    def __init__(self, screen_width, screen_height):
+        self.screen_width = screen_width
+        self.screen_height = screen_height
         pygame.init()
         self.screen = pygame.display.set_mode((self.screen_width, self.screen_height))
         screen = pygame.display.get_surface()
@@ -466,59 +466,65 @@ class MainScreen():
             self.back_no = 1
         self.refresh_pic()
 
-THE_GAME = MainScreen()
-OLD_TIME = time.time()
-
-while True:
-    # check still logged in to facebook every 15 minutes
-    if not THE_GAME.facebook == None:
-        if time.time() - THE_GAME.facebook.check_connect > 900:
-            THE_GAME.log.info('check facebook signin')
-            THE_GAME.facebook.check_signin()
-            THE_GAME.log.info('reset last facebook signin check time')
-            THE_GAME.facebook.check_connect = time.time()
-
-    # Check power off of lights
-    THE_GAME.button_power.check_off()
-    # Check for event. Exit if return key pressed, otherwise pass event to THE_GAME object
-    for e in pygame.event.get():
-        if (e.type is pygame.KEYDOWN and e.key == pygame.K_RETURN):
-            pygame.display.quit()
-            exit()
-        pos = pygame.mouse.get_pos()
-        THE_GAME.check_event(e, pos)
-
-    # Check for background picture of main screen changing
-    if THE_GAME.game_state == 0:
-        NEW_TIME = time.time()
-        if (NEW_TIME - OLD_TIME) > 10:
-            THE_GAME.update_pic()
-            OLD_TIME = NEW_TIME
-        if THE_GAME.button_power.check_button():
-            THE_GAME.refresh_pic()
-
-    # If music is playing check still in hours before playing next track
-    if THE_GAME.play_state == 2:
-        if not pygame.mixer.music.get_busy():
+def main():
+    screen_width = 800  # Set the desired screen width
+    screen_height = 600  # Set the desired screen height
+    THE_GAME = MainScreen(screen_width, screen_height)
+    OLD_TIME = time.time()
+    
+    while True:
+        # check still logged in to facebook every 15 minutes
+        if not THE_GAME.facebook == None:
+            if time.time() - THE_GAME.facebook.check_connect > 900:
+                THE_GAME.log.info('check facebook signin')
+                THE_GAME.facebook.check_signin()
+                THE_GAME.log.info('reset last facebook signin check time')
+                THE_GAME.facebook.check_connect = time.time()
+    
+        # Check power off of lights
+        THE_GAME.button_power.check_off()
+        # Check for event. Exit if return key pressed, otherwise pass event to THE_GAME object
+        for e in pygame.event.get():
+            if (e.type is pygame.KEYDOWN and e.key == pygame.K_RETURN):
+                pygame.display.quit()
+                exit()
+            pos = pygame.mouse.get_pos()
+            THE_GAME.check_event(e, pos)
+    
+        # Check for background picture of main screen changing
+        if THE_GAME.game_state == 0:
+            NEW_TIME = time.time()
+            if (NEW_TIME - OLD_TIME) > 10:
+                THE_GAME.update_pic()
+                OLD_TIME = NEW_TIME
+            if THE_GAME.button_power.check_button():
+                THE_GAME.refresh_pic()
+    
+        # If music is playing check still in hours before playing next track
+        if THE_GAME.play_state == 2:
+            if not pygame.mixer.music.get_busy():
+                if THE_GAME.can_we_play():
+                    THE_GAME.play_next()
+    
+        if THE_GAME.game_state == 5:
+            THE_GAME.pairs.flip_back()
+    
+        if THE_GAME.game_state == 2:
+            THE_GAME.video_screen.update_camera()
+    
+        # if on the blank screen, check whether in hours. Re-display main screen if so.
+        # otherwise check if now out of hours, display blank screen if so.
+        if THE_GAME.game_state == 7:
             if THE_GAME.can_we_play():
-                THE_GAME.play_next()
+                THE_GAME.game_state = 0
+                THE_GAME.update_pic()
+                THE_GAME.refresh_pic()
+        else:
+            if not THE_GAME.can_we_play():
+                THE_GAME.game_state = 7
+                BlankScreen(THE_GAME,THE_GAME.screen_width, THE_GAME.screen_height,THE_GAME.log)
+    
+        pygame.display.update()
 
-    if THE_GAME.game_state == 5:
-        THE_GAME.pairs.flip_back()
-
-    if THE_GAME.game_state == 2:
-        THE_GAME.video_screen.update_camera()
-
-    # if on the blank screen, check whether in hours. Re-display main screen if so.
-    # otherwise check if now out of hours, display blank screen if so.
-    if THE_GAME.game_state == 7:
-        if THE_GAME.can_we_play():
-            THE_GAME.game_state = 0
-            THE_GAME.update_pic()
-            THE_GAME.refresh_pic()
-    else:
-        if not THE_GAME.can_we_play():
-            THE_GAME.game_state = 7
-            BlankScreen(THE_GAME,THE_GAME.screen_width, THE_GAME.screen_height,THE_GAME.log)
-
-    pygame.display.update()
+if __name__ == '__main__':
+    main()
