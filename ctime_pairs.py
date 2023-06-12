@@ -178,7 +178,7 @@ class PairsScreen():
     def play_success(self):
         """ player won a match. celebrate! """
         pygame.display.update()
-        play_applause()
+        self.play_applause()
         time.sleep(6)
         if self.button_exit is None:
             self.add_button_exit()
@@ -190,12 +190,12 @@ class PairsScreen():
         """ All cards are done, so start new game """
         self.__init__(self.screen_size['width'], self.screen_size['height'], False)
 
-def play_applause():
-    """ clapping used in celebration """
-    try:
-        pygame.mixer.init()
-    except BaseException:
-        self.log.error('pygame.mixer.init() failed')
-    new_tune = "sounds/applause.ogg"
-    pygame.mixer.music.load(new_tune)
-    pygame.mixer.music.play()
+    def play_applause(self):
+        """ clapping used in celebration """
+        try:
+            pygame.mixer.init()
+        except BaseException:
+            self.log.error('pygame.mixer.init() failed')
+        new_tune = "sounds/applause.ogg"
+        pygame.mixer.music.load(new_tune)
+        pygame.mixer.music.play()
