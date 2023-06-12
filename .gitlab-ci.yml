@@ -1,17 +1,15 @@
 stages:
-#  - test
+  - test
  - scan
 
-#test_job:
-#  stage: test
-#  tags:
-#    - linux
-#  script:
-#    - python3 -m venv ~/.py3flask
-#    - . ~/.py3flask/bin/activate
-#    - pip install --upgrade pip
-#    - pip install -r requirements.txt
-#    - ./app_unittest.py
+test_job:
+  stage: test
+  tags:
+    - linux
+  script:
+    - rm -rf __pycache__
+    - docker build -t local:test .
+    - docker run -v ${PWD}:/opt/pwd local:test
 
 scan_job:
   stage: scan
