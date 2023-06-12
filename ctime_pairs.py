@@ -195,7 +195,7 @@ def play_applause():
     try:
         pygame.mixer.init()
     except BaseException:
-        logger.error('pygame.mixer.init() failed')
+        self.log.error('pygame.mixer.init() failed')
     new_tune = "sounds/applause.ogg"
     pygame.mixer.music.load(new_tune)
     pygame.mixer.music.play()
