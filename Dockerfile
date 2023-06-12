@@ -2,8 +2,9 @@
 FROM almalinux:9
 
 # Install necessary packages
-RUN dnf update -y && \
-    dnf install -y python3-pip
+RUN dnf update -y \
+ && dnf install -y python3-pip python3-devel alsa-lib-devel \
+ && dnf groupinstall -y 'Development Tools'
 
 # Create a new user named 'appuser'
 RUN useradd -ms /bin/bash appuser
@@ -19,6 +20,9 @@ USER appuser
 
 # Set the working directory to the new user's home directory
 WORKDIR /home/appuser
+
+# Install coverage
+RUN pip install coverage
 
 # Run the script as the new user
 CMD sh -c ./testscript.sh
