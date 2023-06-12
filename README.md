@@ -3,6 +3,12 @@ ctime
 
 A python program to entertain my disabled son Chris on his raspberry pi (with a touch screen monitor).
 
+Prepare requirements:
+
+	pip install -r requirements.txt
+
+Also need pulseaudio installed & running.
+
 Docker
 ======
 
