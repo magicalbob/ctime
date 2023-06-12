@@ -19,6 +19,8 @@ class CtimeFacebook():
         self.ctime = ctime
         self.facebook_user = facebook_user
         self.facebook_pass = facebook_pass
+        print("self.facebook_user: %s" % self.facebook_user)
+        print("self.facebook_pass: %s" % self.facebook_pass)
 
         """ prevent someone clicking something they shouldn't """
         self.mouse_change(self.ctime.disable_mouse)
