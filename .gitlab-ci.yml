@@ -1,5 +1,5 @@
 stages:
-  - test
+ - test
  - scan
 
 test_job:
