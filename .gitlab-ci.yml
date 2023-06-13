@@ -7,14 +7,21 @@ test_job:
   tags:
     - linux
   script:
-    - rm -rf __pycache__
-    - docker build -t local:testctime .
-    - docker run -v ${PWD}:/opt/pwd local:testctime
+    - sh test_job.sh
+  artifacts:
+    paths:
+      - coverage.xml
+  variables:
+    GIT_STRATEGY: clone
 
 scan_job:
   stage: scan
   tags:
     - linux
   script:
-    - rm -rf __pycache__
-    - docker run -e SONAR_HOST_URL="https://sonarqube.ellisbs.co.uk" -e SONAR_LOGIN="sqp_b4a30f72a01b53da17b073fc8173515f56c57942" -v "$(pwd):/usr/src" sonarsource/sonar-scanner-cli
+    - sh scan_job.sh
+  dependencies:
+    - test_job
+  variables:
+    GIT_STRATEGY: clone
+

@@ -7,7 +7,8 @@ RUN dnf update -y \
  && dnf groupinstall -y 'Development Tools'
 
 # Create a new user named 'appuser'
-RUN useradd -ms /bin/bash appuser
+RUN groupadd -g 1002 appuser \
+ && useradd -ms /bin/bash -u 1001 -g 1002 appuser
 
 # Copy the testscript.sh file into the appuser's home directory
 COPY testscript.sh /home/appuser/testscript.sh
