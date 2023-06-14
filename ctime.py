@@ -45,38 +45,25 @@ class MainScreen():
         self.max_play_length = conf['max_play_length']
         try:
             self.power_on = conf['power_on']
-        except:
-            self.power_on = ''
-        try:
             self.power_off = conf['power_off']
         except:
+            self.power_on = ''
             self.power_off = ''
         try:
             self.facebook_user = conf['facebook_user']
-        except:
-            self.facebook_user = None
-        try:
             self.facebook_pass = conf['facebook_pass']
-        except:
-            self.facebook_pass = None
-        try:
             self.facebook_start = conf['facebook_start']
-        except:
-            self.facebook_start = None
-        try:
             self.facebook_end = conf['facebook_end']
-        except:
-            self.facebook_end = None
-        try:
             self.facebook_timeout = conf['facebook_timeout']
         except:
+            self.facebook_user = None
+            self.facebook_pass = None
+            self.facebook_start = None
+            self.facebook_end = None
             self.facebook_timeout = None
         try:
-            self.disable_mouse = conf['disable_mouse']
-        except:
-            self.disable_mouse = None
-        try:
             self.enable_mouse = conf['enable_mouse']
+            self.disable_mouse = conf['disable_mouse']
         except:
             self.enable_mouse = None
             self.disable_mouse = None
