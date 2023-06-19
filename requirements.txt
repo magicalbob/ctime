@@ -3,7 +3,7 @@ chardet==5.1.0
 CMRESHandler==1.0.0
 elasticsearch==7.17.7
 idna==3.4
-pip==22.3.1
+pip==23.1.2
 pygame==2.4.0
 pytz==2022.6
 PyYAML==6.0
