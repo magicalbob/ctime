@@ -4,6 +4,7 @@ stages:
 
 test_job:
   stage: test
+  image: t7610:8085/ctime/1
   tags:
     - linux
   script:
