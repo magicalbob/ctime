@@ -1,4 +1,4 @@
-certifi==2022.12.7
+certifi==2023.5.7
 chardet==5.1.0
 CMRESHandler==1.0.0
 elasticsearch==7.17.9
