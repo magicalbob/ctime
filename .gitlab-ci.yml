@@ -4,7 +4,7 @@ stages:
 
 test_job:
   stage: test
-  image: t7610:8085/ctime/1
+  image: docker:latest
   tags:
     - linux
   script:
@@ -17,6 +17,7 @@ test_job:
 
 scan_job:
   stage: scan
+  image: docker:latest
   tags:
     - linux
   script:
