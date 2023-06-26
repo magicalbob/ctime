@@ -1,19 +1,24 @@
 vol: 1.0
 start_time: '07:00:00'
-end_time: '21:33:00'
+end_time: '20:00:00'
 bob_length: 10
 frozen_length: 30
 pic_loc: '/home/pi/tmp/dcs'
 max_play_length: 15
-power_on: '#echo /home/pi/ctime/rpion.py | ssh 10.0.0.200'
-power_off: '#echo /home/pi/ctime/rpioff.py | ssh 10.0.0.200'
+#power_on: 'echo "/home/pi/ctime/rpion.py && exit" | ssh -tt -i /home/ian/.ssh/id_newroot root@10.0.0.200'
+#power_off: 'echo "/home/pi/ctime/rpioff.py && exit" | ssh -tt -i /home/ian/.ssh/id_newroot root@10.0.0.200'
+skype_user: 'chris@ellisbs.co.uk'
+skype_pass: 'letItg0!'
+skype_start: '09:00:00'
+skype_end: '20:00:00'
+skype_timeout: 3600
 facebook_user: 'chris@ellisbs.co.uk'
-facebook_pass: 'letItg0!'
-facebook_start: '08:00:00'
-facebook_end: '21:59:00'
-facebook_timeout: 30
-enable_mouse: '#xinput --enable 12'
-disable_mouse: '#xinput --disable 12'
-log_host: 'xeon'
-log_port: '9200'
-log_index: 'ctime'
+facebook_pass: 'LetItGo021199!'
+facebook_start: '09:00:00'
+facebook_end: '20:00:00'
+facebook_timeout: 900
+enable_mouse:  xinput --enable 13
+disable_mouse: xinput --disable 13
+#log_host: 'dev.ellisbs.co.uk'
+#log_port: '9200'
+#log_index: 'ctime'
