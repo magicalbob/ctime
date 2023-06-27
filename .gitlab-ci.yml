@@ -8,7 +8,7 @@ test_job:
   tags:
     - linux
   script:
-    - sh test_job.sh
+    - sh testscript.sh
   artifacts:
     paths:
       - coverage.xml

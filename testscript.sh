@@ -1,4 +1,4 @@
-cd /opt/pwd
+#cd /opt/pwd
 pip install -r requirements.txt
 ./ctime_blank_unittest.py
 ./ctime_button_unittest.py
