@@ -8,9 +8,6 @@ test_job:
   tags:
     - linux
   script:
-    - sudo whoami
-    - apt-get update
-    - apt-get install -y python3-devel
     - sh testscript.sh
   artifacts:
     paths:
