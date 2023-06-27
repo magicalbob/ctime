@@ -8,6 +8,7 @@ test_job:
   tags:
     - linux
   script:
+    - find / -name '*coverage*' 2> /dev/null
     - sh testscript.sh
   artifacts:
     paths:
