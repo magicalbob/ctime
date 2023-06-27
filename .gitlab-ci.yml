@@ -8,8 +8,8 @@ test_job:
   tags:
     - linux
   script:
-    - dnf update -y
-    - dnf install -y python3-pip python3-devel
+    - apk update
+    - apk add python3-dev
     - sh testscript.sh
   artifacts:
     paths:
