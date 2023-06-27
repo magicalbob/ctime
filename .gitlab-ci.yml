@@ -8,6 +8,7 @@ test_job:
   tags:
     - linux
   script:
+    - cat /etc/os-release
     - apk update
     - apk add python3-dev
     - sh testscript.sh
