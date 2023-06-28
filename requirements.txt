@@ -9,7 +9,7 @@ pytz==2022.7.1
 PyYAML==6.0
 requests==2.28.1
 selenium==3.141.0
-setuptools==65.7.0
+setuptools==68.0.0
 urllib3==1.26.13
 wheel==0.40.0
 pyalsaaudio==0.10.0
