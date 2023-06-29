@@ -1,3 +1,4 @@
+#!/usr/bin/env python3
 """ blank screen to stop game being played out-of-hours """
 import random
 import os
