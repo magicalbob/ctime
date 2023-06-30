@@ -2,7 +2,7 @@
 import unittest
 import pygame
 from unittest.mock import MagicMock, patch
-from camera import Camera
+from ctime_camera import Camera
 
 class TestCamera(unittest.TestCase):
     @patch('pygame.camera.Camera')
