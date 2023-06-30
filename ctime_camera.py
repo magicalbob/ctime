@@ -18,7 +18,7 @@ class Camera(object):
         # Create the Pygame display
         self.screen = pygame.display.set_mode((screen_width, screen_height))
         pygame.display.set_caption("USB Camera Display")  # Set a caption for the display window
-        go_fullscreen(self.screen)
+        go_fullscreen()
 
         # Try displaying USB camera view
         self.usb_camera = False
