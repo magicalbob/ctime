@@ -438,30 +438,32 @@ class MainScreen():
             #               selenium handles all interactions
 
     def refresh_pic(self):
-        """ redraw background picture """
-        image_name = "images/backgrounds/%03d.jpg" %self.back_no
+        """ Redraw background picture """
+        image_name = "images/backgrounds/%03d.jpg" % self.back_no
         self.image = pygame.image.load(image_name).convert()
+
+        # Scale the image to fit the screen
+        self.image = pygame.transform.scale(self.image, (self.screen_width, self.screen_height))
+
         self.screen.fill((0, 0, 0))
-        self.screen.blit(self.image, (max(0, (self.screen_width-self.image.get_rect().size[0])/2),
-                                      max(0, (self.screen_height-self.image.get_rect().size[1])/2)))
+        self.screen.blit(self.image, (0, 0))
         self.button_play.redraw()
         self.button_play_list.redraw()
-        if self.button_video != None:
+        if self.button_video is not None:
             self.button_video.redraw()
         if self.button_power.enabled:
             self.button_power.redraw()
         self.button_pairs.redraw()
         if self.can_we_facebook():
-            if self.button_facebook == None:
-                self.button_facebook = Button(self.screen,
-                                              (0,
-                                               (self.screen_height / 2) - 100,
-                                               200,
-                                               200),
-                                              "images/icons/Phone.png",
-                                              (0, 0, 0),
-                                              "Facebook",
-                                              self.log)
+            if self.button_facebook is None:
+                self.button_facebook = Button(
+                    self.screen,
+                    (0, (self.screen_height / 2) - 100, 200, 200),
+                    "images/icons/Phone.png",
+                    (0, 0, 0),
+                    "Facebook",
+                    self.log
+                )
             else:
                 self.button_facebook.redraw()
 
