@@ -33,7 +33,6 @@ class MainScreen():
         screen = pygame.display.get_surface()
         self.screen_width, self.screen_height = screen.get_width(), screen.get_height()
 
-        self.image = pygame.image.load("images/backgrounds/001.jpg").convert()
         self.game_state = 0
         self.play_state = 1
         self.tune_no = 1
@@ -125,6 +124,7 @@ class MainScreen():
                 with open(os.path.join(background_directory, output_filename), 'wb') as f:
                     f.write(response.content)
                  
+        self.image = pygame.image.load("images/backgrounds/001.jpg").convert()
         self.old_time=0
         self.re_init()
 
@@ -466,11 +466,17 @@ class MainScreen():
                 self.button_facebook.redraw()
 
     def update_pic(self):
-        """ change background picture """
-        self.back_no += 1
-        if self.back_no > 7:
-            self.back_no = 1
-        self.refresh_pic()
+        """ Change background picture """
+        background_directory = './images/backgrounds/'
+        # Get the list of all image files in the directory
+        image_files = [f for f in os.listdir(background_directory) if f.endswith(('.jpg', '.jpeg', '.png'))]
+        
+        if image_files:
+            self.back_no += 1
+            if self.back_no > len(image_files):
+                self.back_no = 1
+            
+            self.refresh_pic()
 
 def check_facebook(the_game):
     if the_game.facebook and time.time() - the_game.facebook.check_connect > 900:
