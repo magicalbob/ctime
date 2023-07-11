@@ -110,7 +110,16 @@ class MainScreen():
         #
         # Get photos from iCloud
         #
-        background_directory = './images/backgrounds/' 
+        download_thread = threading.Thread(target=self.download_photos_from_icloud)
+        download_thread.start()
+                 
+        self.image = pygame.image.load("images/backgrounds/001.jpg").convert()
+        self.old_time=0
+        self.re_init()
+
+    def download_photos_from_icloud(self):
+        """ Download photos from iCloud in the background """
+        background_directory = './images/backgrounds/'
         output_format = '{:03d}.jpg'
         api = PyiCloudService(str(conf['icloud_user']))
         photos = api.photos.all
@@ -123,10 +132,6 @@ class MainScreen():
                 counter += 1
                 with open(os.path.join(background_directory, output_filename), 'wb') as f:
                     f.write(response.content)
-                 
-        self.image = pygame.image.load("images/backgrounds/001.jpg").convert()
-        self.old_time=0
-        self.re_init()
 
     def re_init(self):
         """ re-initialise the screen - used when sub screen closes """
