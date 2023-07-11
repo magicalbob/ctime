@@ -21,6 +21,7 @@ from ctime_pairs import PairsScreen
 from ctime_facebook import CtimeFacebook
 from ctime_blank import BlankScreen
 from cmreslogging.handlers import CMRESHandler
+from pyicloud import PyiCloudService
 
 class MainScreen():
     """ The main screen of the program """
@@ -107,6 +108,23 @@ class MainScreen():
         except:
             self.facebook = None
             self.log.info("oh dear no facebook")
+        #
+        # Get photos from iCloud
+        #
+        background_directory = './images/backgrounds/' 
+        output_format = '{:03d}.jpg'
+        api = PyiCloudService(str(conf['icloud_user']))
+        photos = api.photos.all
+        counter = 1
+        for photo in photos:
+            if any(ext in photo.filename.lower() for ext in ['.jpg', '.jpeg', '.png']):
+                print(f"Processing photo: {photo.filename}")
+                response = photo.download()
+                output_filename = output_format.format(counter)
+                counter += 1
+                with open(os.path.join(background_directory, output_filename), 'wb') as f:
+                    f.write(response.content)
+                 
         self.old_time=0
         self.re_init()
 
