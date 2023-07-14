@@ -11,4 +11,4 @@ cd ${WORK_DIR}
 
 export PATH=${PATH}:${WORK_DIR}/selenium
 
-./ctime.py
+python3 ./src/ctime/ctime.py
