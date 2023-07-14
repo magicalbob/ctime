@@ -2,3 +2,5 @@
 localpy
 ctime.log
 geckodriver.log
+ctime_package.egg-info
+dist
