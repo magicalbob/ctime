@@ -1,6 +1,25 @@
 stages:
+ - build
+ - publish
  - test
  - scan
+
+build:
+  stage: build
+  script:
+    - python setup.py sdist bdist_wheel
+  artifacts:
+    paths:
+      - dist/*.tar.gz
+      - dist/*.whl
+
+publish:
+  stage: publish
+  script:
+    - pip install twine
+    - twine upload --repository-url https://nexus.ellisbs.co.uk/repository/pypi-hosted/ --username $PYPI_USERNAME --password $PYPI_PASSWORD dist/*
+  dependencies:
+    - build
 
 test_job:
   stage: test
