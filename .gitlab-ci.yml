@@ -6,6 +6,8 @@ stages:
 
 build:
   stage: build
+  tags:
+    - linux
   script:
     - python setup.py sdist bdist_wheel
   artifacts:
@@ -15,6 +17,8 @@ build:
 
 publish:
   stage: publish
+  tags:
+    - linux
   script:
     - pip install twine
     - twine upload --repository-url https://nexus.ellisbs.co.uk/repository/pypi-hosted/ --username $PYPI_USERNAME --password $PYPI_PASSWORD dist/*
@@ -23,7 +27,6 @@ publish:
 
 test_job:
   stage: test
-  image: docker:latest
   tags:
     - linux
   script:
@@ -38,7 +41,6 @@ test_job:
 
 scan_job:
   stage: scan
-  image: docker:latest
   tags:
     - linux
   script:
