@@ -25,9 +25,7 @@ publish:
     - sudo apt-get update
     - sudo apt-get install -y python3-dev python3-pip libasound2-dev
     - pip install twine
-    - echo "PYPI_USERNAME is ${PYPI_USERNAME}"
-    - echo "PYPI_PASSWORD is ${PYPI_PASSWORD}"
-#    - ~/.local/bin/twine upload --repository-url https://nexus.ellisbs.co.uk/repository/pypi-hosted/ --username $PYPI_USERNAME --password $PYPI_PASSWORD dist/*
+    - ~/.local/bin/twine upload --repository-url https://nexus.ellisbs.co.uk/repository/pypi-hosted/ --username $PYPI_USERNAME --password $PYPI_PASSWORD dist/*
   dependencies:
     - build
 
