@@ -22,3 +22,4 @@ disable_mouse: xinput --disable 13
 #log_host: 'dev.ellisbs.co.uk'
 #log_port: '9200'
 #log_index: 'ctime'
+icloud_user: 'chris.cake.ellis@gmail.com'

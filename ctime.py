@@ -111,6 +111,7 @@ class MainScreen():
         #
         # Get photos from iCloud
         #
+        self.icloud_user=str(conf['icloud_user'])
         download_thread = threading.Thread(target=self.download_photos_from_icloud)
         download_thread.start()
                  
@@ -122,7 +123,7 @@ class MainScreen():
         """ Download photos from iCloud in the background """
         background_directory = './images/backgrounds/'
         output_format = '{:03d}.jpg'
-        api = PyiCloudService(str(conf['icloud_user']))
+        api = PyiCloudService(self.icloud_user)
         photos = api.photos.all
         counter = 1
         for photo in photos:
