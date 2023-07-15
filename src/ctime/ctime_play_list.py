@@ -3,9 +3,9 @@ import random
 import os
 import pygame
 import pygame.locals
-from ctime_common import go_fullscreen
-from ctime_common import shuffle_list
-from ctime_button import Button
+from src.ctime.ctime_common import go_fullscreen
+from src.ctime.ctime_common import shuffle_list
+from src.ctime.ctime_button import Button
 
 class TrackListScreen():
     """ list tracks to select """

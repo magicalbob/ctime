@@ -3,7 +3,7 @@ import random
 import os
 import pygame
 import pygame.locals
-from ctime_common import go_fullscreen
+from src.ctime.ctime_common import go_fullscreen
 
 class BlankScreen():
     """ a blank screen with no controls """

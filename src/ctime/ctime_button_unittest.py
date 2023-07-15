@@ -2,7 +2,7 @@
 import unittest
 from unittest.mock import Mock, patch
 import time
-from ctime_button import Button
+from src.ctime.ctime_button import Button
 
 class TestButton(unittest.TestCase):
 

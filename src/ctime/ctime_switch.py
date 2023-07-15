@@ -1,7 +1,7 @@
 """ version of button that turns on/off power to light """
 import time
 import os
-from ctime_button import Button
+from src.ctime.ctime_button import Button
 
 class Switch(Button):
     """ a switch for power """

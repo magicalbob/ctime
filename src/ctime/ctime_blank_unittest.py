@@ -1,12 +1,12 @@
 #!/usr/bin/env python3
 import unittest
 from unittest.mock import patch, MagicMock
-from ctime_blank import BlankScreen
+from src.ctime.ctime_blank import BlankScreen
 
 class TestBlankScreen(unittest.TestCase):
 
-    @patch('ctime_blank.pygame')
-    @patch('ctime_blank.go_fullscreen')
+    @patch('src.ctime.ctime_blank.pygame')
+    @patch('src.ctime.ctime_blank.go_fullscreen')
     def test_BlankScreen(self, mock_go_fullscreen, mock_pygame):
         # Initialize necessary mocks
         mock_ctime = MagicMock()

@@ -2,8 +2,8 @@
 import pygame
 import pygame.camera
 import pygame.locals
-from ctime_common import go_fullscreen
-from ctime_button import Button
+from src.ctime.ctime_common import go_fullscreen
+from src.ctime.ctime_button import Button
 
 class Camera(object):
     """ object to display usb camera """

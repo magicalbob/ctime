@@ -3,10 +3,10 @@ import time
 import os
 import pygame
 import pygame.locals
-from ctime_button import Button
-from ctime_common import shuffle_list
-from ctime_common import go_fullscreen
-from ctime_common import play_let_it_go
+from src.ctime.ctime_button import Button
+from src.ctime.ctime_common import shuffle_list
+from src.ctime.ctime_common import go_fullscreen
+from src.ctime.ctime_common import play_let_it_go
 
 class PairsScreen():
     """ class for simple pairs game """

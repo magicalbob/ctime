@@ -5,8 +5,8 @@ import time
 import pygame
 import os
 import re
-from ctime_common import go_fullscreen
-from ctime_common import go_minimal
+from src.ctime.ctime_common import go_fullscreen
+from src.ctime.ctime_common import go_minimal
 from selenium import webdriver
 from selenium.webdriver.common.keys import Keys
 from selenium.webdriver.common.by import By
