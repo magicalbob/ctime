@@ -7,8 +7,13 @@ else
 fi
 
 WORK_DIR=$(dirname $0)
+WORK_DIR=$PWD
+echo WORK_DIR: ${WORK_DIR}
 cd ${WORK_DIR}
 
 export PATH=${PATH}:${WORK_DIR}/selenium
+echo PATH is ${PATH}
+
+cd src/ctime
 
 python3 ./ctime.py
