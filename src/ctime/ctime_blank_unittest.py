@@ -18,7 +18,7 @@ class TestBlankScreen(unittest.TestCase):
         mock_pygame.display.get_surface.return_value = mock_display
 
         # Initialize the class
-        blank_screen = BlankScreen(mock_ctime, 800, 600, mock_log)
+        _ = BlankScreen(mock_ctime, 800, 600, mock_log)
 
         # Assertions to verify that calls have been made correctly
         mock_log.info.assert_any_call('Time for bed said Zeberdee')
