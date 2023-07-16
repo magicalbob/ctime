@@ -12,6 +12,7 @@ RUN groupadd -g 1002 appuser \
 
 # Copy the testscript.sh file into the appuser's home directory
 COPY testscript.sh /home/appuser/testscript.sh
+COPY testscript_docker.sh /home/appuser/testscript_docker.sh
 
 # Change the ownership of the testscript.sh file to the new user
 RUN chown appuser:appuser /home/appuser/testscript.sh
@@ -26,4 +27,4 @@ WORKDIR /home/appuser
 RUN pip install coverage
 
 # Run the script as the new user
-CMD sh -c ./testscript.sh
+CMD sh -c ./testscript_docker.sh

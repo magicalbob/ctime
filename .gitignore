@@ -2,4 +2,11 @@
 localpy
 ctime.log
 geckodriver.log
-images/backgrounds/*.jpg
+ctime_package.egg-info
+dist
+images/backgrounds/008.jpg
+images/backgrounds/009.jpg
+images/backgrounds/0[1-9]*
+.coverage
+src/.coverage
+src/ctime/.coverage

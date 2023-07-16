@@ -12,15 +12,15 @@ import yaml
 import os
 import logging
 import threading
-from ctime_common import go_fullscreen
-from ctime_button import Button
-from ctime_play_list import PlayListScreen
-from ctime_play_list import TrackListScreen
-from ctime_camera import Camera
-from ctime_switch import Switch
-from ctime_pairs import PairsScreen
-from ctime_facebook import CtimeFacebook
-from ctime_blank import BlankScreen
+from src.ctime.ctime_common import go_fullscreen
+from src.ctime.ctime_button import Button
+from src.ctime.ctime_play_list import PlayListScreen
+from src.ctime.ctime_play_list import TrackListScreen
+from src.ctime.ctime_camera import Camera
+from src.ctime.ctime_switch import Switch
+from src.ctime.ctime_pairs import PairsScreen
+from src.ctime.ctime_facebook import CtimeFacebook
+from src.ctime.ctime_blank import BlankScreen
 from cmreslogging.handlers import CMRESHandler
 from pyicloud import PyiCloudService
 
