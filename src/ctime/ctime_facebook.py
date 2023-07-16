@@ -45,7 +45,7 @@ class CtimeFacebook():
         self.log.info('make sure facebook page loaded')
         try:
             assert "Facebook" in self.driver.title
-        except:
+        except AssertionError:
             """ turn mouse back on, close selenium, go back to main screen """
             self.log.error('no facebook for Chris')
             self.abort_facebook()
