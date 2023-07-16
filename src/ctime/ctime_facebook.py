@@ -102,9 +102,9 @@ class CtimeFacebook():
         self.driver.switch_to_window(new_win)
 
         self.log.info('Start call loop')
-        inCall = True
+        in_call = True
         allow_one_exception = True
-        while inCall == True:
+        while in_call == True:
             try:
                 self.log.info('check still in call')
                 src = self.driver.page_source
@@ -114,15 +114,15 @@ class CtimeFacebook():
                              )
                 if text_found != None:
                     self.log.info('no longer in call')
-                    inCall = False
+                    in_call = False
                 text_found = re.search(r'Connection lost', src)
                 if text_found != None:
                     self.log.warning('no longer in call because of lost connection')
-                    inCall = False
+                    in_call = False
                 text_found = re.search(r'No Answer', src)
                 if text_found != None:
                     self.log.warning('no answer received, hang up')
-                    inCall = False
+                    in_call = False
             except:
                 if allow_one_exception == True:
                     MSG = 'exception while checking still in call, give it another chance'
@@ -130,9 +130,9 @@ class CtimeFacebook():
                     allow_one_exception = False
                     time.sleep(3)
                 else:
-                    inCall = False
+                    in_call = False
                     self.log.info('exception while checking still in call, so no longer in call')
-            if inCall == True:
+            if in_call == True:
                 self.log.info('still in call so pause between checks')
                 time.sleep(3)
         self.abort_facebook(hide_facebook = True)
