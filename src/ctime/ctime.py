@@ -393,7 +393,7 @@ class MainScreen():
                 self.play_track(self.playlist, track_no)
 
     def event_state_5(self, coord):
-        pair_state, is_clicked = self.pairs.check_click(coord)
+        pair_state, _ = self.pairs.check_click(coord)
         if pair_state == -2:
             self.game_state = 0
             self.refresh_pic()
