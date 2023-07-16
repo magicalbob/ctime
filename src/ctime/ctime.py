@@ -23,6 +23,7 @@ from src.ctime.ctime_blank import BlankScreen
 from cmreslogging.handlers import CMRESHandler
 
 CTIME_TIMEZONE = 'Europe/London'
+PLAY_BUTTON = 'images/icons/PlayButton.png'
 
 class MainScreen():
     """ The main screen of the program """
@@ -105,7 +106,7 @@ class MainScreen():
         image_play = ""
         image_list = ""
         if self.can_we_play():
-            image_play = "images/icons/PlayButton.png"
+            image_play = PLAY_BUTTON
             image_list = "images/icons/MusicIcon.png"
         self.button_play = Button(self.screen,
                                   (0, 0, 200, 200),
@@ -234,7 +235,7 @@ class MainScreen():
             self.play_state = 1
         if self.play_state == 1:
             pygame.mixer.music.pause()
-            self.button_play.change_image("images/icons/PlayButton.png")
+            self.button_play.change_image(PLAY_BUTTON)
         elif self.first_play == 1:
             try:
                 pygame.mixer.init()
@@ -266,7 +267,7 @@ class MainScreen():
         if now_time - self.play_start > timedelta(minutes=self.max_play_length):
             self.play_state = 1
             if self.game_state == 0:
-                self.button_play.change_image("images/icons/PlayButton.png")
+                self.button_play.change_image(PLAY_BUTTON)
             return
         self.tune_no += 1
         if self.tune_no > self.play_len[self.playlist]:
