@@ -23,6 +23,8 @@ from src.ctime.ctime_blank import BlankScreen
 from cmreslogging.handlers import CMRESHandler
 
 CTIME_TIMEZONE = 'Europe/London'
+CTIME_TIME_FORMAT = '%Y-%m-%d '
+CTIME_TIMESTAMP_FORMAT = '%Y-%m-%d %H:%M:%S'
 PLAY_BUTTON = 'images/icons/PlayButton.png'
 
 class MainScreen():
@@ -177,10 +179,10 @@ class MainScreen():
 
         """ check the time. if too late say no """
         now_time = datetime.datetime.now(pytz.timezone(CTIME_TIMEZONE))
-        test_start = strftime('%Y-%m-%d ')+self.facebook_start
-        test_end   = strftime('%Y-%m-%d ')+self.facebook_end
-        s_time = datetime.datetime.strptime(test_start, "%Y-%m-%d %H:%M:%S")
-        e_time = datetime.datetime.strptime(test_end, "%Y-%m-%d %H:%M:%S")
+        test_start = strftime(CTIME_TIME_FORMAT)+self.facebook_start
+        test_end   = strftime(CTIME_TIME_FORMAT)+self.facebook_end
+        s_time = datetime.datetime.strptime(test_start, CTIME_TIMESTAMP_FORMAT)
+        e_time = datetime.datetime.strptime(test_end, CTIME_TIMESTAMP_FORMAT)
         if s_time.replace(
                 tzinfo=None) < now_time.replace(
                     tzinfo=None) < e_time.replace(
@@ -212,10 +214,10 @@ class MainScreen():
     def can_we_play(self):
         """ check the time. if too late say no """
         now_time = datetime.datetime.now(pytz.timezone(CTIME_TIMEZONE))
-        test_start = strftime('%Y-%m-%d ')+self.start_time
-        test_end = strftime('%Y-%m-%d ')+self.end_time
-        s_time = datetime.datetime.strptime(test_start, "%Y-%m-%d %H:%M:%S")
-        e_time = datetime.datetime.strptime(test_end, "%Y-%m-%d %H:%M:%S")
+        test_start = strftime(CTIME_TIME_FORMAT)+self.start_time
+        test_end = strftime(CTIME_TIME_FORMAT)+self.end_time
+        s_time = datetime.datetime.strptime(test_start, CTIME_TIMESTAMP_FORMAT)
+        e_time = datetime.datetime.strptime(test_end, CTIME_TIMESTAMP_FORMAT)
         if s_time.replace(
                 tzinfo=None) < now_time.replace(
                     tzinfo=None) < e_time.replace(
