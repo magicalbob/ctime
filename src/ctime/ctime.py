@@ -478,13 +478,9 @@ def check_update_pic(the_game):
         if the_game.button_power.check_button():
             the_game.refresh_pic()
 
-
 def check_music(the_game):
-    if the_game.play_state == 2:
-        if not pygame.mixer.music.get_busy():
-            if the_game.can_we_play():
-                the_game.play_next()
-
+    if the_game.play_state == 2 and not pygame.mixer.music.get_busy() and the_game.can_we_play():
+        the_game.play_next()
 
 def check_game_state(the_game):
     if the_game.game_state == 5:
