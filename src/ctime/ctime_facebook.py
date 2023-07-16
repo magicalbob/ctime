@@ -99,18 +99,15 @@ class CtimeFacebook():
             if win != self.old_win:
                 self.log.info('new window found')
                 new_win=win
-        print("DEBUG: new_win = %s" % (new_win))
         self.driver.switch_to_window(new_win)
 
         self.log.info('Start call loop')
         inCall = True
         allow_one_exception = True
         while inCall == True:
-            print("DEBUG: In Call")
             try:
                 self.log.info('check still in call')
                 src = self.driver.page_source
-                print("DEBUG: Got Page Source")
                 text_found = re.search(
                                  r'Please rate the quality of your video chat',
                                  src
