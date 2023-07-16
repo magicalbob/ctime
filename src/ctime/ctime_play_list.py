@@ -7,6 +7,8 @@ from src.ctime.ctime_common import go_fullscreen
 from src.ctime.ctime_common import shuffle_list
 from src.ctime.ctime_button import Button
 
+IMAGES_ICONS = 'images/icons/%s.png'
+
 class TrackListScreen():
     """ list tracks to select """
     def __init__(self, screen_width, screen_height, play_list, tracks, log):
@@ -104,21 +106,21 @@ class PlayListScreen(object):
 
         self.button_bob = Button(self.screen,
                                  button_position[button_instance[0]],
-                                 "images/icons/%s.png" % ("bob"),
+                                 IMAGES_ICONS % ("bob"),
                                  (0, 0, 0),
                                  "Bob",
                                  self.log)
 
         self.button_frozen = Button(self.screen,
                                     button_position[button_instance[1]],
-                                    "images/icons/%s.png" % ("frozen"),
+                                    IMAGES_ICONS % ("frozen"),
                                     (0, 0, 0),
                                     "Frozen",
                                     self.log)
 
         self.button_showman = Button(self.screen,
                                      button_position[button_instance[2]],
-                                     "images/icons/%s.png" % ("showman"),
+                                     IMAGES_ICONS % ("showman"),
                                      (0, 0, 0),
                                      "Showman",
                                      self.log)
