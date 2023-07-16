@@ -153,7 +153,7 @@ class CtimeFacebook():
             self.log.info('No longer logged in to facebook, login again')
             still_logged_in = False
             self.facebook_login()
-        except:
+        except AssertError:
             self.log.info('Still logged in to facebook')
         if still_logged_in == True:
             self.log.info('check that the other log in page not showing')
