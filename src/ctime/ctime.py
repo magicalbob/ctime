@@ -83,8 +83,8 @@ class MainScreen():
         self.pairs = None
         try:
             pygame.mixer.music.set_volume(self.def_vol)
-        except:
-            self.log.error('pygame.music.set_volume failed')
+        except pygame.error as e:
+            self.log.error('Failed to set volume: {}'.format(e))
         try:
             self.facebook = CtimeFacebook(self, self.facebook_user, self.facebook_pass,self.log)
             self.log.info("got facebook!")
