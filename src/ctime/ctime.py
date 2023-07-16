@@ -326,86 +326,96 @@ class MainScreen():
         self.button_play.change_image(STOP_BUTTON)
         self.play_state = 2
 
+    def event_state_0(self, coord):
+        if self.button_play.check_click(coord):
+            self.log.info('button_play clicked')
+            self.click_button_play()
+        elif (self.button_video != None and
+              self.button_video.check_click(coord)):
+            self.log.info('button_video clicked')
+            self.click_button_video()
+        elif self.button_play_list.check_click(coord):
+            self.log.info('button_play_list clicked')
+            self.click_play_list()
+        elif self.button_power.check_click(coord):
+            self.log.info('button_power clicked')
+            self.refresh_pic()
+        elif self.button_pairs.check_click(coord):
+            self.log.info('button_pairs clicked')
+            self.click_pairs()
+        elif self.button_facebook != None:
+            if self.button_facebook.check_click(coord):
+                self.log.info('button_facebook clicked')
+                self.button_facebook = None
+                self.re_init()
+                self.click_facebook()
+
+    def event_state_2(self, coord):
+        if self.video_screen.check_exit(coord):
+            self.game_state = 0
+            self.refresh_pic()
+
+    def event_state_3(self, coord):
+        if self.play_list.check_click_bob(coord):
+            self.game_state = 4
+            self.playlist = 0
+            self.track_list = TrackListScreen(self.screen_width,
+                                              self.screen_height,
+                                              "bob",
+                                              self.play_len[0],
+                                              self.log)
+        elif self.play_list.check_click_frozen(coord):
+            self.game_state = 4
+            self.playlist = 1
+            self.track_list = TrackListScreen(self.screen_width,
+                                              self.screen_height,
+                                              "frozen",
+                                              self.play_len[1],
+                                              self.log)
+        elif self.play_list.check_click_showman(coord):
+            self.game_state = 4
+            self.playlist = 2
+            self.track_list = TrackListScreen(self.screen_width,
+                                              self.screen_height,
+                                              "showman",
+                                              self.play_len[2],
+                                              self.log)
+        elif self.play_list.check_exit(coord):
+            self.game_state = 0
+            self.refresh_pic()
+
+    def event_state_4(self, coord):
+        track_no, is_clicked = self.track_list.check_click(coord)
+        if is_clicked:
+            if (self.playlist == 1) and (track_no == 5):
+                self.click_pairs()
+            else:
+                self.play_track(self.playlist, track_no)
+
+    def event_state_5(self, coord):
+        pair_state, is_clicked = self.pairs.check_click(coord)
+        if pair_state == -2:
+            self.game_state = 0
+            self.refresh_pic()
+
     def check_event(self, event, coord):
         """ check event and decide how to react """
         if event.type == pygame.MOUSEBUTTONUP:
             # game_state 0: Main menu
             if self.game_state == 0:
-                if self.button_play.check_click(coord):
-                    self.log.info('button_play clicked')
-                    self.click_button_play()
-                elif (self.button_video != None and
-                      self.button_video.check_click(coord)):
-                    self.log.info('button_video clicked')
-                    self.click_button_video()
-                elif self.button_play_list.check_click(coord):
-                    self.log.info('button_play_list clicked')
-                    self.click_play_list()
-                elif self.button_power.check_click(coord):
-                    self.log.info('button_power clicked')
-                    self.refresh_pic()
-                elif self.button_pairs.check_click(coord):
-                    self.log.info('button_pairs clicked')
-                    self.click_pairs()
-                elif self.button_facebook != None:
-                    if self.button_facebook.check_click(coord):
-                        self.log.info('button_facebook clicked')
-                        self.button_facebook = None
-                        self.re_init()
-                        self.click_facebook()
+                self.event_state_0(coord)
             # game_state 2: Video feed from cameras
             elif self.game_state == 2:
-                if self.video_screen.check_exit(coord):
-                    self.game_state = 0
-                    self.refresh_pic()
-
+                self.event_state_2(coord)
             # game_state 3: play list
             elif self.game_state == 3:
-                if self.play_list.check_click_bob(coord):
-                    self.game_state = 4
-                    self.playlist = 0
-                    self.track_list = TrackListScreen(self.screen_width,
-                                                      self.screen_height,
-                                                      "bob",
-                                                      self.play_len[0],
-                                                      self.log)
-                elif self.play_list.check_click_frozen(coord):
-                    self.game_state = 4
-                    self.playlist = 1
-                    self.track_list = TrackListScreen(self.screen_width,
-                                                      self.screen_height,
-                                                      "frozen",
-                                                      self.play_len[1],
-                                                      self.log)
-                elif self.play_list.check_click_showman(coord):
-                    self.game_state = 4
-                    self.playlist = 2
-                    self.track_list = TrackListScreen(self.screen_width,
-                                                      self.screen_height,
-                                                      "showman",
-                                                      self.play_len[2],
-                                                      self.log)
-                elif self.play_list.check_exit(coord):
-                    self.game_state = 0
-                    self.refresh_pic()
-
+                self.event_state_3(coord)
             # game_state 4: track list
             elif self.game_state == 4:
-                track_no, is_clicked = self.track_list.check_click(coord)
-                if is_clicked:
-                    if (self.playlist == 1) and (track_no == 5):
-                        self.click_pairs()
-                    else:
-                        self.play_track(self.playlist, track_no)
+                self.event_state_4(coord)
             # game_state 5: Pairs game
             elif self.game_state == 5:
-                pair_state, is_clicked = self.pairs.check_click(coord)
-                if pair_state == -2:
-                    self.game_state = 0
-                    self.refresh_pic()
-            # game_state 6: Skype chat
-            #               no buttons to check
-            #               selenium handles all interactions
+                self.event_state_5(coord)
 
     def refresh_pic(self):
         """ redraw background picture """
@@ -503,10 +513,10 @@ def main():
     while True:
         check_facebook(the_game)
         the_game.button_power.check_off()
-        
+
         for e in pygame.event.get():
             check_event(the_game, e)
-        
+
         check_update_pic(the_game)
         check_music(the_game)
         check_game_state(the_game)
