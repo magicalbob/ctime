@@ -26,6 +26,7 @@ CTIME_TIMEZONE = 'Europe/London'
 CTIME_TIME_FORMAT = '%Y-%m-%d '
 CTIME_TIMESTAMP_FORMAT = '%Y-%m-%d %H:%M:%S'
 PLAY_BUTTON = 'images/icons/PlayButton.png'
+STOP_BUTTON = 'images/icons/StopButton.png'
 
 class MainScreen():
     """ The main screen of the program """
@@ -241,7 +242,7 @@ class MainScreen():
         elif self.first_play == 1:
             try:
                 pygame.mixer.init()
-            except:
+            except BaseException:
                 self.log.error('pygame.mixer.init() failed')
             if self.playlist < 1:
                 which_list = "bob"
@@ -253,11 +254,11 @@ class MainScreen():
             pygame.mixer.music.load(new_tune)
             pygame.mixer.music.play()
             self.first_play = 0
-            self.button_play.change_image("images/icons/StopButton.png")
+            self.button_play.change_image(STOP_BUTTON)
             self.play_start = datetime.datetime.now(pytz.timezone(CTIME_TIMEZONE))
         else:
             pygame.mixer.music.unpause()
-            self.button_play.change_image("images/icons/StopButton.png")
+            self.button_play.change_image(STOP_BUTTON)
             self.play_start = datetime.datetime.now(pytz.timezone(CTIME_TIMEZONE))
 
     def play_next(self):
@@ -322,7 +323,7 @@ class MainScreen():
         self.first_play = 0
         self.game_state = 0
         self.refresh_pic()
-        self.button_play.change_image("images/icons/StopButton.png")
+        self.button_play.change_image(STOP_BUTTON)
         self.play_state = 2
 
     def check_event(self, event, coord):
