@@ -44,36 +44,18 @@ class MainScreen():
         self.start_time = str(conf['start_time'])
         self.end_time = str(conf['end_time'])
         self.max_play_length = conf['max_play_length']
-        try:
-            self.power_on = conf['power_on']
-            self.power_off = conf['power_off']
-        except:
-            self.power_on = ''
-            self.power_off = ''
-        try:
-            self.facebook_user = conf['facebook_user']
-            self.facebook_pass = conf['facebook_pass']
-            self.facebook_start = conf['facebook_start']
-            self.facebook_end = conf['facebook_end']
-            self.facebook_timeout = conf['facebook_timeout']
-        except:
-            self.facebook_user = None
-            self.facebook_pass = None
-            self.facebook_start = None
-            self.facebook_end = None
-            self.facebook_timeout = None
-        try:
-            self.enable_mouse = conf['enable_mouse']
-            self.disable_mouse = conf['disable_mouse']
-        except:
-            self.enable_mouse = None
-            self.disable_mouse = None
-        try:
-            log_host = conf['log_host']
-            log_port = conf['log_port']
-            log_index = conf['log_index']
-        except:
-            log_host = None
+        self.power_on = conf.get('power_on')
+        self.power_off = conf.get('power_off')
+        self.facebook_user = conf.get('facebook_user')
+        self.facebook_pass = conf.get('facebook_pass')
+        self.facebook_start = conf.get('facebook_start')
+        self.facebook_end = conf.get('facebook_end')
+        self.facebook_timeout = conf.get('facebook_timeout')
+        self.enable_mouse = conf.get('enable_mouse')
+        self.disable_mouse = conf.get('disable_mouse')
+        log_host = conf.get('log_host')
+        log_port = conf.get('log_port')
+        log_index = conf.get('log_index')
         if log_host == None:
             self.log = logging
             self.log.basicConfig(filename='ctime.log',
@@ -93,7 +75,7 @@ class MainScreen():
         self.first_play = 1
         self.playlist = -1
         self.play_len = [10, 32, 11]
-        self.path = str(conf['pic_loc'])
+        self.path = str(conf.get('pic_loc'))
         self.video_screen = None
         self.play_list = None
         self.track_list = None
