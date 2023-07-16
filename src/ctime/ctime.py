@@ -22,6 +22,8 @@ from src.ctime.ctime_facebook import CtimeFacebook
 from src.ctime.ctime_blank import BlankScreen
 from cmreslogging.handlers import CMRESHandler
 
+CTIME_TIMEZONE = 'Europe/London'
+
 class MainScreen():
     """ The main screen of the program """
     def __init__(self, screen_width, screen_height):
@@ -70,7 +72,7 @@ class MainScreen():
         self.log.info('started up')
 
         self.facebook_exit = None
-        self.play_start = datetime.datetime.now(pytz.timezone('Europe/London'))
+        self.play_start = datetime.datetime.now(pytz.timezone(CTIME_TIMEZONE))
         self.first_play = 1
         self.playlist = -1
         self.play_len = [10, 32, 11]
@@ -173,7 +175,7 @@ class MainScreen():
             return False
 
         """ check the time. if too late say no """
-        now_time = datetime.datetime.now(pytz.timezone('Europe/London'))
+        now_time = datetime.datetime.now(pytz.timezone(CTIME_TIMEZONE))
         test_start = strftime('%Y-%m-%d ')+self.facebook_start
         test_end   = strftime('%Y-%m-%d ')+self.facebook_end
         s_time = datetime.datetime.strptime(test_start, "%Y-%m-%d %H:%M:%S")
@@ -208,7 +210,7 @@ class MainScreen():
 
     def can_we_play(self):
         """ check the time. if too late say no """
-        now_time = datetime.datetime.now(pytz.timezone('Europe/London'))
+        now_time = datetime.datetime.now(pytz.timezone(CTIME_TIMEZONE))
         test_start = strftime('%Y-%m-%d ')+self.start_time
         test_end = strftime('%Y-%m-%d ')+self.end_time
         s_time = datetime.datetime.strptime(test_start, "%Y-%m-%d %H:%M:%S")
@@ -249,18 +251,18 @@ class MainScreen():
             pygame.mixer.music.play()
             self.first_play = 0
             self.button_play.change_image("images/icons/StopButton.png")
-            self.play_start = datetime.datetime.now(pytz.timezone('Europe/London'))
+            self.play_start = datetime.datetime.now(pytz.timezone(CTIME_TIMEZONE))
         else:
             pygame.mixer.music.unpause()
             self.button_play.change_image("images/icons/StopButton.png")
-            self.play_start = datetime.datetime.now(pytz.timezone('Europe/London'))
+            self.play_start = datetime.datetime.now(pytz.timezone(CTIME_TIMEZONE))
 
     def play_next(self):
         """ when track finishes check to see what next one is (or not if too late) """
         if not self.can_we_play():
             return
         """ have we been playing too long """
-        now_time = datetime.datetime.now(pytz.timezone('Europe/London'))
+        now_time = datetime.datetime.now(pytz.timezone(CTIME_TIMEZONE))
         if now_time - self.play_start > timedelta(minutes=self.max_play_length):
             self.play_state = 1
             if self.game_state == 0:
