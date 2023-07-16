@@ -8,6 +8,8 @@ from src.ctime.ctime_common import shuffle_list
 from src.ctime.ctime_common import go_fullscreen
 from src.ctime.ctime_common import play_let_it_go
 
+SNOW_FLAKE = "images/pairs/Snowflake.png"
+
 class PairsScreen():
     """ class for simple pairs game """
     def __init__(self, screen_width, screen_height, ctime, new_game = True):
@@ -39,7 +41,7 @@ class PairsScreen():
             self.cards['list'].append(
                 Button(self.screen,
                        (x_pos, y_pos, 200, 400),
-                       "images/pairs/Snowflake.png",
+                       SNOW_FLAKE,
                        (0, 0, 0),
                        "CardButton%s" % (card_index),
                        self.log)
@@ -76,7 +78,7 @@ class PairsScreen():
             if save_done:
                 image = ""
             else:
-                image = "images/pairs/Snowflake.png"
+                image = SNOW_FLAKE
             self.cards['list'][card_index] = Button(self.screen,
                                                     (x_pos, y_pos, 200, 400),
                                                     image,
@@ -147,9 +149,9 @@ class PairsScreen():
             if time.time() - self.flip_time > 3:
                 if not self.cards['list'][self.cards['clicked'][0]].cardDone:
                     self.cards['list'][
-                        self.cards['clicked'][0]].reload("images/pairs/Snowflake.png")
+                        self.cards['clicked'][0]].reload(SNOW_FLAKE)
                     self.cards['list'][
-                        self.cards['clicked'][1]].reload("images/pairs/Snowflake.png")
+                        self.cards['clicked'][1]].reload(SNOW_FLAKE)
                 self.cards['clicked'] = [-1, -1]
 
     def check_click(self, pos):
