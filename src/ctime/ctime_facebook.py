@@ -67,7 +67,6 @@ class CtimeFacebook():
         self.log.info('Press return to logon')
         elem.send_keys(Keys.RETURN)
         time.sleep(3)
-        #ian.ellis.5895
         self.driver.get(
             "https://www.facebook.com/messages/t/jackie.ellis.92?" +
             "cquick=jsc_c_n&cquick_token=AQ6FgU758TSNMWZGPcY&" +
@@ -80,7 +79,6 @@ class CtimeFacebook():
         # Start the video chat
         self.log.info('Start the video chat')
         _ = self.driver.find_element_by_xpath('//*[@aria-label="Start a video call"]').click()
-        #elem = self.driver.find_element_by_xpath('//*[@title="Start a video call"]').click()
         """ prevent someone clicking something they shouldn't """
         self.mouse_change(self.ctime.disable_mouse)
         go_minimal()
