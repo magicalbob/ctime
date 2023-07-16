@@ -20,15 +20,13 @@ class Switch(Button):
 
     def check_off(self):
         """ check if the switch should auto turn off """
-        if self.power_state:
-            if (time.time() - self.light_time) > 3600:
-                self.power_state = False
-                self.rpi_power()
+        if self.power_state and (time.time() - self.light_time) > 3600:
+            self.power_state = False
+            self.rpi_power()
 
     def check_button(self):
         """ check if the switch should reappear """
-        if not self.enabled:
-            if (time.time() - self.button_time) > 15:
+        if not self.enabled and (time.time() - self.button_time) > 15:
                 self.enabled = True
                 return True
         return False
