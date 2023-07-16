@@ -145,9 +145,7 @@ class PairsScreen():
 
     def flip_back(self):
         """ turn a card back to back showing """
-        if self.cards['clicked'][1] != -1:
-            if time.time() - self.flip_time > 3:
-                if not self.cards['list'][self.cards['clicked'][0]].cardDone:
+        if (self.cards['clicked'][1] != -1) and (time.time() - self.flip_time > 3) and (not self.cards['list'][self.cards['clicked'][0]].cardDone):
                     self.cards['list'][
                         self.cards['clicked'][0]].reload(SNOW_FLAKE)
                     self.cards['list'][
