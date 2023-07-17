@@ -3,12 +3,14 @@ import unittest
 import pygame
 from unittest.mock import MagicMock, patch
 from datetime import datetime
+import yaml
 from src.ctime.ctime_play_list import PlayListScreen
 from src.ctime.ctime_play_list import TrackListScreen
 from src.ctime.ctime_camera import Camera
 from src.ctime.ctime_common import go_fullscreen
 from src.ctime.ctime_facebook import CtimeFacebook
 from cmreslogging.handlers import CMRESHandler
+import time
 
 class CtimeTestCase(unittest.TestCase):
     def setUp(self):
@@ -77,10 +79,6 @@ class CtimeTestCase(unittest.TestCase):
         pygame.display.get_surface().get_height = MagicMock(return_value=screen_height)
         pygame.image.load = MagicMock(return_value=MagicMock())
 
-        # Mock datetime methods
-        datetime.now = MagicMock(return_value=datetime(2023, 7, 17, 10, 0, 0))
-        datetime.datetime.now = MagicMock(return_value=datetime(2023, 7, 17, 10, 0, 0))
-
         # Mock other dependencies
         yaml.safe_load = MagicMock(return_value={
             'vol': 0.5,
@@ -122,8 +120,8 @@ class CtimeTestCase(unittest.TestCase):
             max(0, (main_screen.screen_height - main_screen.image.get_rect().size[1]) / 2)
         ))
         self.assertEqual(main_screen.play_state, 1)
-        self.button_play.assert_called_with(main_screen.screen, (0, 0, 200, 200), PLAY_BUTTON, (0, 0, 0), "Play", main_screen.log)
-        self.button_play_list.assert_called_with(main_screen.screen, (main_screen.screen_width - 200, 0, 200, 200), image_list, (0, 0, 0), "PlayList", main_screen.log)
+        self.button_play.assert_called_with(main_screen.screen, (0, 0, 200, 200), "PLAY_BUTTON", (0, 0, 0), "Play", main_screen.log)
+        self.button_play_list.assert_called_with(main_screen.screen, (main_screen.screen_width - 200, 0, 200, 200), "image_list", (0, 0, 0), "PlayList", main_screen.log)
         if is_video_camera_present():
             self.button_video.assert_called_with(main_screen.screen, (0, main_screen.screen_height - 200, 200, 200), "images/icons/VideoButton.png", (0, 0, 0), "Camera", main_screen.log)
         else:
