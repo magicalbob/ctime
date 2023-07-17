@@ -441,6 +441,28 @@ class CtimeTestCase(unittest.TestCase):
         self.assertEqual(main_screen.game_state, 3)
         self.assertIsInstance(main_screen.play_list, PlayListScreen)
 
+    def test_click_pairs(self):
+        # Mock necessary dependencies
+        screen_width = 800
+        screen_height = 600
+
+        # Create an instance of MainScreen
+        main_screen = MainScreen(screen_width, screen_height)
+
+        # Set up initial state
+        main_screen.log = MagicMock()
+        main_screen.game_state = 0
+        main_screen.screen_width = screen_width
+        main_screen.screen_height = screen_height
+
+        # Call the click_pairs method
+        main_screen.click_pairs()
+
+        # Verify the method calls
+        main_screen.log.info.assert_called_with('start pairs game')
+        self.assertEqual(main_screen.game_state, 5)
+        self.assertIsInstance(main_screen.pairs, PairsScreen)
+
 if __name__ == '__main__':
     unittest.main()
 
