@@ -827,5 +827,46 @@ class CtimeTestCase(unittest.TestCase):
         if self.main_screen.can_we_facebook():
             self.assertIsNotNone(self.main_screen.button_facebook)
 
+    def test_update_pic_with_image_files(self):
+        # Test when there are image files in the background directory
+        image_files = ['image1.jpg', 'image2.jpg', 'image3.jpg']
+        background_directory = './images/backgrounds/'
+
+        # Save the original back_no value
+        original_back_no = self.main_screen.back_no
+
+        # Mock the os.listdir function to return the image files
+        with unittest.mock.patch('os.listdir', return_value=image_files):
+            self.main_screen.update_pic()
+
+        # Assert that back_no has been incremented and wrapped correctly
+        self.assertEqual(self.main_screen.back_no, original_back_no + 1 if original_back_no < len(image_files) else 1)
+
+        # Assert that refresh_pic is called after updating the picture
+        self.assertTrue(self.main_screen.refresh_pic_called)
+
+        # Add more assertions as needed to cover the behavior of the method
+
+    def test_update_pic_without_image_files(self):
+        # Test when there are no image files in the background directory
+        image_files = []
+        background_directory = './images/backgrounds/'
+
+        # Save the original back_no value
+        original_back_no = self.main_screen.back_no
+
+        # Mock the os.listdir function to return the image files
+        with unittest.mock.patch('os.listdir', return_value=image_files):
+            self.main_screen.update_pic()
+
+        # Assert that back_no remains unchanged
+        self.assertEqual(self.main_screen.back_no, original_back_no)
+
+        # Assert that refresh_pic is not called
+        self.assertFalse(self.main_screen.refresh_pic_called)
+
+        # Add more assertions as needed to cover the behavior of the method
+
+
 if __name__ == '__main__':
     unittest.main()
