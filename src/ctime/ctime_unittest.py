@@ -33,8 +33,6 @@ class CtimeTestCase(unittest.TestCase):
         # Assert that the instance is created successfully
         self.assertIsInstance(play_list_screen, PlayListScreen)
 
-        # Add additional test cases as needed
-
     @unittest.skipIf(os.environ.get('DISPLAY') is None, "No display available")
     def test_track_list_screen(self):
         # Mock necessary dependencies
@@ -50,8 +48,6 @@ class CtimeTestCase(unittest.TestCase):
         # Assert that the instance is created successfully
         self.assertIsInstance(track_list_screen, TrackListScreen)
 
-        # Add additional test cases as needed
-
     @unittest.skipIf(os.environ.get('DISPLAY') is None, "No display available")
     def test_camera(self):
         # Mock necessary dependencies
@@ -65,8 +61,6 @@ class CtimeTestCase(unittest.TestCase):
 
         # Assert that the instance is created successfully
         self.assertIsInstance(camera, Camera)
-
-        # Add additional test cases as needed
 
     @unittest.skipIf(os.environ.get('DISPLAY') is None, "No display available")
     def test_main_screen(self):
@@ -809,6 +803,29 @@ class CtimeTestCase(unittest.TestCase):
         main_screen.event_state_3.assert_not_called()
         main_screen.event_state_4.assert_not_called()
         main_screen.event_state_5.assert_called_with(coord)
+
+    def test_refresh_pic(self):
+        # Test that the method properly redraws the background picture
+        self.main_screen.refresh_pic()
+
+        # Add your assertions here to verify the expected behavior
+        # For example, you can assert that the image is loaded correctly:
+        self.assertIsNotNone(self.main_screen.image)
+
+        # Assert other expectations based on your specific implementation
+
+        # Verify that the necessary buttons are redrawn
+        self.assertIsNotNone(self.main_screen.button_play)
+        self.assertIsNotNone(self.main_screen.button_play_list)
+        self.assertIsNotNone(self.main_screen.button_power)
+        self.assertIsNotNone(self.main_screen.button_pairs)
+
+        # If the button_video is None, assert that it remains None after the method call
+        self.assertIsNone(self.main_screen.button_video)
+
+        # If can_we_facebook() returns True, assert the creation or redraw of button_facebook
+        if self.main_screen.can_we_facebook():
+            self.assertIsNotNone(self.main_screen.button_facebook)
 
 if __name__ == '__main__':
     unittest.main()
