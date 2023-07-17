@@ -108,7 +108,8 @@ class CtimeTestCase(unittest.TestCase):
         from src.ctime.ctime import MainScreen
 
         # Create an instance of MainScreen
-        main_screen = MainScreen(screen_width, screen_height)
+        with patch('src.ctime.ctime_common.go_fullscreen'):
+            main_screen = MainScreen(screen_width, screen_height)
 
         # Test the re_init method
         main_screen.re_init()
@@ -158,8 +159,70 @@ class CtimeTestCase(unittest.TestCase):
         self.assertFalse(main_screen.can_we_facebook())
         main_screen.log.info.assert_called_with("no video device, no facebook")
 
-        # Add additional test cases as needed
+    def test_can_we_play(self):
+        # Mock necessary dependencies
+        screen_width = 800
+        screen_height = 600
 
-if __name__ == "__main__":
-    unittest.main()
+        # Mock pygame methods
+        pygame.init = MagicMock()
+        pygame.display.set_mode = MagicMock(return_value=MagicMock())
+        pygame.display.get_surface().get_width = MagicMock(return_value=screen_width)
+        pygame.display.get_surface().get_height = MagicMock(return_value=screen_height)
+        pygame.image.load = MagicMock(return_value=MagicMock())
+
+        # Mock other dependencies
+        yaml.safe_load = MagicMock(return_value={
+            'vol': 0.5,
+            'start_time': '10:00:00',
+            'end_time': '18:00:00',
+            'max_play_length': 3600,
+            'power_on': True,
+            'power_off': False,
+            'facebook_user': 'test_user',
+            'facebook_pass': 'test_password',
+            'facebook_start': '09:00:00',
+            'facebook_end': '19:00:00',
+            'facebook_timeout': 10,
+            'enable_mouse': True,
+            'disable_mouse': False,
+            'log_host': 'test_host',
+            'log_port': 9200,
+            'log_index': 'test_index',
+            'pic_loc': '/path/to/pics'
+        })
+        pygame.mixer.music.set_volume = MagicMock()
+        CtimeFacebook = MagicMock()
+
+        # Import MainScreen after mocking dependencies
+        from src.ctime.ctime import MainScreen
+
+        # Create an instance of MainScreen
+        with patch('src.ctime.ctime_common.go_fullscreen'):
+            main_screen = MainScreen(screen_width, screen_height)
+
+        # Test can_we_play method
+        main_screen.start_time = '10:00:00'
+        main_screen.end_time = '18:00:00'
+
+        # Test case: current time is within the start and end time
+        now_time = datetime(2023, 7, 17, 12, 0, 0)
+        with patch('src.ctime.ctime.datetime') as mock_datetime:
+            mock_datetime.now.return_value = now_time
+            self.assertTrue(main_screen.can_we_play())
+
+        # Test case: current time is before the start time
+        now_time = datetime(2023, 7, 17, 9, 0, 0)
+        with patch('src.ctime.ctime.datetime') as mock_datetime:
+            mock_datetime.now.return_value = now_time
+            self.assertFalse(main_screen.can_we_play())
+
+        # Test case: current time is after the end time
+        now_time = datetime(2023, 7, 17, 20, 0, 0)
+        with patch('src.ctime.ctime.datetime') as mock_datetime:
+            mock_datetime.now.return_value = now_time
+            self.assertFalse(main_screen.can_we_play())
+
+    if __name__ == "__main__":
+        unittest.main()
 
