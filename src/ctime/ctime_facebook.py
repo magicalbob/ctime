@@ -11,6 +11,9 @@ from selenium import webdriver
 from selenium.webdriver.common.keys import Keys
 from selenium.webdriver.common.by import By
 
+class CallEndedException(Exception):
+    pass
+
 class CtimeFacebook():
     """ A Facebook object """
     def __init__(self, ctime, facebook_user, facebook_pass, log):
@@ -93,21 +96,14 @@ class CtimeFacebook():
         self.mouse_change(self.ctime.disable_mouse)
         go_minimal()
     
-        self.old_win = None
         try:
-            self.log.info('save old window')
-            self.old_win = self.driver.current_window_handle
+            self.old_win = self.save_old_window()
         except Exception as e:
             self.log.error("could not save old window: %s" % (e))
             self.abort_facebook()
             return
     
-        self.log.info('find new window')
-        new_win = None
-        for win in self.driver.window_handles:
-            if win != self.old_win:
-                self.log.info('new window found')
-                new_win = win
+        new_win = self.find_new_window()
         self.driver.switch_to_window(new_win)
     
         self.log.info('Start call loop')
@@ -116,19 +112,8 @@ class CtimeFacebook():
     
         while in_call:
             try:
-                self.log.info('check still in call')
-                src = self.driver.page_source
-                text_found = re.search(r'Please rate the quality of your video chat', src)
-                if text_found:
-                    self.log.info('no longer in call')
-                    in_call = False
-                text_found = re.search(r'Connection lost', src)
-                if text_found:
-                    self.log.warning('no longer in call because of lost connection')
-                    in_call = False
-                text_found = re.search(r'No Answer', src)
-                if text_found:
-                    self.log.warning('no answer received, hang up')
+                self.check_call_status()
+                if self.call_ended():
                     in_call = False
             except Exception:
                 if allow_one_exception:
@@ -145,8 +130,42 @@ class CtimeFacebook():
                 time.sleep(3)
     
         self.abort_facebook(hide_facebook=True)
-
-
+    
+    def save_old_window(self):
+        self.log.info('save old window')
+        return self.driver.current_window_handle
+    
+    def find_new_window(self):
+        self.log.info('find new window')
+        for win in self.driver.window_handles:
+            if win != self.old_win:
+                self.log.info('new window found')
+                return win
+    
+    def check_call_status(self):
+        self.log.info('check still in call')
+        src = self.driver.page_source
+        text_found = re.search(r'Please rate the quality of your video chat', src)
+        if text_found:
+            self.log.info('no longer in call')
+            raise CallEndedException()
+        text_found = re.search(r'Connection lost', src)
+        if text_found:
+            self.log.warning('no longer in call because of lost connection')
+            raise CallEndedException()
+        text_found = re.search(r'No Answer', src)
+        if text_found:
+            self.log.warning('no answer received, hang up')
+            raise CallEndedException()
+    
+    def call_ended(self):
+        src = self.driver.page_source
+        return (
+            re.search(r'Please rate the quality of your video chat', src) or
+            re.search(r'Connection lost', src) or
+            re.search(r'No Answer', src)
+        )
+    
     def check_signin(self):
         self.check_connect = time.time()
         try:
