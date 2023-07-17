@@ -526,6 +526,96 @@ class CtimeTestCase(unittest.TestCase):
         self.assertEqual(main_screen.game_state, 0)
         self.assertEqual(main_screen.play_state, 2)
 
+    def test_event_state_0(self):
+        # Mock necessary dependencies
+        coord = (100, 100)
+        log = MagicMock()
+        button_play = MagicMock()
+        button_video = MagicMock()
+        button_play_list = MagicMock()
+        button_power = MagicMock()
+        button_pairs = MagicMock()
+        button_facebook = MagicMock()
+        click_button_play = MagicMock()
+        click_button_video = MagicMock()
+        click_play_list = MagicMock()
+        refresh_pic = MagicMock()
+        click_pairs = MagicMock()
+        click_facebook = MagicMock()
+
+        # Create an instance of MainScreen
+        main_screen = MainScreen(log=log)
+        main_screen.button_play = button_play
+        main_screen.button_video = button_video
+        main_screen.button_play_list = button_play_list
+        main_screen.button_power = button_power
+        main_screen.button_pairs = button_pairs
+        main_screen.button_facebook = button_facebook
+        main_screen.click_button_play = click_button_play
+        main_screen.click_button_video = click_button_video
+        main_screen.click_play_list = click_play_list
+        main_screen.refresh_pic = refresh_pic
+        main_screen.click_pairs = click_pairs
+        main_screen.click_facebook = click_facebook
+
+        # Test case: button_play.check_click returns True
+        button_play.check_click.return_value = True
+        main_screen.event_state_0(coord)
+        log.info.assert_called_with('button_play clicked')
+        click_button_play.assert_called_once()
+        button_video.check_click.assert_not_called()
+        button_play_list.check_click.assert_not_called()
+        button_power.check_click.assert_not_called()
+        button_pairs.check_click.assert_not_called()
+        button_facebook.check_click.assert_not_called()
+
+        # Test case: button_video is not None and button_video.check_click returns True
+        button_play.check_click.return_value = False
+        button_video.check_click.return_value = True
+        main_screen.event_state_0(coord)
+        log.info.assert_called_with('button_video clicked')
+        click_button_video.assert_called_once()
+        button_play_list.check_click.assert_not_called()
+        button_power.check_click.assert_not_called()
+        button_pairs.check_click.assert_not_called()
+        button_facebook.check_click.assert_not_called()
+
+        # Test case: button_play_list.check_click returns True
+        button_video.check_click.return_value = False
+        button_play_list.check_click.return_value = True
+        main_screen.event_state_0(coord)
+        log.info.assert_called_with('button_play_list clicked')
+        click_play_list.assert_called_once()
+        button_power.check_click.assert_not_called()
+        button_pairs.check_click.assert_not_called()
+        button_facebook.check_click.assert_not_called()
+
+        # Test case: button_power.check_click returns True
+        button_play_list.check_click.return_value = False
+        button_power.check_click.return_value = True
+        main_screen.event_state_0(coord)
+        log.info.assert_called_with('button_power clicked')
+        refresh_pic.assert_called_once()
+        button_pairs.check_click.assert_not_called()
+        button_facebook.check_click.assert_not_called()
+
+        # Test case: button_pairs.check_click returns True
+        button_power.check_click.return_value = False
+        button_pairs.check_click.return_value = True
+        main_screen.event_state_0(coord)
+        log.info.assert_called_with('button_pairs clicked')
+        click_pairs.assert_called_once()
+        button_facebook.check_click.assert_not_called()
+
+        # Test case: button_facebook is not None and button_facebook.check_click returns True
+        button_pairs.check_click.return_value = False
+        button_facebook.check_click.return_value = True
+        main_screen.event_state_0(coord)
+        log.info.assert_called_with('button_facebook clicked')
+        self.assertIsNone(main_screen.button_facebook)
+        refresh_pic.assert_called_once()
+        click_facebook.assert_called_once()
+
 if __name__ == '__main__':
     unittest.main()
 
