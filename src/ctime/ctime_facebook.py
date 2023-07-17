@@ -23,11 +23,13 @@ class CtimeFacebook():
         """ prevent someone clicking something they shouldn't """
         self.mouse_change(self.ctime.disable_mouse)
 
+        print("DEBUG: new Firefox profile - disable camera/mic permissions ")
         """ new Firefox profile - disable camera/mic permissions """
         self.log.info('Create Firefox profile')
         profile = webdriver.FirefoxProfile()
         profile.set_preference("media.navigator.permission.disabled", True)
 
+        print("DEBUG: set Firefox options ")
         """ set Firefox options """
         self.log.info('Set Firefox options')
         options = webdriver.FirefoxOptions()
@@ -36,11 +38,15 @@ class CtimeFacebook():
         options.add_argument("--no-sandbox")
         options.add_argument("--new-instance")
 
+        print("DEBUG: load Firefox using selenium and get the facebook page ")
         """ load Firefox using selenium and get the facebook page """
         self.log.info('Load Firefox using selenium')
         self.driver = webdriver.Firefox(options=options, firefox_profile = profile)
+        print("DEBUG: Get facebook page")
         self.log.info('Get facebook page')
         self.driver.get("https://www.facebook.com/messages")
+
+        print("DEBUG: handle facebook not being available ")
         """ handle facebook not being available """
         self.log.info('make sure facebook page loaded')
         try:
@@ -50,7 +56,9 @@ class CtimeFacebook():
             self.log.error('no facebook for Chris')
             self.abort_facebook()
             return
+        print("DEBUG: try facebook login")
         self.facebook_login()
+        print("DEBUG: facebook login done")
 
     def facebook_login(self):
         """ record last time connection checked """
@@ -76,53 +84,54 @@ class CtimeFacebook():
 
     def make_call(self):
         self.log.info('Find target for call')
+    
         # Start the video chat
         self.log.info('Start the video chat')
         _ = self.driver.find_element_by_xpath('//*[@aria-label="Start a video call"]').click()
+    
         """ prevent someone clicking something they shouldn't """
         self.mouse_change(self.ctime.disable_mouse)
         go_minimal()
-
+    
         self.old_win = None
         try:
             self.log.info('save old window')
-            self.old_win=self.driver.current_window_handle
+            self.old_win = self.driver.current_window_handle
         except Exception as e:
             self.log.error("could not save old window: %s" % (e))
             self.abort_facebook()
             return
+    
         self.log.info('find new window')
-        new_win=None
+        new_win = None
         for win in self.driver.window_handles:
             if win != self.old_win:
                 self.log.info('new window found')
-                new_win=win
+                new_win = win
         self.driver.switch_to_window(new_win)
-
+    
         self.log.info('Start call loop')
         in_call = True
         allow_one_exception = True
-        while in_call == True:
+    
+        while in_call:
             try:
                 self.log.info('check still in call')
                 src = self.driver.page_source
-                text_found = re.search(
-                                 r'Please rate the quality of your video chat',
-                                 src
-                             )
-                if text_found != None:
+                text_found = re.search(r'Please rate the quality of your video chat', src)
+                if text_found:
                     self.log.info('no longer in call')
                     in_call = False
                 text_found = re.search(r'Connection lost', src)
-                if text_found != None:
+                if text_found:
                     self.log.warning('no longer in call because of lost connection')
                     in_call = False
                 text_found = re.search(r'No Answer', src)
-                if text_found != None:
+                if text_found:
                     self.log.warning('no answer received, hang up')
                     in_call = False
-            except:
-                if allow_one_exception == True:
+            except Exception:
+                if allow_one_exception:
                     MSG = 'exception while checking still in call, give it another chance'
                     self.log.warning(MSG)
                     allow_one_exception = False
@@ -130,10 +139,13 @@ class CtimeFacebook():
                 else:
                     in_call = False
                     self.log.info('exception while checking still in call, so no longer in call')
-            if in_call == True:
+    
+            if in_call:
                 self.log.info('still in call so pause between checks')
                 time.sleep(3)
-        self.abort_facebook(hide_facebook = True)
+    
+        self.abort_facebook(hide_facebook=True)
+
 
     def check_signin(self):
         self.check_connect = time.time()
