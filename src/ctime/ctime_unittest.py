@@ -419,6 +419,28 @@ class CtimeTestCase(unittest.TestCase):
         main_screen.log.info.assert_called_with('start video show')
         Camera.assert_called_with(screen_width, screen_height, "/path/to/images", main_screen.log)
 
+    def test_click_play_list(self):
+        # Mock necessary dependencies
+        screen_width = 800
+        screen_height = 600
+
+        # Create an instance of MainScreen
+        main_screen = MainScreen(screen_width, screen_height)
+
+        # Set up initial state
+        main_screen.can_we_play = MagicMock(return_value=True)
+        main_screen.game_state = 0
+        main_screen.log = MagicMock()
+
+        # Call the click_play_list method
+        main_screen.click_play_list()
+
+        # Verify the method calls
+        main_screen.log.info.assert_called_with('display play list selection (if not too late)')
+        self.assertTrue(main_screen.can_we_play())
+        self.assertEqual(main_screen.game_state, 3)
+        self.assertIsInstance(main_screen.play_list, PlayListScreen)
+
 if __name__ == '__main__':
     unittest.main()
 
