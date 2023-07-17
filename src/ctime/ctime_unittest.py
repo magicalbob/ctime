@@ -1,3 +1,4 @@
+import os
 import unittest
 import pygame
 from unittest.mock import MagicMock, patch
@@ -130,13 +131,34 @@ class CtimeTestCase(unittest.TestCase):
             self.assertIsNone(main_screen.button_video)
         self.button_power.assert_called_with(main_screen.screen, (main_screen.screen_width - 200, main_screen.screen_height - 200, 200, 200), "images/icons/light.png", (0, 0, 0), main_screen.power_on, main_screen.power_off, main_screen.log)
         self.button_pairs.assert_called_with(main_screen.screen, (main_screen.screen_width - 200, (main_screen.screen_height / 2) - 100, 200, 200), "images/icons/pairs.png", (0, 0, 0), "Pairs", main_screen.log)
-        print.assert_called_with("DEBUG: can we facebook")
-        if main_screen.can_we_facebook():
-            print.assert_called_with("DEBUG: yes we can")
-            self.button_facebook.assert_called_with(main_screen.screen, (0, (main_screen.screen_height / 2) - 100, 200, 200), "images/icons/Phone.png", (0, 0, 0), "Facebook", main_screen.log)
-        else:
-            print.assert_called_with("DEBUG: no we can't")
-            self.assertIsNone(main_screen.button_facebook)
+
+        # Test can_we_facebook method
+        main_screen.log = MagicMock()
+        main_screen.facebook = True
+        main_screen.facebook_user = "test_user"
+        main_screen.facebook_pass = "test_password"
+        main_screen.facebook_start = "09:00:00"
+        main_screen.facebook_end = "19:00:00"
+        main_screen.facebook_timeout = 10
+        main_screen.facebook_exit = time.time()
+
+        # Test case: all config settings are available
+        self.assertTrue(main_screen.can_we_facebook())
+        main_screen.log.info.assert_not_called()
+
+        # Test case: video camera not present
+        main_screen.facebook = True
+        main_screen.facebook_user = "test_user"
+        main_screen.facebook_pass = "test_password"
+        main_screen.facebook_start = "09:00:00"
+        main_screen.facebook_end = "19:00:00"
+        main_screen.facebook_timeout = 10
+        main_screen.facebook_exit = time.time()
+        is_video_camera_present.return_value = False
+        self.assertFalse(main_screen.can_we_facebook())
+        main_screen.log.info.assert_called_with("no video device, no facebook")
+
+        # Add additional test cases as needed
 
 if __name__ == "__main__":
     unittest.main()
