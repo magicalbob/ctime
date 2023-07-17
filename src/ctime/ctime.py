@@ -196,7 +196,7 @@ class MainScreen():
                 tzinfo=None) < now_time.replace(
                     tzinfo=None) < e_time.replace(
                         tzinfo=None):
-            pass
+            # Empty block intentionally left blank
         else:
             self.log.info('too late for facebook')
             return False
