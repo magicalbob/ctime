@@ -455,11 +455,17 @@ class MainScreen():
                 self.button_facebook.redraw()
 
     def update_pic(self):
-        """ change background picture """
-        self.back_no += 1
-        if self.back_no > 7:
-            self.back_no = 1
-        self.refresh_pic()
+        """ Change background picture """
+        background_directory = './images/backgrounds/'
+        # Get the list of all image files in the directory
+        image_files = [f for f in os.listdir(background_directory) if f.endswith(('.jpg', '.jpeg', '.png'))]
+
+        if image_files:
+            self.back_no += 1
+            if self.back_no > len(image_files):
+                self.back_no = 1
+
+            self.refresh_pic()
 
 def check_facebook(the_game):
     if the_game.facebook and time.time() - the_game.facebook.check_connect > 900:
