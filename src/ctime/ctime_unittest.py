@@ -400,6 +400,9 @@ class CtimeTestCase(unittest.TestCase):
         screen_width = 800
         screen_height = 600
 
+        # Import MainScreen after mocking dependencies
+        from src.ctime.ctime import MainScreen
+
         # Create an instance of MainScreen
         main_screen = MainScreen(screen_width, screen_height)
 
@@ -424,6 +427,9 @@ class CtimeTestCase(unittest.TestCase):
         screen_width = 800
         screen_height = 600
 
+        # Import MainScreen after mocking dependencies
+        from src.ctime.ctime import MainScreen
+
         # Create an instance of MainScreen
         main_screen = MainScreen(screen_width, screen_height)
 
@@ -445,6 +451,9 @@ class CtimeTestCase(unittest.TestCase):
         # Mock necessary dependencies
         screen_width = 800
         screen_height = 600
+
+        # Import MainScreen after mocking dependencies
+        from src.ctime.ctime import MainScreen
 
         # Create an instance of MainScreen
         main_screen = MainScreen(screen_width, screen_height)
