@@ -3,6 +3,7 @@ import unittest
 import pygame
 from unittest.mock import MagicMock, patch
 from datetime import datetime
+import pytz
 import yaml
 from src.ctime.ctime_play_list import PlayListScreen
 from src.ctime.ctime_play_list import TrackListScreen
@@ -155,6 +156,15 @@ class CtimeTestCase(unittest.TestCase):
         is_video_camera_present.return_value = False
         self.assertFalse(main_screen.can_we_facebook())
         main_screen.log.info.assert_called_with("no video device, no facebook")
+
+        # Add tests for can_we_play method
+        # Test case: current time is within the specified play time range
+        datetime.now = MagicMock(return_value=datetime(2023, 7, 17, 11, 0, 0))
+        self.assertTrue(main_screen.can_we_play())
+
+        # Test case: current time is outside the specified play time range
+        datetime.now = MagicMock(return_value=datetime(2023, 7, 17, 20, 0, 0))
+        self.assertFalse(main_screen.can_we_play())
 
         # Add additional test cases as needed
 
