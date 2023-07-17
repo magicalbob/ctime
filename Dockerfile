@@ -4,7 +4,8 @@ FROM almalinux:9
 # Install necessary packages
 RUN dnf update -y \
  && dnf install -y python3-pip python3-devel alsa-lib-devel \
- && dnf groupinstall -y 'Development Tools'
+ && dnf groupinstall -y 'Development Tools' \
+ && dnf install -y Xvfb xorg-x11-server-Xvfb
 
 # Create a new user named 'appuser'
 RUN groupadd -g 1002 appuser \
@@ -28,3 +29,4 @@ RUN pip install coverage
 
 # Run the script as the new user
 CMD sh -c ./testscript_docker.sh
+
