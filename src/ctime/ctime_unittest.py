@@ -52,7 +52,7 @@ class CtimeTestCase(unittest.TestCase):
 
         # Add additional test cases as needed
 
-    @unittest.skipIf(os.environ.get('DISPLAY') is None, "No display available")    
+    @unittest.skipIf(os.environ.get('DISPLAY') is None, "No display available")
     def test_camera(self):
         # Mock necessary dependencies
         screen_width = 800
@@ -68,7 +68,7 @@ class CtimeTestCase(unittest.TestCase):
 
         # Add additional test cases as needed
 
-    @unittest.skipIf(os.environ.get('DISPLAY') is None, "No display available")    
+    @unittest.skipIf(os.environ.get('DISPLAY') is None, "No display available")
     def test_main_screen(self):
         # Mock necessary dependencies
         screen_width = 800
@@ -499,6 +499,32 @@ class CtimeTestCase(unittest.TestCase):
 
         # Verify the method calls
         TrackListScreen.assert_called_with(screen_width, screen_height, main_screen.playlist, main_screen.tracks, main_screen.log)
+
+    def test_play_track(self):
+        # Mock necessary dependencies
+        log = MagicMock()
+        play_list = 0
+        tune_no = 1
+        pygame.mixer.music.load = MagicMock()
+        pygame.mixer.music.play = MagicMock()
+        refresh_pic = MagicMock()
+        button_play_change_image = MagicMock()
+
+        # Create an instance of MainScreen
+        main_screen = MainScreen(log=log)
+
+        # Call the play_track method
+        main_screen.play_track(play_list, tune_no)
+
+        # Verify the method calls and assertions
+        log.info.assert_called_with('play some music')
+        pygame.mixer.music.load.assert_called_with('tunes/bob/001.ogg')
+        pygame.mixer.music.play.assert_called_once()
+        refresh_pic.assert_called_once()
+        button_play_change_image.assert_called_with(STOP_BUTTON)
+        self.assertEqual(main_screen.first_play, 0)
+        self.assertEqual(main_screen.game_state, 0)
+        self.assertEqual(main_screen.play_state, 2)
 
 if __name__ == '__main__':
     unittest.main()
