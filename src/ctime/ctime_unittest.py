@@ -616,6 +616,30 @@ class CtimeTestCase(unittest.TestCase):
         refresh_pic.assert_called_once()
         click_facebook.assert_called_once()
 
+    def test_event_state_2(self):
+        # Mock necessary dependencies
+        coord = (100, 100)
+        log = MagicMock()
+        video_screen = MagicMock()
+        refresh_pic = MagicMock()
+
+        # Create an instance of MainScreen
+        main_screen = MainScreen(log=log)
+        main_screen.video_screen = video_screen
+        main_screen.refresh_pic = refresh_pic
+
+        # Test case: self.video_screen.check_exit returns True
+        video_screen.check_exit.return_value = True
+        main_screen.event_state_2(coord)
+        self.assertEqual(main_screen.game_state, 0)
+        refresh_pic.assert_called_once()
+
+        # Test case: self.video_screen.check_exit returns False
+        video_screen.check_exit.return_value = False
+        main_screen.event_state_2(coord)
+        self.assertIsNone(main_screen.game_state)
+        refresh_pic.assert_not_called()
+
 if __name__ == '__main__':
     unittest.main()
 
