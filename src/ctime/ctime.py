@@ -12,6 +12,7 @@ import yaml
 import os
 import logging
 from src.ctime.ctime_common import go_fullscreen
+from src.ctime.ctime_common import is_video_camera_present
 from src.ctime.ctime_button import Button
 from src.ctime.ctime_play_list import PlayListScreen
 from src.ctime.ctime_play_list import TrackListScreen
@@ -90,11 +91,14 @@ class MainScreen():
         except pygame.error as e:
             self.log.error('Failed to set volume: {}'.format(e))
         try:
-            self.facebook = CtimeFacebook(self, self.facebook_user, self.facebook_pass,self.log)
+            print("DEBUG: try CTimeFacebook")
+            self.facebook = CtimeFacebook(self, self.facebook_user, self.facebook_pass, self.log)
+            print("DEBUG: got CTimeFacebook")
             self.log.info("got facebook!")
-        except:
+        except Exception as e:
+            print("DEBUG: facebook exception")
             self.facebook = None
-            self.log.info("oh dear no facebook")
+            self.log.error("An exception occurred while initializing CtimeFacebook: %s" % e)
         self.old_time=0
         self.re_init()
 
@@ -123,7 +127,7 @@ class MainScreen():
                                        (0, 0, 0),
                                        "PlayList",
                                        self.log)
-        if os.path.exists("/dev/video0"):
+        if is_video_camera_present():
             self.button_video = Button(self.screen,
                                        (0, self.screen_height - 200, 200, 200),
                                        "images/icons/VideoButton.png",
@@ -131,6 +135,7 @@ class MainScreen():
                                        "Camera",
                                        self.log)
         else:
+            print("DEBUG: no video")
             self.button_video = None
         self.button_power = Switch(self.screen,
                                    (self.screen_width - 200, self.screen_height - 200, 200, 200),
@@ -148,7 +153,9 @@ class MainScreen():
                                    (0, 0, 0),
                                    "Pairs",
                                    self.log)
+        print("DEBUG: can we facebook")
         if self.can_we_facebook():
+            print("DEBUG: yes we can")
             self.button_facebook = Button(self.screen,
                                           (0,
                                            (self.screen_height / 2) - 100,
@@ -159,11 +166,12 @@ class MainScreen():
                                           "Facebook",
                                           self.log)
         else:
+            print("DEBUG: no we can't")
             self.button_facebook = None
 
     def can_we_facebook(self):
         """ check config settings available """
-        if (not os.path.exists("/dev/video0") or
+        if (not is_video_camera_present() or
             self.facebook == None or
             self.facebook_user  == None or
             self.facebook_pass  == None or

@@ -2,6 +2,8 @@
 import random
 import pygame
 import pygame.locals
+import os
+import sys
 
 def go_fullscreen():
     """ switch display to full screen mode """
@@ -60,3 +62,25 @@ def play_let_it_go():
 
     pygame.mixer.music.load("tunes/frozen/005.ogg")
     pygame.mixer.music.play()
+
+def is_video_camera_present():
+    if os.path.exists('/dev/video0'):
+        # Linux: Check if /dev/video0 exists
+        return True
+    
+    # macOS: Check using AVCaptureDevice
+    if sys.platform == 'darwin':
+        try:
+            import objc
+            from AVFoundation import AVCaptureDevice
+            
+            objc.loadBundle('AVFoundation', globals(), bundle_path=objc.pathForFramework('/System/Library/Frameworks/AVFoundation.framework'))
+            
+            devices = AVCaptureDevice.devices()
+            for device in devices:
+                if device.hasMediaType_('vide'):
+                    return True
+        except ImportError:
+            pass
+    
+    return False
