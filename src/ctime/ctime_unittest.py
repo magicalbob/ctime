@@ -434,20 +434,20 @@ class CtimeTestCase(unittest.TestCase):
         main_screen = MainScreen(screen_width, screen_height)
 
         # Set up initial state
-        main_screen.can_we_play = MagicMock(return_value=True)
-        main_screen.game_state = 0
         main_screen.log = MagicMock()
+        main_screen.screen_width = screen_width
+        main_screen.screen_height = screen_height
+
+        # Mock the PlayListScreen class
+        PlayListScreen = MagicMock()
 
         # Call the click_play_list method
         main_screen.click_play_list()
 
         # Verify the method calls
-        main_screen.log.info.assert_called_with('display play list selection (if not too late)')
-        self.assertTrue(main_screen.can_we_play())
-        self.assertEqual(main_screen.game_state, 3)
-        self.assertIsInstance(main_screen.play_list, PlayListScreen)
+        PlayListScreen.assert_called_with(screen_width, screen_height, main_screen.log)
 
-    def test_click_pairs(self):
+    def test_click_button_power(self):
         # Mock necessary dependencies
         screen_width = 800
         screen_height = 600
@@ -460,17 +460,45 @@ class CtimeTestCase(unittest.TestCase):
 
         # Set up initial state
         main_screen.log = MagicMock()
-        main_screen.game_state = 0
+        main_screen.screen_width = screen_width
+        main_screen.screen_height = screen_height
+        main_screen.power_on = True
+        main_screen.power_off = False
+
+        # Call the click_button_power method
+        main_screen.click_button_power()
+
+        # Verify the method calls
+        main_screen.log.info.assert_called_with('power: %s' % (not main_screen.power_on))
+
+        # Test case: power_on is True
+        main_screen.click_button_power()
+        main_screen.log.info.assert_called_with('power: %s' % main_screen.power_on)
+
+    def test_click_button_pairs(self):
+        # Mock necessary dependencies
+        screen_width = 800
+        screen_height = 600
+
+        # Import MainScreen after mocking dependencies
+        from src.ctime.ctime import MainScreen
+
+        # Create an instance of MainScreen
+        main_screen = MainScreen(screen_width, screen_height)
+
+        # Set up initial state
+        main_screen.log = MagicMock()
         main_screen.screen_width = screen_width
         main_screen.screen_height = screen_height
 
-        # Call the click_pairs method
-        main_screen.click_pairs()
+        # Mock the TrackListScreen class
+        TrackListScreen = MagicMock()
+
+        # Call the click_button_pairs method
+        main_screen.click_button_pairs()
 
         # Verify the method calls
-        main_screen.log.info.assert_called_with('start pairs game')
-        self.assertEqual(main_screen.game_state, 5)
-        self.assertIsInstance(main_screen.pairs, PairsScreen)
+        TrackListScreen.assert_called_with(screen_width, screen_height, main_screen.playlist, main_screen.tracks, main_screen.log)
 
 if __name__ == '__main__':
     unittest.main()
