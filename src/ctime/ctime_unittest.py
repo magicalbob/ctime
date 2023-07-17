@@ -640,6 +640,53 @@ class CtimeTestCase(unittest.TestCase):
         self.assertIsNone(main_screen.game_state)
         refresh_pic.assert_not_called()
 
+    def test_event_state_3(self):
+        # Mock necessary dependencies
+        coord = (100, 100)
+        log = MagicMock()
+        play_list = MagicMock()
+        track_list_screen = MagicMock()
+        refresh_pic = MagicMock()
+
+        # Create an instance of MainScreen
+        main_screen = MainScreen(log=log)
+        main_screen.play_list = play_list
+        main_screen.track_list = track_list_screen
+        main_screen.refresh_pic = refresh_pic
+
+        # Test case: play_list.check_click_bob returns True
+        play_list.check_click_bob.return_value = True
+        main_screen.event_state_3(coord)
+        self.assertEqual(main_screen.game_state, 4)
+        self.assertEqual(main_screen.playlist, 0)
+        track_list_screen.assert_called_with(main_screen.screen_width, main_screen.screen_height, "bob", main_screen.play_len[0], log)
+        refresh_pic.assert_called_once()
+
+        # Test case: play_list.check_click_frozen returns True
+        play_list.check_click_bob.return_value = False
+        play_list.check_click_frozen.return_value = True
+        main_screen.event_state_3(coord)
+        self.assertEqual(main_screen.game_state, 4)
+        self.assertEqual(main_screen.playlist, 1)
+        track_list_screen.assert_called_with(main_screen.screen_width, main_screen.screen_height, "frozen", main_screen.play_len[1], log)
+        refresh_pic.assert_called_once()
+
+        # Test case: play_list.check_click_showman returns True
+        play_list.check_click_frozen.return_value = False
+        play_list.check_click_showman.return_value = True
+        main_screen.event_state_3(coord)
+        self.assertEqual(main_screen.game_state, 4)
+        self.assertEqual(main_screen.playlist, 2)
+        track_list_screen.assert_called_with(main_screen.screen_width, main_screen.screen_height, "showman", main_screen.play_len[2], log)
+        refresh_pic.assert_called_once()
+
+        # Test case: play_list.check_exit returns True
+        play_list.check_click_showman.return_value = False
+        play_list.check_exit.return_value = True
+        main_screen.event_state_3(coord)
+        self.assertEqual(main_screen.game_state, 0)
+        refresh_pic.assert_called_once()
+
 if __name__ == '__main__':
     unittest.main()
 
