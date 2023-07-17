@@ -744,6 +744,71 @@ class CtimeTestCase(unittest.TestCase):
         main_screen.event_state_5(coord)
         refresh_pic.assert_not_called()
 
+    def test_check_event(self):
+        # Mock necessary dependencies
+        coord = (100, 100)
+        log = MagicMock()
+        main_screen = MainScreen(screen_width=800, screen_height=600)
+        main_screen.event_state_0 = MagicMock()
+        main_screen.event_state_2 = MagicMock()
+        main_screen.event_state_3 = MagicMock()
+        main_screen.event_state_4 = MagicMock()
+        main_screen.event_state_5 = MagicMock()
+
+        # Test case: event.type is pygame.MOUSEBUTTONUP
+        event = MagicMock()
+        event.type = pygame.MOUSEBUTTONUP
+        main_screen.check_event(event, coord)
+        main_screen.event_state_0.assert_not_called()
+        main_screen.event_state_2.assert_not_called()
+        main_screen.event_state_3.assert_not_called()
+        main_screen.event_state_4.assert_not_called()
+        main_screen.event_state_5.assert_not_called()
+
+        # Test case: game_state is 0
+        main_screen.game_state = 0
+        main_screen.check_event(event, coord)
+        main_screen.event_state_0.assert_called_with(coord)
+        main_screen.event_state_2.assert_not_called()
+        main_screen.event_state_3.assert_not_called()
+        main_screen.event_state_4.assert_not_called()
+        main_screen.event_state_5.assert_not_called()
+
+        # Test case: game_state is 2
+        main_screen.game_state = 2
+        main_screen.check_event(event, coord)
+        main_screen.event_state_0.assert_not_called()
+        main_screen.event_state_2.assert_called_with(coord)
+        main_screen.event_state_3.assert_not_called()
+        main_screen.event_state_4.assert_not_called()
+        main_screen.event_state_5.assert_not_called()
+
+        # Test case: game_state is 3
+        main_screen.game_state = 3
+        main_screen.check_event(event, coord)
+        main_screen.event_state_0.assert_not_called()
+        main_screen.event_state_2.assert_not_called()
+        main_screen.event_state_3.assert_called_with(coord)
+        main_screen.event_state_4.assert_not_called()
+        main_screen.event_state_5.assert_not_called()
+
+        # Test case: game_state is 4
+        main_screen.game_state = 4
+        main_screen.check_event(event, coord)
+        main_screen.event_state_0.assert_not_called()
+        main_screen.event_state_2.assert_not_called()
+        main_screen.event_state_3.assert_not_called()
+        main_screen.event_state_4.assert_called_with(coord)
+        main_screen.event_state_5.assert_not_called()
+
+        # Test case: game_state is 5
+        main_screen.game_state = 5
+        main_screen.check_event(event, coord)
+        main_screen.event_state_0.assert_not_called()
+        main_screen.event_state_2.assert_not_called()
+        main_screen.event_state_3.assert_not_called()
+        main_screen.event_state_4.assert_not_called()
+        main_screen.event_state_5.assert_called_with(coord)
+
 if __name__ == '__main__':
     unittest.main()
-
