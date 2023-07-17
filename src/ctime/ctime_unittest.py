@@ -395,3 +395,30 @@ class CtimeTestCase(unittest.TestCase):
         pygame.mixer.music.load.assert_called_with("tunes/showman/002.ogg")
         pygame.mixer.music.play.assert_called_once()
 
+    def test_click_button_video(self):
+        # Mock necessary dependencies
+        screen_width = 800
+        screen_height = 600
+
+        # Create an instance of MainScreen
+        main_screen = MainScreen(screen_width, screen_height)
+
+        # Set up initial state
+        main_screen.log = MagicMock()
+        main_screen.screen_width = screen_width
+        main_screen.screen_height = screen_height
+        main_screen.path = "/path/to/images"
+
+        # Mock the Camera class
+        Camera = MagicMock()
+
+        # Call the click_button_video method
+        main_screen.click_button_video()
+
+        # Verify the method calls
+        main_screen.log.info.assert_called_with('start video show')
+        Camera.assert_called_with(screen_width, screen_height, "/path/to/images", main_screen.log)
+
+if __name__ == '__main__':
+    unittest.main()
+
