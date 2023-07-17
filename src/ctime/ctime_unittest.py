@@ -687,6 +687,63 @@ class CtimeTestCase(unittest.TestCase):
         self.assertEqual(main_screen.game_state, 0)
         refresh_pic.assert_called_once()
 
+    def test_event_state_4(self):
+        # Mock necessary dependencies
+        coord = (100, 100)
+        log = MagicMock()
+        track_list = MagicMock()
+        click_pairs = MagicMock()
+        play_track = MagicMock()
+
+        # Create an instance of MainScreen
+        main_screen = MainScreen(log=log)
+        main_screen.track_list = track_list
+        main_screen.click_pairs = click_pairs
+        main_screen.play_track = play_track
+
+        # Test case: is_clicked is True and playlist is 1 and track_no is 5
+        track_list.check_click.return_value = (5, True)
+        main_screen.playlist = 1
+        main_screen.event_state_4(coord)
+        click_pairs.assert_called_once()
+        play_track.assert_not_called()
+
+        # Test case: is_clicked is True and playlist is not 1 or track_no is not 5
+        track_list.check_click.return_value = (2, True)
+        main_screen.playlist = 0
+        main_screen.event_state_4(coord)
+        play_track.assert_called_with(0, 2)
+        click_pairs.assert_not_called()
+
+        # Test case: is_clicked is False
+        track_list.check_click.return_value = (3, False)
+        main_screen.event_state_4(coord)
+        play_track.assert_not_called()
+        click_pairs.assert_not_called()
+
+    def test_event_state_5(self):
+        # Mock necessary dependencies
+        coord = (100, 100)
+        log = MagicMock()
+        pairs = MagicMock()
+        refresh_pic = MagicMock()
+
+        # Create an instance of MainScreen
+        main_screen = MainScreen(log=log)
+        main_screen.pairs = pairs
+        main_screen.refresh_pic = refresh_pic
+
+        # Test case: pair_state is -2
+        pairs.check_click.return_value = (-2, None)
+        main_screen.event_state_5(coord)
+        self.assertEqual(main_screen.game_state, 0)
+        refresh_pic.assert_called_once()
+
+        # Test case: pair_state is not -2
+        pairs.check_click.return_value = (0, None)
+        main_screen.event_state_5(coord)
+        refresh_pic.assert_not_called()
+
 if __name__ == '__main__':
     unittest.main()
 
