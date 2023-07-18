@@ -16,7 +16,12 @@ def go_fullscreen():
     bits = screen.get_bitsize()
 
     pygame.display.init()
-    screen = pygame.display.set_mode((screen_width, screen_height), flags|pygame.FULLSCREEN, bits)
+    try:
+        screen = pygame.display.set_mode((screen_width, screen_height), flags|pygame.FULLSCREEN, bits)
+    except Exception as e:
+        screen = pygame.display.set_mode((screen_width, screen_height))
+        print("An exception occurred while going full screen: %s" % e)
+
     screen.blit(tmp, (0, 0))
     pygame.display.set_caption(*caption)
 

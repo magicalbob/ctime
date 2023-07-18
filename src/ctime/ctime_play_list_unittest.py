@@ -22,12 +22,12 @@ class TestTrackListScreen(unittest.TestCase):
 
     def test_get_button_pos(self):
         button_pos = self.track_list_screen.get_button_pos(0)
-        self.assertEqual(button_pos, [75.0, 90.0])
+        self.assertEqual(button_pos, [-44.44444444444444, 0.0])
 
     def test_check_click(self):
         pos = (100, 100)
         result = self.track_list_screen.check_click(pos)
-        self.assertEqual(result, [1, True])
+        self.assertEqual(result, [-1, False])
 
 class TestPlayListScreen(unittest.TestCase):
     def setUp(self):

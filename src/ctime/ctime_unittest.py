@@ -15,6 +15,9 @@ import time
 
 class CtimeTestCase(unittest.TestCase):
     def setUp(self):
+        # Import MainScreen after mocking dependencies
+        from src.ctime.ctime import MainScreen
+        self.main_screen = MainScreen(800, 600)
         pygame.init()
 
     def tearDown(self):
@@ -295,14 +298,14 @@ class CtimeTestCase(unittest.TestCase):
         # Mock necessary dependencies
         screen_width = 800
         screen_height = 600
-
+    
         # Mock pygame methods
         pygame.init = MagicMock()
         pygame.display.set_mode = MagicMock(return_value=MagicMock())
         pygame.display.get_surface().get_width = MagicMock(return_value=screen_width)
         pygame.display.get_surface().get_height = MagicMock(return_value=screen_height)
         pygame.image.load = MagicMock(return_value=MagicMock())
-
+    
         # Mock other dependencies
         yaml.safe_load = MagicMock(return_value={
             'vol': 0.5,
@@ -325,14 +328,17 @@ class CtimeTestCase(unittest.TestCase):
         })
         pygame.mixer.music.set_volume = MagicMock()
         CtimeFacebook = MagicMock()
-
+    
         # Import MainScreen after mocking dependencies
         from src.ctime.ctime import MainScreen
-
+    
         # Create an instance of MainScreen
-        with patch('src.ctime.ctime_common.go_fullscreen'):
+        with patch('src.ctime.ctime_common.go_fullscreen'), \
+                patch('pygame.FULLSCREEN', 0), \
+                patch('pygame.HWSURFACE', 0), \
+                patch('pygame.DOUBLEBUF', 0):
             main_screen = MainScreen(screen_width, screen_height)
-
+    
         # Set up initial state
         main_screen.can_we_play = MagicMock(return_value=True)
         main_screen.play_start = datetime.now(pytz.timezone(CTIME_TIMEZONE))
@@ -345,14 +351,14 @@ class CtimeTestCase(unittest.TestCase):
         main_screen.play_len = {0: 3, 1: 3, 2: 3}
         pygame.mixer.music.load = MagicMock()
         pygame.mixer.music.play = MagicMock()
-
+    
         # Test case: can_we_play returns False
         main_screen.can_we_play.return_value = False
         main_screen.play_next()
         main_screen.button_play.change_image.assert_not_called()
         pygame.mixer.music.load.assert_not_called()
         pygame.mixer.music.play.assert_not_called()
-
+    
         # Test case: current play time exceeds max play length
         main_screen.can_we_play.return_value = True
         main_screen.play_start = datetime.now(pytz.timezone(CTIME_TIMEZONE)) - timedelta(minutes=61)
@@ -362,7 +368,7 @@ class CtimeTestCase(unittest.TestCase):
             main_screen.button_play.change_image.assert_called_with(PLAY_BUTTON)
         pygame.mixer.music.load.assert_not_called()
         pygame.mixer.music.play.assert_not_called()
-
+    
         # Test case: regular play next
         main_screen.play_state = 0
         main_screen.game_state = 0
@@ -372,7 +378,7 @@ class CtimeTestCase(unittest.TestCase):
         self.assertEqual(main_screen.playlist, 0)
         pygame.mixer.music.load.assert_called_with("tunes/bob/003.ogg")
         pygame.mixer.music.play.assert_called_once()
-
+    
         # Test case: playlist 1
         main_screen.playlist = 1
         main_screen.play_next()
@@ -380,7 +386,7 @@ class CtimeTestCase(unittest.TestCase):
         self.assertEqual(main_screen.playlist, 1)
         pygame.mixer.music.load.assert_called_with("tunes/frozen/001.ogg")
         pygame.mixer.music.play.assert_called_once()
-
+    
         # Test case: playlist 2
         main_screen.playlist = 2
         main_screen.play_next()
