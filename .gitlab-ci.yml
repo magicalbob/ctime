@@ -10,8 +10,9 @@ build:
     - linux
   script:
     - sudo apt-get update
-    - sudo rm -rf /var/lib/dpkg/lock-frontend /var/lib/dpkg/lock /var/cache/debconf/*.dat
+    - sudo rm -rf /var/lib/dpkg/lock-frontend /var/lib/dpkg/lock /var/cache/debconf/*.dat /var/cache/apt/archives/lock
     - sudo dpkg --configure -a
+    - sudo apt-get install -f
     - sudo apt-get install -y python3-dev python3-pip libasound2-dev
     - python3 setup.py sdist bdist_wheel
   artifacts:
