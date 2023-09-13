@@ -26,6 +26,9 @@ publish:
     - linux
   script:
     - sudo apt-get update
+    - sudo rm -rf /var/lib/dpkg/lock-frontend /var/lib/dpkg/lock /var/cache/debconf/*.dat /var/cache/apt/archives/lock
+    - sudo dpkg --configure -a
+    - sudo apt-get install -f
     - sudo apt-get install -y python3-dev python3-pip libasound2-dev
     - pip install twine
     - ~/.local/bin/twine upload --repository-url https://nexus.ellisbs.co.uk/repository/pypi-hosted/ --username $PYPI_USERNAME --password $PYPI_PASSWORD dist/*
@@ -39,6 +42,9 @@ test_job:
   script:
     - export DEBIAN_FRONTEND=noninteractive
     - sudo apt-get update
+    - sudo rm -rf /var/lib/dpkg/lock-frontend /var/lib/dpkg/lock /var/cache/debconf/*.dat /var/cache/apt/archives/lock
+    - sudo dpkg --configure -a
+    - sudo apt-get install -f
     - sudo apt-get install -y python3-dev python3-pip libasound2-dev
     - sudo apt-get install -y xvfb xserver-xorg-video-dummy
     - sh testscript.sh
