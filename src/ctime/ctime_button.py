@@ -19,8 +19,8 @@ class Button():
                 self.image = pygame.image.load(image).convert()
                 self.image.set_colorkey(colorkey)
                 self.screen.blit(self.image, (self.rect[0], self.rect[1]))
-            except:
-                self.log.error('Failed to set image of Button %s' % (self.name))
+            except pygame.error as e:
+                self.log.error('Failed to set image of Button %s: %s' % (self.name, str(e)))
         else:
             self.image = None
 
