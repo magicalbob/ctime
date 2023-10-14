@@ -54,5 +54,31 @@ class TestButton(unittest.TestCase):
         pos_outside = (200, 200) 
         self.assertFalse(self.button.check_click(pos_outside))
 
+    @patch('pygame.image.load')
+    def test_reload_no_image(self, mock_image_load):
+        # Test reloading when image is initially None
+        self.button.image = None
+        self.button.reload(self.image_path)
+        mock_image_load.assert_called_with(self.image_path)
+        self.screen.blit.assert_called_once()
+
+    @patch('pygame.image.load')
+    def test_change_image_no_image(self, mock_image_load):
+        # Test changing the image when it is initially None
+        new_image_path = 'new_button.png'
+        self.button.image = None
+        self.button.change_image(new_image_path)
+        mock_image_load.assert_called_with(new_image_path)
+        self.screen.blit.assert_called_once()
+
+    def test_check_click_rate_limit(self):
+        # Test clicking within the rate limit
+        pos_inside = (25, 25)
+        self.assertTrue(self.button.check_click(pos_inside))
+
+        # Click again within the rate limit, should return False
+        pos_inside = (30, 30)
+        self.assertFalse(self.button.check_click(pos_inside))
+
 if __name__ == '__main__':
     unittest.main()
