@@ -131,7 +131,7 @@ class PairsScreen():
                 "images/pairs/card%d.png" % (self.cards['back'][card_num]))
         else:
             if self.cards['clicked'][0] == card_num:
-                pass
+                 self.log.info("Card %d already turned over" % (card_num))
             elif self.cards['clicked'][1] == -1:
                 self.cards['clicked'][1] = card_num
                 self.cards['list'][card_num].reload("images/pairs/card%d.png" %
