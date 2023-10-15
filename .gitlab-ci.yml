@@ -56,8 +56,6 @@ test_job:
   artifacts:
     paths:
       - coverage.xml
-  variables:
-    GIT_STRATEGY: clone
 
 scan_job:
   stage: scan
@@ -76,6 +74,4 @@ scan_job:
     - sonar-scanner -Dsonar.scm.provider=git
   dependencies:
     - test_job
-  variables:
-    GIT_STRATEGY: clone
 
