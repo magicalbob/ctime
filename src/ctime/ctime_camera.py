@@ -23,7 +23,7 @@ class Camera(object):
                                             (screen_width, screen_height))
             self.cam.start()
             self.usb_camera = True
-        except BaseException as camera_exception:
+        except pygame.error as camera_exception:
             self.log.exception("Open camera: %s", camera_exception)
 
         self.button_exit = Button(self.screen,
