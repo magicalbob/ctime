@@ -189,12 +189,13 @@ class PairsScreen():
         """ All cards are done, so start new game """
         self.__init__(self.screen_size['width'], self.screen_size['height'], False)
 
-def play_applause():
+def play_applause(self):
     """ clapping used in celebration """
     try:
         pygame.mixer.init()
-    except BaseException:
-        self.log.error('pygame.mixer.init() failed')
+    except pygame.error as e:
+        self.log.error('pygame.mixer.init() failed: %s' % str(e))
+
     new_tune = "sounds/applause.ogg"
     pygame.mixer.music.load(new_tune)
     pygame.mixer.music.play()
