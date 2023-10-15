@@ -61,7 +61,19 @@ scan_job:
   tags:
     - linux
   script:
-    - sh scan_job.sh
+    - export DEBIAN_FRONTEND=noninteractive
+    - sudo apt-get update
+    - sudo rm -rf /var/lib/dpkg/lock-frontend /var/lib/dpkg/lock /var/cache/debconf/*.dat /var/cache/apt/archives/lock
+    - sudo dpkg --configure -a
+    - sudo apt-get install -f
+    - sudo debconf-set-selections /path/to/keyboard-config.seed
+    - sudo dpkg-reconfigure keyboard-configuration
+    - sudo apt-get install -y unzip
+    - sudo wget https://binaries.sonarsource.com/Distribution/sonar-scanner-cli/sonar-scanner-cli-4.8.0.2856-linux.zip
+    - sudo unzip sonar-scanner-cli-4.8.0.2856-linux.zip
+    - sudo mv sonar-scanner-4.8.0.2856-linux/ /opt/sonar-scanner
+    - sudo ln -s /opt/sonar-scanner/bin/sonar-scanner /usr/local/bin/sonar-scanner
+    - sonar-scanner
   dependencies:
     - test_job
   variables:

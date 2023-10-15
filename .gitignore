@@ -10,3 +10,4 @@ images/backgrounds/0[1-9]*
 .coverage
 src/.coverage
 src/ctime/.coverage
+*.zip
