@@ -6,6 +6,7 @@ stages:
 
 variables:
   SONAR_SCANNER_VERSION: 4.8.0.2856
+  GIT_DEPTH: "0" 
 
 build:
   stage: build
@@ -62,6 +63,7 @@ scan_job:
   tags:
     - linux
   script:
+    - git fetch --unshallow
     - export DEBIAN_FRONTEND=noninteractive
     - sudo apt-get update
     - sudo rm -rf /var/lib/dpkg/lock-frontend /var/lib/dpkg/lock /var/cache/debconf/*.dat /var/cache/apt/archives/lock
