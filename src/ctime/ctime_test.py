@@ -12,69 +12,6 @@ from src.ctime.ctime_common import go_fullscreen
 from src.ctime.ctime_facebook import CtimeFacebook
 from cmreslogging.handlers import CMRESHandler
 import time
-from src.ctime.ctime_switch import Switch
-from src.ctime.ctime_blank import BlankScreen
-from main_screen_module import MainScreen  # Replace with the actual import path
-
-class TestMainScreen(unittest.TestCase):
-
-    @patch('src.ctime.ctime_facebook.CMRESHandler')
-    @patch('src.ctime.ctime_facebook.logging.getLogger')
-    @patch('src.ctime.ctime_facebook.CtimeFacebook')
-    @patch('src.ctime.ctime_common.pygame')
-    @patch('src.ctime.ctime_common.pygame.display.set_mode')
-    def test_init_main_screen(self, mock_set_mode, mock_pygame, mock_facebook, mock_get_logger, mock_cmres_handler):
-        # Mock the dependencies and initialize the class
-        mock_set_mode.return_value = MagicMock(), MagicMock()
-        mock_pygame.init.return_value = None
-        mock_facebook.return_value = MagicMock()
-        mock_logger = MagicMock()
-        mock_get_logger.return_value = mock_logger
-        mock_cmres_handler.return_value = MagicMock()
-
-        screen_width = 800
-        screen_height = 600
-        main_screen = MainScreen(screen_width, screen_height)
-
-        # Assertions to verify the initialization of attributes
-        self.assertEqual(main_screen.screen_width, screen_width)
-        self.assertEqual(main_screen.screen_height, screen_height)
-        self.assertTrue(mock_pygame.init.called)
-        self.assertTrue(mock_set_mode.called)
-        self.assertTrue(mock_facebook.called)
-        self.assertTrue(mock_logger.info.called)
-        self.assertTrue(mock_cmres_handler.called)
-
-        # Additional assertions for attributes based on your code
-        self.assertEqual(main_screen.game_state, 0)
-        self.assertEqual(main_screen.play_state, 1)
-        self.assertEqual(main_screen.tune_no, 1)
-        self.assertEqual(main_screen.back_no, 1)
-        self.assertEqual(main_screen.def_vol, 0.5)  # Assuming default volume is 0.5
-        self.assertEqual(main_screen.start_time, '08:00:00')  # Example start time
-        self.assertEqual(main_screen.end_time, '22:00:00')  # Example end time
-        self.assertEqual(main_screen.max_play_length, 180)  # Example max play length
-        self.assertEqual(main_screen.power_on, 'power_on_command')  # Example power on command
-        self.assertEqual(main_screen.power_off, 'power_off_command')  # Example power off command
-        self.assertEqual(main_screen.facebook_user, 'facebook_user')  # Example Facebook user
-        self.assertEqual(main_screen.facebook_pass, 'facebook_pass')  # Example Facebook pass
-        self.assertEqual(main_screen.facebook_start, '08:00:00')  # Example Facebook start time
-        self.assertEqual(main_screen.facebook_end, '20:00:00')  # Example Facebook end time
-        self.assertEqual(main_screen.facebook_timeout, 1800)  # Example Facebook timeout
-        self.assertEqual(main_screen.enable_mouse, 'enable_mouse_command')  # Example enable mouse command
-        self.assertEqual(main_screen.disable_mouse, 'disable_mouse_command')  # Example disable mouse command
-        self.assertIsNotNone(main_screen.log)
-        self.assertIsNone(main_screen.facebook_exit)
-        self.assertIsInstance(main_screen.play_start, datetime.datetime)
-        self.assertEqual(main_screen.first_play, 1)
-        self.assertEqual(main_screen.playlist, -1)
-        self.assertEqual(main_screen.play_len, [10, 32, 11])  # Example play lengths
-        self.assertEqual(main_screen.path, 'pic_loc')  # Example pic location
-        self.assertIsNone(main_screen.video_screen)
-        self.assertIsNone(main_screen.play_list)
-        self.assertIsNone(main_screen.track_list)
-        self.assertIsNone(main_screen.pairs)
-        self.assertEqual(main_screen.old_time, 0)
 
 class CtimeTestCase(unittest.TestCase):
     def setUp(self):
