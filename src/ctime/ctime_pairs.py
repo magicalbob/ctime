@@ -154,9 +154,8 @@ class PairsScreen():
 
     def check_click(self, pos):
         """ check if exit button has been clicked """
-        if self.button_exit != None:
-            if self.button_exit.check_click(pos):
-                return [-2, False]
+        if self.button_exit and self.button_exit.check_click(pos):
+            return [-2, False]
 
         """ check if facebook button has been clicked """
         if self.button_facebook != None:
