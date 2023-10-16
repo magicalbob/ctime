@@ -46,12 +46,12 @@ class TestCtimeCommon(unittest.TestCase):
 
         objc_mock = Mock()
         objc_mock.loadBundle = Mock()
-        AVCaptureDevice_mock = Mock()
+        av_capture_device_mock = Mock()
         devices_mock = Mock()
-        devices_mock.return_value = [AVCaptureDevice_mock]
+        devices_mock.return_value = [av_capture_device_mock]
 
         with patch('src.ctime.ctime_common.objc', objc_mock):
-            with patch('src.ctime.ctime_common.AVCaptureDevice', AVCaptureDevice_mock):
+            with patch('src.ctime.ctime_common.AVCaptureDevice', av_capture_device_mock):
                 with patch('src.ctime.ctime_common.AVCaptureDevice.devices', devices_mock):
                     screen = go_fullscreen()
 
