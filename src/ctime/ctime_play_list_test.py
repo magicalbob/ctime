@@ -1,7 +1,7 @@
 import unittest
-import pygame
 from unittest.mock import Mock, patch
-from src.ctime.ctime_play_list import TrackListScreen, PlayListScreen
+import pygame
+from ctime_play_list import TrackListScreen, PlayListScreen
 
 class TestTrackListScreen(unittest.TestCase):
     def setUp(self):
@@ -28,6 +28,20 @@ class TestTrackListScreen(unittest.TestCase):
         pos = (100, 100)
         result = self.track_list_screen.check_click(pos)
         self.assertEqual(result, [-1, False])
+
+    def test_check_click_track(self):
+        # Create a mock button instance
+        mock_button = Mock()
+        mock_button.check_click.return_value = True
+
+        # Replace a button in the list with the mock button
+        self.track_list_screen.track_list[0] = mock_button
+
+        pos = (100, 100)
+        result = self.track_list_screen.check_click(pos)
+
+        # Check that the result indicates a track was clicked
+        self.assertEqual(result, [1, True])
 
 class TestPlayListScreen(unittest.TestCase):
     def setUp(self):
