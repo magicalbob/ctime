@@ -89,10 +89,10 @@ class TestCtimeCommon(unittest.TestCase):
     @patch('src.ctime.ctime_common.objc')
     @patch('src.ctime.ctime_common.AVCaptureDevice')
     @patch('src.ctime.ctime_common.sys.platform', return_value='darwin')
-    def test_is_video_camera_present_macos(self, mock_platform, mock_AVCaptureDevice, mock_objc):
+    def test_is_video_camera_present_macos(self, mock_platform, mock_avcapture_device, mock_objc):
         mock_device = Mock()
         mock_device.hasMediaType_.return_value = True
-        mock_AVCaptureDevice.devices.return_value = [mock_device]
+        mock_avcapture_device.devices.return_value = [mock_device]
 
         result = is_video_camera_present()
         self.assertTrue(result)
@@ -100,10 +100,10 @@ class TestCtimeCommon(unittest.TestCase):
     @patch('src.ctime.ctime_common.objc')
     @patch('src.ctime.ctime_common.AVCaptureDevice')
     @patch('src.ctime.ctime_common.sys.platform', return_value='darwin')
-    def test_is_video_camera_present_macos_not_present(self, mock_platform, mock_AVCaptureDevice, mock_objc):
+    def test_is_video_camera_present_macos_not_present(self, mock_platform, mock_avcapture_device, mock_objc):
         mock_device = Mock()
         mock_device.hasMediaType_.return_value = False
-        mock_AVCaptureDevice.devices.return_value = [mock_device]
+        mock_avcapture_device.devices.return_value = [mock_device]
 
         result = is_video_camera_present()
         self.assertFalse(result)
