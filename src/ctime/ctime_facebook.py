@@ -90,8 +90,13 @@ class CtimeFacebook():
                 "ctarget=https%25253A%25252F%25252Fwww.facebook.com"
                            )
             self.mouse_change(self.ctime.enable_mouse)
-        except:
+        except NoSuchElementException as e:
             self.log.error("Facebook login failed" % e)
+            self.abort_facebook()
+            return
+        except Exception as e:
+            # Handle other exceptions here
+            self.log.error("An unexpected error occurred during Facebook login: %s" % e)
             self.abort_facebook()
             return
 
