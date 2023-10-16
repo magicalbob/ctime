@@ -231,7 +231,7 @@ class CtimeFacebook():
             go_fullscreen()
             self.log.info('return to main screen')
         except:
-            self.log.error(("Faile to abort Facebook: %s", e)
+            self.log.error("Failed to abort Facebook: %s", e)
 
     def mouse_change(self,mouse_command):
         """ prevent/enable someone clicking something they shouldn't/should """
