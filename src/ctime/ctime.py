@@ -251,7 +251,7 @@ class MainScreen():
         elif self.first_play == 1:
             try:
                 pygame.mixer.init()
-            except BaseException:
+            except pygame.error:
                 self.log.error('pygame.mixer.init() failed')
             if self.playlist < 1:
                 which_list = "bob"
