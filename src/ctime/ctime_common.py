@@ -18,7 +18,7 @@ def go_fullscreen():
     pygame.display.init()
     try:
         screen = pygame.display.set_mode((screen_width, screen_height), flags|pygame.FULLSCREEN, bits)
-    except Exception as e:
+    except pygame.error as e:
         screen = pygame.display.set_mode((screen_width, screen_height))
         print("An exception occurred while going full screen: %s" % e)
 
@@ -62,7 +62,7 @@ def play_let_it_go():
     """ play favourite tune """
     try:
         pygame.mixer.init()
-    except BaseException:
+    except pygame.error:
         print("pygame.mixer.init() failed")
 
     pygame.mixer.music.load("tunes/frozen/005.ogg")
