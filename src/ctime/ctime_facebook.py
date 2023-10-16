@@ -1,4 +1,4 @@
-#!/usr/bio/env python
+#!/usr/bin/env python
 """ Allow Christopher to Facebook us """
 
 import time
@@ -44,10 +44,15 @@ class CtimeFacebook():
         print("DEBUG: load Firefox using selenium and get the facebook page ")
         """ load Firefox using selenium and get the facebook page """
         self.log.info('Load Firefox using selenium')
-        self.driver = webdriver.Firefox(options=options, firefox_profile = profile)
-        print("DEBUG: Get facebook page")
-        self.log.info('Get facebook page')
-        self.driver.get("https://www.facebook.com/messages")
+        try:
+            self.driver = webdriver.Firefox(options=options, firefox_profile = profile)
+            print("DEBUG: Get facebook page")
+            self.log.info('Get facebook page')
+            self.driver.get("https://www.facebook.com/messages")
+        except Exception as e:
+            self.log.error("Failed to initialize Facebook: %s" % e)
+            self.abort_facebook()
+            return
 
         print("DEBUG: handle facebook not being available ")
         """ handle facebook not being available """
@@ -66,24 +71,29 @@ class CtimeFacebook():
     def facebook_login(self):
         """ record last time connection checked """
         self.check_connect = time.time()
-        # Enter facebook username
-        self.log.info('Enter facebook username')
-        elem = self.driver.find_element_by_id("email")
-        elem.send_keys(self.facebook_user)
-        # Enter facebook password
-        self.log.info('Enter facebook password')
-        elem = self.driver.find_element_by_id("pass")
-        elem.send_keys(self.facebook_pass)
-        # Press return and wait a little
-        self.log.info('Press return to logon')
-        elem.send_keys(Keys.RETURN)
-        time.sleep(3)
-        self.driver.get(
-            "https://www.facebook.com/messages/t/jackie.ellis.92?" +
-            "cquick=jsc_c_n&cquick_token=AQ6FgU758TSNMWZGPcY&" +
-            "ctarget=https%25253A%25252F%25252Fwww.facebook.com"
-                       )
-        self.mouse_change(self.ctime.enable_mouse)
+        try:
+            # Enter facebook username
+            self.log.info('Enter facebook username')
+            elem = self.driver.find_element_by_id("email")
+            elem.send_keys(self.facebook_user)
+            # Enter facebook password
+            self.log.info('Enter facebook password')
+            elem = self.driver.find_element_by_id("pass")
+            elem.send_keys(self.facebook_pass)
+            # Press return and wait a little
+            self.log.info('Press return to logon')
+            elem.send_keys(Keys.RETURN)
+            time.sleep(3)
+            self.driver.get(
+                "https://www.facebook.com/messages/t/jackie.ellis.92?" +
+                "cquick=jsc_c_n&cquick_token=AQ6FgU758TSNMWZGPcY&" +
+                "ctarget=https%25253A%25252F%25252Fwww.facebook.com"
+                           )
+            self.mouse_change(self.ctime.enable_mouse)
+        except:
+            self.log.error("Facebook login failed" % e)
+            self.abort_facebook()
+            return
 
     def make_call(self):
         self.log.info('Find target for call')
@@ -201,24 +211,27 @@ class CtimeFacebook():
 
     def abort_facebook(self,hide_facebook = False):
         """ turn mouse back on, close selenium, go back to main screen """
-        self.log.info('turn mouse back on')
-        self.mouse_change(self.ctime.enable_mouse)
-        self.log.info('set time that facebook finished')
-        if hide_facebook == True:
-            self.log.info('set actual time cos facebook needs to hide')
-            self.ctime.facebook_exit = time.time()
-        else:
-            self.log.info('set no time cos facebook went wrong so no hide')
-            self.ctime.facebook_exit = 0
-        self.log.info('go back to old window')
-        self.driver.switch_to_window(self.old_win)
-        self.log.info('back to main menu game state')
-        self.ctime.game_state = 0
-        self.log.info('re-draw main screen')
-        self.ctime.refresh_pic()
-        self.log.info('make sure in full screen mode')
-        go_fullscreen()
-        self.log.info('return to main screen')
+        try:
+            self.log.info('turn mouse back on')
+            self.mouse_change(self.ctime.enable_mouse)
+            self.log.info('set time that facebook finished')
+            if hide_facebook == True:
+                self.log.info('set actual time cos facebook needs to hide')
+                self.ctime.facebook_exit = time.time()
+            else:
+                self.log.info('set no time cos facebook went wrong so no hide')
+                self.ctime.facebook_exit = 0
+            self.log.info('go back to old window')
+            self.driver.switch_to_window(self.old_win)
+            self.log.info('back to main menu game state')
+            self.ctime.game_state = 0
+            self.log.info('re-draw main screen')
+            self.ctime.refresh_pic()
+            self.log.info('make sure in full screen mode')
+            go_fullscreen()
+            self.log.info('return to main screen')
+        except:
+            self.log.error(("Faile to abort Facebook: %s", e)
 
     def mouse_change(self,mouse_command):
         """ prevent/enable someone clicking something they shouldn't/should """
