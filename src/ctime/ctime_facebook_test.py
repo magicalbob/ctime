@@ -3,6 +3,7 @@ from unittest.mock import patch, MagicMock
 from src.ctime.ctime_facebook import CtimeFacebook, CallEndedException
 
 RATE_YOUR_VIDEO = "Please rate the quality of your video chat"
+SOME_FACEBOOK_PAGE = "Some Facebook page source"
 
 class TestCtimeFacebook(unittest.TestCase):
 
@@ -114,16 +115,16 @@ class TestCtimeFacebook(unittest.TestCase):
         # When still logged in
         mock_driver.title = "Facebook"
         facebook.check_signin()
-        mock_driver.page_source = "Some Facebook page source"
-        self.assertEqual(mock_driver.page_source, "Some Facebook page source")
+        mock_driver.page_source = SOME_FACEBOOK_PAGE
+        self.assertEqual(mock_driver.page_source, SOME_FACEBOOK_PAGE)
 
         # When not logged in
         mock_driver.title = "Some Other Title"
         facebook.check_signin()
-        mock_driver.page_source = "Some Facebook page source"
-        self.assertEqual(mock_driver.page_source, "Some Facebook page source")
+        mock_driver.page_source = SOME_FACEBOOK_PAGE
+        self.assertEqual(mock_driver.page_source, SOME_FACEBOOK_PAGE)
         mock_driver.get.assert_called_with("https://www.facebook.com/messages")
-        mock_driver.page_source = "Some Facebook page source"
+        mock_driver.page_source = SOME_FACEBOOK_PAGE
         self.assertTrue(mock_log.info.called)
 
     def test_abort_facebook(self):
