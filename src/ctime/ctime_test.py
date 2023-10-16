@@ -13,6 +13,8 @@ from src.ctime.ctime_facebook import CtimeFacebook
 from cmreslogging.handlers import CMRESHandler
 import time
 
+PATH_TO_IMAGES = "./images/backgrounds/"
+
 class CtimeTestCase(unittest.TestCase):
     def setUp(self):
         # Import MainScreen after mocking dependencies
@@ -56,7 +58,7 @@ class CtimeTestCase(unittest.TestCase):
         # Mock necessary dependencies
         screen_width = 800
         screen_height = 600
-        path = "/path/to/images"
+        path = PATH_TO_IMAGES
         log = MagicMock()
 
         # Create an instance of Camera
@@ -835,7 +837,7 @@ class CtimeTestCase(unittest.TestCase):
     def test_update_pic_with_image_files(self):
         # Test when there are image files in the background directory
         image_files = ['image1.jpg', 'image2.jpg', 'image3.jpg']
-        background_directory = './images/backgrounds/'
+        background_directory = PATH_TO_IMAGES
 
         # Save the original back_no value
         original_back_no = self.main_screen.back_no
@@ -855,7 +857,7 @@ class CtimeTestCase(unittest.TestCase):
     def test_update_pic_without_image_files(self):
         # Test when there are no image files in the background directory
         image_files = []
-        background_directory = './images/backgrounds/'
+        background_directory = PATH_TO_IMAGES
 
         # Save the original back_no value
         original_back_no = self.main_screen.back_no
