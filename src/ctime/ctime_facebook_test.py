@@ -2,6 +2,8 @@ import unittest
 from unittest.mock import patch, MagicMock
 from src.ctime.ctime_facebook import CtimeFacebook, CallEndedException
 
+RATE_YOUR_VIDEO = "Please rate the quality of your video chat"
+
 class TestCtimeFacebook(unittest.TestCase):
 
     @patch('src.ctime.ctime_facebook.webdriver')
@@ -51,7 +53,7 @@ class TestCtimeFacebook(unittest.TestCase):
         # Assertions to verify that calls have been made correctly
         mock_driver.find_element_by_xpath.assert_called_with('//*[@aria-label="Start a video call"]')
         mock_driver.switch_to_window.assert_called_with(mock.ANY)
-        mock_driver.page_source = "Please rate the quality of your video chat"
+        mock_driver.page_source = RATE_YOUR_VIDEO
         self.assertTrue(facebook.call_ended())
 
     @patch('src.ctime.ctime_facebook.time.sleep')
@@ -66,7 +68,7 @@ class TestCtimeFacebook(unittest.TestCase):
         facebook.driver = mock_driver
 
         # Simulate checking call status
-        mock_driver.page_source = "Please rate the quality of your video chat"
+        mock_driver.page_source = RATE_YOUR_VIDEO
         self.assertRaises(CallEndedException, facebook.check_call_status)
 
         mock_driver.page_source = "Connection lost"
@@ -86,7 +88,7 @@ class TestCtimeFacebook(unittest.TestCase):
         facebook.driver = mock_driver
 
         # Simulate call ended scenarios
-        mock_driver.page_source = "Please rate the quality of your video chat"
+        mock_driver.page_source = RATE_YOUR_VIDEO
         self.assertTrue(facebook.call_ended())
 
         mock_driver.page_source = "Connection lost"
