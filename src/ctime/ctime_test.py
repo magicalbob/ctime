@@ -857,7 +857,6 @@ class CtimeTestCase(unittest.TestCase):
     def test_update_pic_without_image_files(self):
         # Test when there are no image files in the background directory
         image_files = []
-        background_directory = PATH_TO_IMAGES
 
         # Save the original back_no value
         original_back_no = self.main_screen.back_no
