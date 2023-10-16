@@ -441,13 +441,13 @@ class CtimeTestCase(unittest.TestCase):
         main_screen.screen_height = screen_height
 
         # Mock the PlayListScreen class
-        PlayListScreen = MagicMock()
+        play_list_screen = MagicMock()
 
         # Call the click_play_list method
         main_screen.click_play_list()
 
         # Verify the method calls
-        PlayListScreen.assert_called_with(screen_width, screen_height, main_screen.log)
+        play_list_screen.assert_called_with(screen_width, screen_height, main_screen.log)
 
     def test_click_button_power(self):
         # Mock necessary dependencies
