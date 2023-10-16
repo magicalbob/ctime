@@ -14,6 +14,7 @@ from cmreslogging.handlers import CMRESHandler
 import time
 
 PATH_TO_IMAGES = "./images/backgrounds/"
+DATETIME_MODULE = 'src.ctime.ctime.datetime'
 
 class CtimeTestCase(unittest.TestCase):
     def setUp(self):
@@ -205,19 +206,19 @@ class CtimeTestCase(unittest.TestCase):
 
         # Test case: current time is within the start and end time
         now_time = datetime(2023, 7, 17, 12, 0, 0)
-        with patch('src.ctime.ctime.datetime') as mock_datetime:
+        with patch(DATETIME_MODULE) as mock_datetime:
             mock_datetime.now.return_value = now_time
             self.assertTrue(main_screen.can_we_play())
 
         # Test case: current time is before the start time
         now_time = datetime(2023, 7, 17, 9, 0, 0)
-        with patch('src.ctime.ctime.datetime') as mock_datetime:
+        with patch(DATETIME_MODULE) as mock_datetime:
             mock_datetime.now.return_value = now_time
             self.assertFalse(main_screen.can_we_play())
 
         # Test case: current time is after the end time
         now_time = datetime(2023, 7, 17, 20, 0, 0)
-        with patch('src.ctime.ctime.datetime') as mock_datetime:
+        with patch(DATETIME_MODULE) as mock_datetime:
             mock_datetime.now.return_value = now_time
             self.assertFalse(main_screen.can_we_play())
 
