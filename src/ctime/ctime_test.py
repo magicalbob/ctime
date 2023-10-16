@@ -838,7 +838,6 @@ class CtimeTestCase(unittest.TestCase):
     def test_update_pic_with_image_files(self):
         # Test when there are image files in the background directory
         image_files = ['image1.jpg', 'image2.jpg', 'image3.jpg']
-        background_directory = PATH_TO_IMAGES
 
         # Save the original back_no value
         original_back_no = self.main_screen.back_no
