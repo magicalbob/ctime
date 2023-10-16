@@ -5,6 +5,9 @@ import pygame.locals
 from src.ctime.ctime_common import go_fullscreen
 from src.ctime.ctime_button import Button
 
+# Define a constant for the error message
+CAMERA_ERROR_MESSAGE = "Open camera: %s"
+
 class Camera(object):
     """ object to display usb camera """
     def __init__(self, screen_width, screen_height, path, log):
@@ -24,7 +27,7 @@ class Camera(object):
             self.cam.start()
             self.usb_camera = True
         except pygame.error as camera_exception:
-            self.log.exception("Open camera: %s", camera_exception)
+            self.log.exception(CAMERA_ERROR_MESSAGE, camera_exception)
 
         self.button_exit = Button(self.screen,
                                   (screen_width - 200, 0, 200, 200),
@@ -66,6 +69,6 @@ class Camera(object):
                                  (self.screen_size['width'] - image_width,
                                   self.screen_size['height'] - image_height))
             except pygame.error as camera_exception:
-               self.log.exception("Open camera: %s", camera_exception)
+               self.log.exception(CAMERA_ERROR_MESSAGE, camera_exception)
         except pygame.error as camera_exception:
-            self.log.exception("Open camera: %s", camera_exception)
+            self.log.exception(CAMERA_ERROR_MESSAGE, camera_exception)
