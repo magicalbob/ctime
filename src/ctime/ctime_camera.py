@@ -65,7 +65,7 @@ class Camera(object):
                 self.screen.blit(self.image,
                                  (self.screen_size['width'] - image_width,
                                   self.screen_size['height'] - image_height))
-            except BaseException:
-                pass
-        except BaseException:
-            pass
+            except pygame.error as camera_exception:
+               self.log.exception("Open camera: %s", camera_exception)
+        except pygame.error as camera_exception:
+            self.log.exception("Open camera: %s", camera_exception)
