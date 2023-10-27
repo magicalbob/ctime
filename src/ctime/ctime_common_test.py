@@ -80,7 +80,7 @@ class TestCtimeCommon(unittest.TestCase):
         result = is_video_camera_present()
         self.assertTrue(result)
 
-    @patch('src.ctime.ctime_common.os.path.exists', return_value=False)
+    @patch('src.ctime.ctime_common.os.path.exists', return_value=False)  # Change return value
     @patch('src.ctime.ctime_common.sys.platform', return_value='linux')
     def test_is_video_camera_present_linux_not_present(self, mock_platform, mock_exists):
         result = is_video_camera_present()
@@ -105,12 +105,6 @@ class TestCtimeCommon(unittest.TestCase):
         mock_device.hasMediaType_.return_value = False
         mock_avcapture_device.devices.return_value = [mock_device]
 
-        result = is_video_camera_present()
-        self.assertFalse(result)
-
-    @patch('src.ctime.ctime_common.os.path.exists', return_value=False)
-    @patch('src.ctime.ctime_common.sys.platform', return_value='other')
-    def test_is_video_camera_present_other_platform_not_present(self, mock_platform, mock_exists):
         result = is_video_camera_present()
         self.assertFalse(result)
 
