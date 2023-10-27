@@ -177,7 +177,7 @@ class PairsScreen():
     def play_success(self):
         """ player won a match. celebrate! """
         pygame.display.update()
-        play_applause()
+        self.play_applause()
         time.sleep(6)
         if self.button_exit is None:
             self.add_button_exit()
