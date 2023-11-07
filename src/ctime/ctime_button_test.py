@@ -80,5 +80,22 @@ class TestButton(unittest.TestCase):
         pos_inside = (30, 30)
         self.assertFalse(self.button.check_click(pos_inside))
 
+    @patch('time.time')
+    def test_check_click_rate_limit_delay(self, mock_time):
+        # Mock time.time to control the timing of the clicks
+        mock_time.side_effect = [0, 2, 3]
+
+        # First click, should return True
+        pos_inside = (25, 25)
+        self.assertTrue(self.button.check_click(pos_inside))
+
+        # Second click within the rate limit, should return False
+        pos_inside = (30, 30)
+        self.assertFalse(self.button.check_click(pos_inside))
+
+        # Third click after the rate limit, should return True
+        self.assertTrue(self.button.check_click(pos_inside))
+
 if __name__ == '__main__':
     unittest.main()
+
