@@ -72,4 +72,4 @@ scan_job:
   dependencies:
     - test_job
   variables:
-    TTY: true # Add this line to enable TTY
+    TTY: 'true' # Add this line to enable TTY
