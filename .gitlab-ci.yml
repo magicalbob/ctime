@@ -65,6 +65,7 @@ scan_job:
     - export DEBIAN_FRONTEND=noninteractive
     - sudo apt-get update
     - sudo apt-get install -y keyboard-configuration
+    - apt install --reinstall language-pack-en
     - sudo dpkg-reconfigure keyboard-configuration
     - sudo apt-get install -y unzip
     - if command -v sonar-scanner &> /dev/null; then echo "sonar-scanner already available."; else ./get_scanner.sh; fi
