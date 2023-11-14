@@ -71,3 +71,5 @@ scan_job:
     - sonar-scanner -Dsonar.scm.provider=git
   dependencies:
     - test_job
+  variables:
+    TTY: true # Add this line to enable TTY
