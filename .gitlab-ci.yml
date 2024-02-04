@@ -63,7 +63,7 @@ scan_job:
     - sudo rm -rf /var/lib/dpkg/lock-frontend /var/lib/dpkg/lock /var/cache/debconf/*.dat /var/cache/apt/archives/lock
     - sudo dpkg --configure -a
     - sudo apt-get install -f
-    - sudo apt-get install -y unzip default-jre
+    - sudo apt-get install -y unzip openjdk-16-jre
     - pushd ~
     - curl -o /tmp/sonar-scanner.zip https://binaries.sonarsource.com/Distribution/sonar-scanner-cli/sonar-scanner-cli-${SONAR_SCANNER_VERSION}.zip
     - unzip -n /tmp/sonar-scanner.zip
