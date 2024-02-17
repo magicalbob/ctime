@@ -432,8 +432,11 @@ class MainScreen():
 
     def refresh_pic(self):
         """ redraw background picture """
-        image_name = "images/backgrounds/%03d.jpg" %self.back_no
-        self.image = pygame.image.load(image_name).convert()
+
+        image_path = os.path.join("images", "backgrounds", "%03d.jpg" % self.back_no)
+        pil_image = Image.open(image_path)
+        pygame_surface = pygame.image.fromstring(pil_image.tobytes(), pil_image.size, pil_image.mode).convert()
+        self.image = pygame_surface
         self.screen.fill((0, 0, 0))
         self.screen.blit(self.image, (max(0, (self.screen_width-self.image.get_rect().size[0])/2),
                                       max(0, (self.screen_height-self.image.get_rect().size[1])/2)))
