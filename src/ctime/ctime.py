@@ -11,6 +11,7 @@ import pygame.locals
 import yaml
 import os
 import logging
+from PIL import Image
 from src.ctime.ctime_common import go_fullscreen
 from src.ctime.ctime_common import is_video_camera_present
 from src.ctime.ctime_button import Button
@@ -39,7 +40,10 @@ class MainScreen():
         screen = pygame.display.get_surface()
         self.screen_width, self.screen_height = screen.get_width(), screen.get_height()
 
-        self.image = pygame.image.load("images/backgrounds/001.jpg").convert()
+        image_path = os.path.join("images", "backgrounds", "001.jpg")
+        pil_image = Image.open(image_path)
+        pygame_surface = pygame.image.fromstring(pil_image.tobytes(), pil_image.size, pil_image.mode).convert()
+        self.image = pygame_surface
         self.game_state = 0
         self.play_state = 1
         self.tune_no = 1
